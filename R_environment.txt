@@ -1,0 +1,24 @@
+Outputs in this repository were produced with:
+
+R 4.5.2 (aarch64-apple-darwin20), macOS 26
+Python 3.9.16 (standard library only)
+pandoc 3.7.0.2
+
+tidyverse    2.0.0
+dplyr        1.1.4
+tidyr        1.3.2
+ggplot2      4.0.1
+rmarkdown    2.30
+knitr        1.51
+kableExtra   1.4.0
+lme4         1.1.38
+lmerTest     3.2.0
+Matrix       1.7.4
+MASS         7.3.65
+broom        1.0.12
+broom.mixed  0.2.9.7
+cowplot      1.2.0
+patchwork    1.3.2
+ggtext       0.1.2
+ggrepel      0.9.6
+scales       1.4.0

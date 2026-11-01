@@ -1,0 +1,31 @@
+id,item_id,category,subcategory,question,scoring
+1,1,premeditation,nan,"I only act to satisfy immediate concerns, figuring the future will take care of itself.",normal
+2,2,premeditation,nan,I think that sacrificing now is usually unnecessary since future outcomes can be dealt with at a later time.,normal
+3,3,premeditation,nan,"I only act to satisfy immediate concerns, figuring that I will take care of future problems that may occur at a later date.",normal
+4,4,consistency,nan,The appearance of consistency is an important part of the image I present to the world.,normal
+5,5,consistency,nan,An important requirement for any friend of mine is personal consistency.,normal
+6,6,consistency,nan,I make an effort to appear consistent to others.,normal
+7,7,sensation seeking,novelty,I would like to travel to places that are strange and far away.,normal
+8,8,sensation seeking,novelty,I would have enjoyed being one of the first explorers of an unknown land.,normal
+9,9,sensation seeking,novelty,"If it were possible to visit another planet or the moon for free, I would be among the first to sign up.",normal
+10,10,self-control,nan,I say inappropriate things.,normal
+11,11,self-control,nan,"I do certain things that are bad for me, if they are fun.",normal
+12,12,self-control,nan,"Sometimes I can’t stop myself from doing something, even if I know it is wrong.",normal
+13,13,social influence,normative,"When buying products, I generally purchase those brands that I think others will approve of.",normal
+14,14,social influence,normative,"If other people can see me using a product, I often purchase the brand they expect me to buy.",normal
+15,15,social influence,normative,I achieve a sense of belonging by purchasing the same products and brands that others purchase.,normal
+16,16,similarity,nan,"When a product I own becomes popular among the general population, I begin to use it less.",reverse
+17,17,similarity,nan,I often try to avoid products or brands that I know are bought by the general population.,reverse
+18,18,similarity,nan,"The more commonplace a product or brand is among the general population, the less interested I am in buying it.",reverse
+19,19,risk preferences,financial,I would be likely to bet a day’s income at the horse races.,normal
+20,20,risk preferences,financial,I would be likely to bet a day’s income at a high-stake poker game.,normal
+21,21,risk preferences,financial,I would be likely to bet a day’s income on the outcome of a sporting event.,normal
+22,22,attitudes towards advertising,nan,Advertising is essential.,normal
+23,23,attitudes towards advertising,nan,Advertising helps raise our standard of living.,normal
+24,24,attitudes towards advertising,nan,Advertising results in better products for the public.,normal
+25,25,need for cognition,nan,I would rather do something that requires little thought than something that is sure to challenge my thinking abilities.,normal
+26,26,need for cognition,nan,I try to anticipate and avoid situations where there is a likely chance I will have to think in depth about something.,normal
+27,27,need for cognition,nan,Learning new ways to think doesn't excite me very much.,normal
+28,28,need for unique choice,nan,I often combine possessions in such a way that I create a personal image that cannot be duplicated.,normal
+29,29,need for unique choice,nan,I often try to find a more interesting version of run-of-the-mill products because I enjoy being original.,normal
+30,30,need for unique choice,nan,Having an eye for products that are interesting and unusual assists me in establishing a distinctive image.,normal

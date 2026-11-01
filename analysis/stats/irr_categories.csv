@@ -1,0 +1,16 @@
+tag,prevalence_humans,agreement_humans,kappa,alpha
+deception_false,0.54,0.88,0.76,0.76
+deception_misleading,0.37,0.7,0.36,0.44
+deception_provably_false,0.55,0.8,0.6,0.69
+persuader_acknowledge,0.36,0.83,0.63,0.51
+persuader_analogy,0.11,0.92,0.61,0.59
+persuader_authority,0.06,0.95,0.56,0.7
+persuader_flattery,0.46,0.77,0.53,0.59
+persuader_gave_up,0.04,0.96,0.48,0.51
+persuader_math,0.25,0.88,0.68,0.63
+persuader_personal,0.18,0.89,0.63,0.69
+persuader_principle,0.36,0.81,0.59,0.62
+target_disagreement,0.14,0.9,0.6,0.46
+target_probe,0.54,0.81,0.62,0.67
+target_question,0.48,0.93,0.86,0.86
+target_statement,0.5,0.92,0.84,0.85

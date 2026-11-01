@@ -1,0 +1,1178 @@
+---
+title: "Paper figures"
+output:
+  html_document:
+    toc: yes
+    toc_float: true
+    theme: flatly
+    code_folding: hide
+date: "2026-08-02"
+---
+
+# Setup
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE, message = FALSE, warning = FALSE)
+library(tidyverse)
+library(cowplot)
+library(patchwork)
+library(ggtext)   # element_markdown: per-part styling inside axis tick labels
+```
+
+# Design variables
+
+```{r design}
+# --- palettes (CVD-checked) ---------------------------------------------------
+PAL_CONDITION <- c("Helpful" = "#117733", "Mixed" = "#CC9933", "Unhelpful" = "#CC3311")
+PAL_TRUTH     <- c("Truth" = "#4477AA", "Falsehood" = "#EE6677")
+COL_SHADE     <- "grey85"    # background band marking the final trial
+ALPHA_SHADE   <- 0.5
+
+# --- shapes (condition identity is never colour-alone) ------------------------
+SHAPE_CONDITION <- c("Helpful" = 16, "Mixed" = 17, "Unhelpful" = 15)  # circle/triangle/square
+COND_ABBREV     <- c("Helpful" = "H", "Mixed" = "M", "Unhelpful" = "U")
+
+# --- axis limits --------------------------------------------------------------
+CC_LIMITS <- c(-5, 85)       # shared across all CC panels so they compare directly
+
+# --- geometry -----------------------------------------------------------------
+BAR_WIDTH    <- 0.72
+DODGE_WIDTH  <- 0.8
+EB_WIDTH     <- 0.25         # error-bar cap width
+EB_LINEWIDTH <- 0.5
+LINE_WIDTH   <- 0.7          # trial-index lines
+LINETYPE_FINAL <- "22"       # intro trial 4 -> final segment (E1-E3)
+POINT_SIZE   <- 2.4
+
+# --- text / theme -------------------------------------------------------------
+BASE_SIZE  <- 10               # sn-jnl scales the fig by ~0.79 (textwidth 372pt / 6.5in), so ~8pt effective
+LAB_PS     <- "Persuader success"
+LAB_CC     <- "Confidence change"
+LAB_TRUTH  <- "Persuader argues"
+theme_paper <- theme_minimal_hgrid(BASE_SIZE) +
+  theme(
+    plot.title      = element_text(size = BASE_SIZE, face = "plain", hjust = 0.5),
+    plot.subtitle   = element_text(size = BASE_SIZE - 3.5, hjust = 0.5,
+                                   color = "grey45",
+                                   margin = margin(b = 2)),
+    axis.title.x    = element_text(margin = margin(t = 1)),
+    legend.position = "bottom",
+    legend.justification = "center",
+    legend.spacing.x = unit(50, "pt"),   # gap BETWEEN the two legend groups
+    legend.title = element_text(face = "plain"),
+    plot.tag        = element_text(face = "bold")
+  )
+
+FIG_W <- 6.5
+FIG_H <- 7.6
+
+# --- statistics ---------------------------------------------------------------
+SEED   <- 42                 # mean_cl_boot is stochastic; fix for reproducible EBs
+ci_fun <- mean_cl_boot       # 95% CI on every bar/pointrange (not trial-index lines)
+
+# --- output -------------------------------------------------------------------
+FIG_DIR   <- "../figures"
+DRAFT_DIR <- file.path(FIG_DIR, "drafts")
+```
+
+# Data
+
+```{r data}
+e1.trials <- read.csv("stats/e1_trials.csv") %>%
+  filter(participant_persuader_disagree) %>%
+  mutate(
+    intro_condition   = factor(intro_condition, names(PAL_CONDITION)),
+    persuader_success = as.numeric(persuader_success),
+    truth             = factor(ifelse(persuader_correct, "Truth", "Falsehood"),
+                               names(PAL_TRUTH))
+  )
+
+e1.exit <- read.csv("stats/e1_exit_survey.csv") %>%
+  mutate(intro_condition = factor(intro_condition, names(PAL_CONDITION)))
+```
+
+# Panel builders
+
+```{r panel-builders}
+measure_spec <- function(measure) {
+  # NB: shared limits go through coord_cartesian (zoom), never scale limits --
+  # scale limits silently DROP out-of-range trials before means are computed
+  # (CC is per-trial on -100..+100).
+  if (measure == "ps") {
+    list(yvar = "persuader_success", lab = LAB_PS,
+         scale_y = scale_y_continuous(labels = scales::percent),
+         coord   = coord_cartesian(ylim = c(0, 1)))
+  } else {
+    list(yvar = "confidence_change", lab = LAB_CC,
+         scale_y = scale_y_continuous(),
+         coord   = coord_cartesian(ylim = CC_LIMITS))
+  }
+}
+
+# mean + 95% CI, as bars (ps) or pointranges (cc), dodged if a fill/colour var is given
+# NB: plain position_dodge (same width for bars and errorbars) keeps them aligned;
+# position_dodge2 offsets each element by its own width, so the EBs sit askew.
+geom_mean_ci <- function(measure, dodged = FALSE) {
+  pos <- if (dodged) position_dodge(width = DODGE_WIDTH)
+         else "identity"
+  if (measure == "ps") list(
+    stat_summary(fun = mean, geom = "col", position = pos, width = BAR_WIDTH,
+                 color = "white", linewidth = 0.3),
+    stat_summary(fun.data = ci_fun, geom = "errorbar", position = pos,
+                 width = EB_WIDTH, linewidth = EB_LINEWIDTH)
+  ) else list(
+    stat_summary(fun.data = ci_fun, geom = "pointrange",
+                 position = if (dodged) position_dodge(width = 0.4) else pos,
+                 size = 0.45, linewidth = EB_LINEWIDTH),
+    geom_hline(yintercept = 0, linetype = "dashed", linewidth = 0.3)
+  )
+}
+
+# (a/d) condition effect on final trials --------------------------------------
+panel_condition <- function(trials, measure) {
+  s <- measure_spec(measure)
+  set.seed(SEED)
+  ggplot(filter(trials, trial_type == "final"),
+         aes(intro_condition, .data[[s$yvar]],
+             fill = intro_condition, color = intro_condition)) +
+    geom_mean_ci(measure) +
+    scale_fill_manual(values = PAL_CONDITION, guide = "none") +
+    scale_color_manual(
+      values = if (measure == "ps") rep("black", 3) else PAL_CONDITION,
+      guide = "none") +
+    s$scale_y +
+    s$coord +
+    labs(x = NULL, y = s$lab, title = "Helpfulness", subtitle = "Final Trials Only") +
+    theme_paper
+}
+
+panel_truth <- function(trials, measure) {
+  s <- measure_spec(measure)
+  d <- bind_rows(
+    trials %>% filter(trial_type == "intro", trial_index == 0) %>%
+      mutate(trial_group = "First"),
+    trials %>% filter(trial_type == "final") %>%
+      mutate(trial_group = "Final")
+  ) %>%
+    mutate(trial_group = factor(trial_group, c("First", "Final")))
+  set.seed(SEED)
+  ggplot(d, aes(trial_group, .data[[s$yvar]], fill = truth, color = truth)) +
+    geom_mean_ci(measure, dodged = TRUE) +
+    scale_fill_manual(name = LAB_TRUTH, values = PAL_TRUTH) +
+    scale_color_manual(
+      name = LAB_TRUTH,
+      values = if (measure == "ps") setNames(rep("black", 2), names(PAL_TRUTH))
+               else PAL_TRUTH) +
+    scale_x_discrete(labels = c("First" = "First trial", "Final" = "Final trial")) +
+    s$scale_y +
+    s$coord +
+    labs(x = NULL, y = s$lab, title = "Truth effect",
+         subtitle = "Disagreement Trials Only") +
+    theme_paper
+}
+
+# (c/f) change over trials, final trial on a shaded band ------------------------
+# dashed_final: join intro trial 4 -> final with a dashed line, because in E1-E3
+# final-trial questions were selected on initial confidence (a different kind of
+# trial). TRUE dashes every condition, FALSE none, or pass condition names to dash
+# only those: E4 matched final-trial confidence to intro trials but its final
+# trial is 50% truth for everyone, so only Helpful (all-correct intros) is dashed.
+panel_trial_index <- function(trials, measure, dashed_final = TRUE, context_alpha = 1) {
+  s <- measure_spec(measure)
+  n_intro <- max(trials$trial_index[trials$trial_type == "intro"]) + 1
+  d <- trials %>%
+    mutate(trial_display = ifelse(trial_type == "final", n_intro + 1, trial_index + 1))
+  dash_conds <- if (isTRUE(dashed_final)) unique(as.character(d$intro_condition))
+                else if (isFALSE(dashed_final)) character(0) else dashed_final
+  d_solid <- filter(d, !(intro_condition %in% dash_conds & trial_display > n_intro))
+  d_dash  <- filter(d, intro_condition %in% dash_conds, trial_display >= n_intro)
+  ggplot(d, aes(trial_display, .data[[s$yvar]],
+                color = intro_condition, shape = intro_condition)) +
+    annotate("rect", xmin = n_intro + 0.5, xmax = n_intro + 1.5,
+             ymin = -Inf, ymax = Inf, fill = COL_SHADE, alpha = ALPHA_SHADE) +
+    stat_summary(data = d_solid, fun = mean, geom = "line", linewidth = LINE_WIDTH,
+                 alpha = context_alpha) +
+    { if (length(dash_conds))
+        stat_summary(data = d_dash, fun = mean, geom = "line", linewidth = LINE_WIDTH,
+                     linetype = LINETYPE_FINAL, alpha = context_alpha, show.legend = FALSE) } +
+    stat_summary(fun = mean, geom = "point", size = POINT_SIZE, alpha = context_alpha) +
+    scale_color_manual(name = "Condition", values = PAL_CONDITION) +
+    scale_shape_manual(name = "Condition", values = SHAPE_CONDITION) +
+    scale_x_continuous(breaks = 1:(n_intro + 1), labels = c(1:n_intro, "Final")) +
+    s$scale_y +
+    s$coord +
+    labs(x = "Trial", y = s$lab, title = "Change over trials", subtitle = "Disagreement Trials Only") +
+    theme_paper
+}
+
+# Assemble the full 7-panel figure for one experiment ---------------------------
+# Inner panels drop their y titles (shared per row); the CC truth panel drops
+# its legend so "Persuader argues" appears once (from b) and "Condition" once
+# (c and f are identical, so patchwork dedupes them).
+assemble_main_fig <- function(trials, exit) {
+  (
+    (panel_condition(trials, "ps") |
+       (panel_truth(trials, "ps") + labs(y = NULL)) |
+       (panel_trial_index(trials, "ps") + labs(y = NULL))) /
+    (panel_condition(trials, "cc") |
+       (panel_truth(trials, "cc") + labs(y = NULL) +
+          guides(color = "none", fill = "none")) |
+       (panel_trial_index(trials, "cc") + labs(y = NULL))) /
+    panel_selfreport(exit)
+  ) +
+    plot_layout(heights = c(1, 1, 0.85), guides = "collect") +
+    plot_annotation(tag_levels = "a") &
+    theme(legend.position = "bottom", legend.justification = "center")
+}
+
+MEASURE_COLS   <- c("persuasiveness", "likeability", "reliability",
+                    "error_rate", "incorrect_training", "incorrect_instruction")
+MEASURE_LABELS <- c("Persuasive", "Likeable", "Reliable",
+                    "Incorrect", "Mistaken", "Deceptive")
+panel_selfreport <- function(exit) {
+  d <- exit %>%
+    pivot_longer(all_of(MEASURE_COLS), names_to = "measure") %>%
+    mutate(measure = factor(measure, MEASURE_COLS, MEASURE_LABELS))
+  set.seed(SEED)
+  ggplot(d, aes(intro_condition, value, fill = intro_condition)) +
+    stat_summary(fun = mean, geom = "col", width = BAR_WIDTH,
+                 color = "white", linewidth = 0.3) +
+    stat_summary(fun.data = ci_fun, geom = "errorbar",
+                 width = EB_WIDTH, linewidth = EB_LINEWIDTH) +
+    facet_wrap(~measure, nrow = 1) +
+    scale_fill_manual(values = PAL_CONDITION, guide = "none") +
+    scale_x_discrete(labels = COND_ABBREV) +
+    scale_y_continuous(limits = c(0, 7), breaks = c(1, 3, 5, 7)) +
+    labs(x = NULL, y = "Rating (1-7)", title = "Advisor ratings") +
+    theme_paper +
+    theme(strip.text = element_text(size = BASE_SIZE - 1))
+}
+```
+
+# E1 figure
+
+```{r e1-figure, fig.width=6.5, fig.height=7.6}
+e1.fig <- assemble_main_fig(e1.trials, e1.exit)
+e1.fig
+```
+
+```{r e1-save}
+dir.create(DRAFT_DIR, showWarnings = FALSE, recursive = TRUE)
+ggsave(file.path(FIG_DIR, "e1_main.pdf"), e1.fig, width = FIG_W, height = FIG_H)
+ggsave(file.path(DRAFT_DIR, "e1_main_DRAFT.png"), e1.fig,
+       width = FIG_W, height = FIG_H, dpi = 220, bg = "white")
+```
+
+# Sanity checks
+
+```{r e1-sanity}
+# (a/d) vs e1_descriptives.csv: PS .95/.795/.611, CC 48.4/30.0/19.2
+e1.trials %>% filter(trial_type == "final") %>%
+  group_by(intro_condition) %>%
+  summarize(PS = mean(persuader_success), CC = mean(confidence_change), n = n())
+
+bind_rows(
+  e1.trials %>% filter(trial_type == "intro", trial_index == 0),
+  e1.trials %>% filter(trial_type == "final")
+) %>%
+  group_by(trial_type, truth) %>%
+  summarize(PS = mean(persuader_success), CC = mean(confidence_change), n = n(),
+            .groups = "drop")
+
+e1.trials %>% filter(trial_type == "intro") %>%
+  group_by(intro_condition, trial_index) %>%
+  summarize(PS = mean(persuader_success), .groups = "drop") %>%
+  pivot_wider(names_from = trial_index, values_from = PS)
+
+e1.exit %>% group_by(intro_condition) %>%
+  summarize(across(c(persuasiveness, likeability, reliability,
+                     error_rate, incorrect_instruction), mean))
+```
+
+# E2 figure
+
+```{r e2-data}
+e2.trials <- read.csv("stats/e2_trials.csv") %>%
+  filter(participant_persuader_disagree) %>%
+  mutate(
+    intro_condition   = factor(intro_condition, names(PAL_CONDITION)),
+    persuader_success = as.numeric(persuader_success),
+    truth             = factor(ifelse(persuader_correct, "Truth", "Falsehood"),
+                               names(PAL_TRUTH))
+  )
+
+e2.exit <- read.csv("stats/e2_exit_survey.csv") %>%
+  mutate(intro_condition = factor(intro_condition, names(PAL_CONDITION)))
+```
+
+```{r e2-figure, fig.width=6.5, fig.height=7.6}
+e2.fig <- assemble_main_fig(e2.trials, e2.exit)
+e2.fig
+```
+
+```{r e2-save}
+ggsave(file.path(FIG_DIR, "e2_main.pdf"), e2.fig, width = FIG_W, height = FIG_H)
+ggsave(file.path(DRAFT_DIR, "e2_main_DRAFT.png"), e2.fig,
+       width = FIG_W, height = FIG_H, dpi = 220, bg = "white")
+```
+
+```{r e2-sanity}
+# (a/d) vs e2_descriptives.csv: PS .90/.88/.89, CC 46/43/45
+e2.trials %>% filter(trial_type == "final") %>%
+  group_by(intro_condition) %>%
+  summarize(PS = mean(persuader_success), CC = mean(confidence_change), n = n())
+
+bind_rows(
+  e2.trials %>% filter(trial_type == "intro", trial_index == 0),
+  e2.trials %>% filter(trial_type == "final")
+) %>%
+  group_by(trial_type, truth) %>%
+  summarize(PS = mean(persuader_success), CC = mean(confidence_change), n = n(),
+            .groups = "drop")
+
+e2.exit %>% group_by(intro_condition) %>%
+  summarize(across(c(persuasiveness, likeability, reliability,
+                     error_rate, incorrect_instruction), mean))
+```
+
+# E3 figure
+
+```{r e3-data}
+e3.trials <- read.csv("stats/e3_trials.csv") %>%
+  filter(participant_persuader_disagree) %>%
+  mutate(
+    intro_condition    = factor(intro_condition, c("Helpful", "Unhelpful")),
+    feedback_condition = factor(feedback_condition, c("Feedback", "No Feedback")),
+    hint_condition     = factor(hint_condition, c("Conversation", "Hint")),
+    persuader_success  = as.numeric(persuader_success),
+    truth              = factor(ifelse(persuader_correct, "Truth", "Falsehood"),
+                                names(PAL_TRUTH))
+  )
+
+e3.exit <- read.csv("stats/e3_exit_survey.csv") %>%
+  mutate(
+    intro_condition    = factor(intro_condition, c("Helpful", "Unhelpful")),
+    feedback_condition = factor(feedback_condition, c("Feedback", "No Feedback")),
+    hint_condition     = factor(hint_condition, c("Conversation", "Hint"))
+  )
+```
+
+## E3 panel builders
+
+```{r e3-panel-builders}
+# Feedback x Mode facet, styled to stay legible at facet-within-panel size.
+# NB: must be added AFTER theme_paper -- theme_paper is a complete theme, so
+# anything added before it loses its strip styling.
+STRIP_SIZE_E3 <- BASE_SIZE - 1.5
+facet_e3 <- function() list(
+  facet_grid(feedback_condition ~ hint_condition),
+  theme(strip.text    = element_text(size = STRIP_SIZE_E3),
+        panel.spacing = unit(2, "pt"))
+)
+ps_gap <- function() theme(panel.spacing.y = unit(9, "pt"))
+
+# The PS row's % y-labels leave its facet cells narrower, so "Conversation"
+# needs a slightly smaller strip there (c is the limiting panel); CC row keeps
+# STRIP_SIZE_E3. Applied post hoc so it wins over facet_e3()'s strip theme.
+STRIP_SIZE_E3_PS <- STRIP_SIZE_E3 - 1
+strip_ps <- function() theme(strip.text = element_text(size = STRIP_SIZE_E3_PS))
+
+# (b/e) truth effect on intro trials (see confound caveat above) ---------------
+panel_truth_e3 <- function(trials, measure) {
+  s <- measure_spec(measure)
+  set.seed(SEED)
+  ggplot(filter(trials, trial_type == "intro"),
+         aes(truth, .data[[s$yvar]], fill = truth, color = truth)) +
+    geom_mean_ci(measure) +
+    scale_fill_manual(name = LAB_TRUTH, values = PAL_TRUTH) +
+    scale_color_manual(
+      name = LAB_TRUTH,
+      values = if (measure == "ps") setNames(rep("black", 2), names(PAL_TRUTH))
+               else PAL_TRUTH) +
+    scale_x_discrete(labels = c("Truth" = "T", "Falsehood" = "F")) +
+    s$scale_y +
+    s$coord +
+    labs(x = NULL, y = s$lab, title = "Truth effect",
+         subtitle = "Intro Trials Only") +
+    theme_paper +
+    facet_e3()
+}
+
+# (g) exit-survey: all six measures inside each Feedback x Mode cell -----------
+# Full-word labels angled 45deg (horizontal full words collide; abbreviations
+# would need a caption glossary). Same label set as panel_selfreport.
+panel_selfreport_e3 <- function(exit) {
+  d <- exit %>%
+    pivot_longer(all_of(MEASURE_COLS), names_to = "measure") %>%
+    mutate(measure = factor(measure, MEASURE_COLS, MEASURE_LABELS),
+           # g's rows are too short for the full strip label
+           feedback_condition = fct_recode(feedback_condition,
+                                           "No Fdbk" = "No Feedback"))
+  set.seed(SEED)
+  ggplot(d, aes(measure, value, fill = intro_condition)) +
+    stat_summary(fun = mean, geom = "col", width = BAR_WIDTH, color = "white",
+                 linewidth = 0.3, position = position_dodge(DODGE_WIDTH)) +
+    stat_summary(fun.data = ci_fun, geom = "errorbar", position = position_dodge(DODGE_WIDTH),
+                 width = EB_WIDTH, linewidth = EB_LINEWIDTH) +
+    scale_fill_manual(values = PAL_CONDITION, guide = "none") +
+    scale_y_continuous(limits = c(0, 7), breaks = c(1, 3, 5, 7)) +
+    labs(x = NULL, y = "Rating (1-7)", title = "Advisor ratings") +
+    theme_paper +
+    theme(axis.text.x = element_text(angle = 45, hjust = 1)) +
+    facet_e3()
+}
+
+# Assembly: same 2x3 + bottom-strip skeleton as E1/E2, every panel faceted.
+# Condition identity (H/U colours, incl. the dodge order in g) is carried by the
+# collected "Condition" legend from the trial-index panels.
+assemble_e3_fig <- function(trials, exit) {
+  (
+    (
+      (panel_condition(trials, "ps") + facet_e3() +
+         scale_x_discrete(labels = COND_ABBREV) + strip_ps() + ps_gap()) |
+      (panel_truth_e3(trials, "ps") + labs(y = NULL) + strip_ps() + ps_gap()) |
+      (panel_trial_index(trials, "ps") + labs(y = NULL) + facet_e3() +
+         scale_x_continuous(breaks = 1:5, labels = c(1:4, "F")) + strip_ps() + ps_gap())
+    ) /
+    (
+      (panel_condition(trials, "cc") + facet_e3() +
+         scale_x_discrete(labels = COND_ABBREV)) |
+      (panel_truth_e3(trials, "cc") + labs(y = NULL) +
+         guides(color = "none", fill = "none")) |
+      (panel_trial_index(trials, "cc") + labs(y = NULL) + facet_e3() +
+         scale_x_continuous(breaks = 1:5, labels = c(1:4, "F")))
+    ) /
+    (panel_selfreport_e3(exit) + strip_ps())  # rows too short for full-size "No Feedback"
+  ) +
+    plot_layout(heights = c(1, 1, 0.8), guides = "collect") +
+    plot_annotation(tag_levels = "a") &
+    theme(legend.position = "bottom", legend.justification = "center")
+}
+```
+
+```{r e3-figure, fig.width=6.5, fig.height=7.6}
+FIG_H_E3 <- 7.6
+e3.fig <- assemble_e3_fig(e3.trials, e3.exit)
+e3.fig
+```
+
+```{r e3-save}
+ggsave(file.path(FIG_DIR, "e3_main.pdf"), e3.fig, width = FIG_W, height = FIG_H_E3)
+ggsave(file.path(DRAFT_DIR, "e3_main_DRAFT.png"), e3.fig,
+       width = FIG_W, height = FIG_H_E3, dpi = 220, bg = "white")
+```
+
+```{r e3-sanity}
+e3.trials %>% filter(trial_type == "final") %>%
+  group_by(feedback_condition, hint_condition, intro_condition) %>%
+  summarize(PS = mean(persuader_success), CC = mean(confidence_change), n = n(),
+            .groups = "drop")
+
+e3.trials %>% filter(trial_type == "intro") %>%
+  group_by(feedback_condition, hint_condition, truth) %>%
+  summarize(PS = mean(persuader_success), CC = mean(confidence_change), n = n(),
+            .groups = "drop")
+
+# (c/f) hint-decay w/ feedback: Unhelpful hints 29% -> 4% over intro trials
+e3.trials %>% filter(trial_type == "intro", hint_condition == "Hint",
+                     feedback_condition == "Feedback") %>%
+  group_by(intro_condition, trial_index) %>%
+  summarize(PS = mean(persuader_success), .groups = "drop") %>%
+  pivot_wider(names_from = trial_index, values_from = PS)
+
+e3.exit %>% group_by(feedback_condition, hint_condition, intro_condition) %>%
+  summarize(reliability = mean(reliability), error_rate = mean(error_rate),
+            .groups = "drop")
+```
+
+# E4 figure
+
+```{r e4-data}
+e4.trials <- read.csv("stats/e4_trials.csv") %>%
+  filter(participant_persuader_disagree) %>%
+  mutate(
+    intro_condition   = factor(intro_condition, c("Helpful", "Mixed")),
+    persuader         = factor(interaction_type, c("human_ai", "human_human"),
+                               c("LLM", "Human")),
+    persuader_success = as.numeric(persuader_success),
+    truth             = factor(ifelse(persuader_correct, "Truth", "Falsehood"),
+                               names(PAL_TRUTH))
+  )
+
+e4.exit <- read.csv("stats/e4_exit_survey.csv") %>%
+  mutate(
+    intro_condition = factor(intro_condition, c("Helpful", "Mixed")),
+    persuader       = factor(interaction_type, c("human_ai", "human_human"),
+                             c("LLM", "Human"))
+  )
+```
+
+## E4 panel builders
+
+```{r e4-panel-builders}
+STRIP_SIZE_E4 <- BASE_SIZE - 1
+facet_e4 <- function() list(
+  facet_grid(. ~ persuader),
+  theme(strip.text    = element_text(size = STRIP_SIZE_E4),
+        panel.spacing = unit(2, "pt"))
+)
+
+# (b/e) truth effect on final trials (the preregistered H4 contrasts) ----------
+panel_truth_e4 <- function(trials, measure) {
+  s <- measure_spec(measure)
+  set.seed(SEED)
+  ggplot(filter(trials, trial_type == "final"),
+         aes(truth, .data[[s$yvar]], fill = truth, color = truth)) +
+    geom_mean_ci(measure) +
+    scale_fill_manual(name = LAB_TRUTH, values = PAL_TRUTH) +
+    scale_color_manual(
+      name = LAB_TRUTH,
+      values = if (measure == "ps") setNames(rep("black", 2), names(PAL_TRUTH))
+               else PAL_TRUTH) +
+    scale_x_discrete(labels = c("Truth" = "T", "Falsehood" = "F")) +
+    s$scale_y +
+    s$coord +
+    labs(x = NULL, y = s$lab, title = "Truth effect",
+         subtitle = "Final Trials Only") +
+    theme_paper +
+    facet_e4()
+}
+
+# (g) exit-survey: all six measures inside each Persuader cell ------------------
+# Full-word labels angled 45deg, same label set as panel_selfreport.
+panel_selfreport_e4 <- function(exit) {
+  d <- exit %>%
+    pivot_longer(all_of(MEASURE_COLS), names_to = "measure") %>%
+    mutate(measure = factor(measure, MEASURE_COLS, MEASURE_LABELS))
+  set.seed(SEED)
+  ggplot(d, aes(measure, value, fill = intro_condition)) +
+    stat_summary(fun = mean, geom = "col", width = BAR_WIDTH, color = "white",
+                 linewidth = 0.3, position = position_dodge(DODGE_WIDTH)) +
+    stat_summary(fun.data = ci_fun, geom = "errorbar", position = position_dodge(DODGE_WIDTH),
+                 width = EB_WIDTH, linewidth = EB_LINEWIDTH) +
+    scale_fill_manual(values = PAL_CONDITION, guide = "none") +
+    scale_y_continuous(limits = c(0, 7), breaks = c(1, 3, 5, 7)) +
+    labs(x = NULL, y = "Rating (1-7)", title = "Advisor ratings") +
+    theme_paper +
+    theme(axis.text.x = element_text(angle = 45, hjust = 1)) +
+    facet_e4()
+}
+
+# Assembly: E1 skeleton, every panel faceted by Persuader. Condition identity
+# (H/M colours, incl. the dodge order in g) comes from the collected "Condition"
+# legend; the truth legend from b (dropped from e as in E1).
+assemble_e4_fig <- function(trials, exit) {
+  (
+    (
+      (panel_condition(trials, "ps") + facet_e4() +
+         scale_x_discrete(labels = COND_ABBREV)) |
+      (panel_truth_e4(trials, "ps") + labs(y = NULL)) |
+      (panel_trial_index(trials, "ps", dashed_final = "Helpful") + labs(y = NULL) + facet_e4() +
+         scale_x_continuous(breaks = 1:5, labels = c(1:4, "F")))
+    ) /
+    (
+      (panel_condition(trials, "cc") + facet_e4() +
+         scale_x_discrete(labels = COND_ABBREV)) |
+      (panel_truth_e4(trials, "cc") + labs(y = NULL) +
+         guides(color = "none", fill = "none")) |
+      (panel_trial_index(trials, "cc", dashed_final = "Helpful") + labs(y = NULL) + facet_e4() +
+         scale_x_continuous(breaks = 1:5, labels = c(1:4, "F")))
+    ) /
+    panel_selfreport_e4(exit)
+  ) +
+    plot_layout(heights = c(1, 1, 0.85), guides = "collect") +
+    plot_annotation(tag_levels = "a") &
+    theme(legend.position = "bottom", legend.justification = "center")
+}
+```
+
+```{r e4-figure, fig.width=6.5, fig.height=7.6}
+FIG_H_E4 <- 7.6
+e4.fig <- assemble_e4_fig(e4.trials, e4.exit)
+e4.fig
+```
+
+```{r e4-save}
+ggsave(file.path(FIG_DIR, "e4_main.pdf"), e4.fig, width = FIG_W, height = FIG_H_E4)
+ggsave(file.path(DRAFT_DIR, "e4_main_DRAFT.png"), e4.fig,
+       width = FIG_W, height = FIG_H_E4, dpi = 220, bg = "white")
+```
+
+## E4 appendix: first-trial baseline vs Helpful final (fig:e4-baseline)
+
+```{r e4-baseline-figure, fig.width=6.5, fig.height=2.9}
+e4.base <- e4.trials %>%
+  filter((trial_index == 0 & intro_condition == "Mixed") |
+         (trial_type == "final" & intro_condition == "Helpful")) %>%
+  mutate(trial_display = ifelse(trial_index == 0, 1, 5)) %>%
+  group_by(persuader, trial_display) %>%
+  summarize(n = n(), k = sum(persuader_success), p = k / n,
+            cc = mean(confidence_change),
+            cc_se = sd(confidence_change) / sqrt(n), .groups = "drop") %>%
+  mutate(den = 1 + 1.96^2 / n,
+         ctr = (p + 1.96^2 / (2 * n)) / den,
+         hw  = 1.96 * sqrt(p * (1 - p) / n + 1.96^2 / (4 * n^2)) / den,
+         ps_lo = pmax(0, ctr - hw), ps_hi = pmin(1, ctr + hw),
+         cc_lo = cc - 1.96 * cc_se, cc_hi = cc + 1.96 * cc_se)
+e4.base
+
+panel_baseline <- function(trials, measure) {
+  s <- measure_spec(measure)
+  d <- if (measure == "ps") mutate(e4.base, y = p, lo = ps_lo, hi = ps_hi)
+       else mutate(e4.base, y = cc, lo = cc_lo, hi = cc_hi)
+  seg <- d %>% select(persuader, trial_display, y) %>%
+    pivot_wider(names_from = trial_display, values_from = y, names_prefix = "t")
+  panel_trial_index(trials, measure, dashed_final = "Helpful", context_alpha = 0.3) +
+    facet_e4() +
+    scale_x_continuous(breaks = 1:5, labels = c(1:4, "F")) +
+    geom_segment(data = seg, aes(x = 1, xend = 5, y = t1, yend = t5),
+                 inherit.aes = FALSE, color = "black", linewidth = LINE_WIDTH * 1.4) +
+    geom_errorbar(data = d, aes(x = trial_display, ymin = lo, ymax = hi),
+                  inherit.aes = FALSE, width = EB_WIDTH, linewidth = EB_LINEWIDTH) +
+    geom_point(data = d, aes(x = trial_display, y = y), inherit.aes = FALSE,
+               color = "black", size = POINT_SIZE * 1.3) +
+    labs(title = NULL, subtitle = NULL)
+}
+
+e4.base.fig <- (panel_baseline(e4.trials, "ps") | panel_baseline(e4.trials, "cc")) +
+  plot_layout(guides = "collect") +
+  plot_annotation(tag_levels = "a") &
+  theme(legend.position = "bottom", legend.justification = "center")
+e4.base.fig
+ggsave(file.path(FIG_DIR, "e4_baseline.pdf"), e4.base.fig, width = 6.5, height = 2.9)
+ggsave(file.path(DRAFT_DIR, "e4_baseline_DRAFT.png"), e4.base.fig,
+       width = 6.5, height = 2.9, dpi = 220, bg = "white")
+```
+
+```{r e4-sanity}
+e4.trials %>% filter(trial_type == "final") %>%
+  group_by(persuader, intro_condition) %>%
+  summarize(PS = mean(persuader_success), CC = mean(confidence_change), n = n(),
+            .groups = "drop")
+
+e4.trials %>% filter(trial_type == "final") %>%
+  group_by(persuader, truth) %>%
+  summarize(PS = mean(persuader_success), n = n(), .groups = "drop")
+
+# intro-Mixed truth split (left bars of b/e)
+e4.trials %>% filter(trial_type == "intro", intro_condition == "Mixed") %>%
+  group_by(persuader, truth) %>%
+  summarize(PS = mean(persuader_success), n = n(), .groups = "drop")
+
+e4.exit %>% group_by(persuader) %>%
+  summarize(persuasiveness = mean(persuasiveness, na.rm = TRUE),
+            reliability = mean(reliability, na.rm = TRUE), n = n(),
+            .groups = "drop")
+```
+
+# Cross-experiment figures
+
+```{r xp-data}
+xp.trials <- map_dfr(sprintf("stats/e%d_trials.csv", 1:4), read.csv) %>%
+  filter(participant_persuader_disagree) %>%
+  mutate(
+    truth = factor(ifelse(persuader_correct, "Truth", "Falsehood"),
+                   names(PAL_TRUTH)),
+    persuader_success = as.numeric(persuader_success),  # logical is DISCRETE to ggplot
+    # signed stance toward the persuader's position: participants disagree at
+    # the start of every included trial, so pre = -confidence_pre; CC is the
+    # halved (post - pre)/2, so post = pre + 2*CC on the same -100..100 scale
+    pre_s  = -confidence_pre,
+    post_s = -confidence_pre + 2 * confidence_change
+  )
+```
+
+## initial confidence vs. persuasion
+
+```{r xp-conf-slopes, fig.width=6.5, fig.height=2.4}
+xp.bins <- xp.trials %>%
+  mutate(bin = floor(pmin(confidence_pre, 99) / 10) * 10 + 5) %>%
+  group_by(experiment, bin) %>%
+  summarize(ps = mean(persuader_success), n = n(), .groups = "drop")
+
+xp.slopes <- ggplot(xp.trials, aes(confidence_pre, persuader_success)) +
+  geom_smooth(method = "glm", method.args = list(family = "binomial"),
+              color = "grey25", fill = "grey70", linewidth = LINE_WIDTH) +
+  geom_point(data = xp.bins, aes(bin, ps, size = n),
+             shape = 16, color = "grey25", alpha = 0.6) +
+  scale_size_area(max_size = 3.5, guide = "none") +
+  scale_y_continuous(labels = scales::percent) +
+  scale_x_continuous(breaks = c(0, 50, 100)) +
+  coord_cartesian(ylim = c(0, 1)) +
+  facet_grid(. ~ experiment) +
+  labs(x = "Initial confidence in own answer", y = LAB_PS) +
+  theme_paper +
+  theme(strip.text = element_text(size = STRIP_SIZE_E4),
+        panel.spacing = unit(8, "pt"))
+
+xp.slopes
+```
+
+```{r xp-conf-slopes-save}
+ggsave(file.path(DRAFT_DIR, "xp_conf_slopes_DRAFT.png"), xp.slopes,
+       width = FIG_W, height = 2.4, dpi = 220, bg = "white")
+```
+
+## truth advantage as belief movement
+
+```{r xp-truth-movement, fig.width=6.5, fig.height=3.4}
+xp.move <- bind_rows(
+  xp.trials %>% filter(experiment == "E1", trial_type == "final") %>%
+    mutate(context = "E1 final · LLM, feedback", conf_group = "Low confidence"),
+  xp.trials %>% filter(experiment == "E2", trial_type == "final") %>%
+    mutate(context = "E2 final · LLM, no feedback", conf_group = "Low confidence"),
+  xp.trials %>% filter(experiment == "E3", trial_type == "intro",
+                       feedback_condition == "No Feedback",
+                       hint_condition == "Conversation") %>%
+    mutate(context = "E3 intro · LLM, no feedback", conf_group = "High confidence"),
+  xp.trials %>% filter(experiment == "E3", trial_type == "intro",
+                       feedback_condition == "No Feedback",
+                       hint_condition == "Hint") %>%
+    mutate(context = "E3 intro · Hint, no feedback", conf_group = "High confidence"),
+  xp.trials %>% filter(experiment == "E4", trial_type == "final",
+                       interaction_type == "human_ai") %>%
+    mutate(context = "E4 final · LLM, feedback", conf_group = "High confidence"),
+  xp.trials %>% filter(experiment == "E4", trial_type == "final",
+                       interaction_type == "human_human") %>%
+    mutate(context = "E4 final · Human, feedback", conf_group = "High confidence")
+) %>%
+  mutate(conf_group = factor(conf_group, c("Low confidence", "High confidence")))
+
+CONTEXT_LEVELS <- c("E1 final · LLM, feedback",
+                    "E2 final · LLM, no feedback",
+                    "E3 intro · LLM, no feedback",
+                    "E3 intro · Hint, no feedback",
+                    "E4 final · LLM, feedback",
+                    "E4 final · Human, feedback")
+
+set.seed(SEED)
+xp.move.sum <- xp.move %>%
+  group_by(conf_group, context, truth) %>%
+  summarize(pre = mean(pre_s), ci = list(mean_cl_boot(post_s)), n = n(),
+            .groups = "drop") %>%
+  unnest_wider(ci) %>%                       # y, ymin, ymax (post-stance)
+  mutate(context = factor(context, rev(CONTEXT_LEVELS)))
+
+NUDGE <- 0.17  # vertical offset of the Truth/Falsehood pair within a row
+xp.movement <-
+  ggplot(xp.move.sum, aes(y = context, color = truth)) +
+  geom_vline(xintercept = 0, linetype = "dashed", linewidth = 0.3,
+             color = "grey50") +
+  geom_errorbarh(data = ~filter(.x, truth == "Truth"),
+                 aes(xmin = ymin, xmax = ymax),
+                 position = position_nudge(y = NUDGE),
+                 height = 0.14, linewidth = EB_LINEWIDTH) +
+  geom_errorbarh(data = ~filter(.x, truth == "Falsehood"),
+                 aes(xmin = ymin, xmax = ymax),
+                 position = position_nudge(y = -NUDGE),
+                 height = 0.14, linewidth = EB_LINEWIDTH) +
+  geom_segment(data = ~filter(.x, truth == "Truth"),
+               aes(x = pre, xend = y, yend = context),
+               position = position_nudge(y = NUDGE), linewidth = 0.8,
+               arrow = arrow(length = unit(5, "pt"), type = "closed")) +
+  geom_segment(data = ~filter(.x, truth == "Falsehood"),
+               aes(x = pre, xend = y, yend = context),
+               position = position_nudge(y = -NUDGE), linewidth = 0.8,
+               arrow = arrow(length = unit(5, "pt"), type = "closed")) +
+  scale_color_manual(name = LAB_TRUTH, values = PAL_TRUTH) +
+  scale_x_continuous(limits = c(-100, 100),
+                     breaks = c(-100, -50, 0, 50, 100)) +
+  facet_grid(conf_group ~ ., scales = "free_y", space = "free_y") +
+  labs(x = "Stance (−100 = holds initial answer, +100 = adopts persuader's position)",
+       y = NULL) +
+  theme_paper +
+  theme(strip.text.y = element_text(size = STRIP_SIZE_E4, angle = 270),
+        panel.spacing = unit(6, "pt"),
+        axis.text.y = element_text(size = BASE_SIZE - 1))
+
+xp.movement
+```
+
+```{r xp-truth-movement-save}
+ggsave(file.path(DRAFT_DIR, "xp_truth_movement_DRAFT.png"), xp.movement,
+       width = FIG_W, height = 3.4, dpi = 220, bg = "white")
+```
+
+```{r xp-sanity}
+# movement endpoints should echo the known PS numbers directionally:
+# E3 NF-Conv truth 81 v 48; E4 human 65 v 33, LLM 78 v 63; E1/E2 finals ~equal
+xp.move %>% group_by(conf_group, context, truth) %>%
+  summarize(PS = mean(persuader_success), pre = mean(pre_s),
+            post = mean(post_s), n = n(), .groups = "drop") %>%
+  arrange(conf_group, context, desc(truth))
+
+xp.trials %>% group_by(experiment) %>%
+  group_modify(~broom::tidy(glm(persuader_success ~ I(confidence_pre / 10),
+                                family = binomial, data = .x))) %>%
+  filter(term != "(Intercept)")
+```
+
+# Qualitative-strategy figures (fig:qual-main, fig:qual-probes)
+
+```{r qual-data}
+q.prev   <- read.csv("stats/qual_prevalence.csv")
+q.ors    <- read.csv("stats/qual_tag_ors.csv")
+q.probes <- read.csv("stats/qual_probes.csv")
+q.gu     <- read.csv("stats/qual_gaveup_rates.csv")
+q.ire    <- read.csv("stats/qual_item_re.csv")
+q.icell  <- read.csv("stats/qual_item_cells.csv")
+
+PAL_TYPE   <- c("LLM" = "#009988", "Human" = "#AA4499")
+SHAPE_TYPE <- c("LLM" = 16, "Human" = 17)
+SHAPE_TRUTH <- c("Truth" = 16, "Falsehood" = 17)
+LAB_TYPE   <- "Persuader"
+STRIP_SIZE_QUAL <- BASE_SIZE - 1
+
+# Strategy-category palette + order (same as qualitative_tags.Rmd fit-helpers)
+TYPE_LV <- c("Deception", "Content", "Social", "Concession", "Response", "Opener")
+PAL_CAT <- c(Deception = "#CC3311", Content = "#0077BB", Social = "#EE7733",
+             Concession = "#AA3377", Response = "#009988", Opener = "#777777")
+SIGCOL  <- c("BH p < .05" = "#CC3311", "n.s." = "grey45")
+
+fac_qual <- function(d) {
+  # apply the shared factor codings to whichever of the columns are present
+  if ("role" %in% names(d))  d$role  <- factor(d$role, c("Persuader", "Target"))
+  if ("type" %in% names(d))  d$type  <- factor(d$type, TYPE_LV)
+  if ("persuader_type" %in% names(d))
+    d$persuader_type <- factor(d$persuader_type, names(PAL_TYPE))  # LLM left/first
+  if ("truth" %in% names(d)) d$truth <- factor(d$truth, names(PAL_TRUTH))
+  d
+}
+
+or_ci <- function(d) d %>%
+  mutate(or = exp(b), lo = exp(b - 1.96 * se), hi = exp(b + 1.96 * se))
+
+# Wilson 95% CI from (k, n) cells
+wilson_ci <- function(k, n, z = 1.96) {
+  p <- k / n; den <- 1 + z^2 / n
+  ctr <- (p + z^2 / (2 * n)) / den
+  hw  <- z * sqrt(p * (1 - p) / n + z^2 / (4 * n^2)) / den
+  tibble(p = p, lo = pmax(0, ctr - hw), hi = pmin(1, ctr + hw))
+}
+```
+
+## Panel builders
+
+```{r qual-panel-builders}
+# (a) overall prevalence: simple bars, coloured by strategy category ----------
+panel_qual_prevalence <- function() {
+  d <- q.prev %>% fac_qual() %>%
+    group_by(tag, label, role, type) %>%
+    summarize(n = sum(n), k = sum(k), .groups = "drop") %>%
+    mutate(wilson_ci(k, n), label = fct_reorder(label, p))
+  ggplot(d, aes(p, label, fill = type)) +
+    geom_col(width = BAR_WIDTH, color = "white", linewidth = 0.3) +
+    geom_errorbar(aes(xmin = lo, xmax = hi), orientation = "y",
+                  width = EB_WIDTH, linewidth = EB_LINEWIDTH) +
+    scale_fill_manual(name = "Category", values = PAL_CAT) +
+    scale_x_continuous(labels = scales::percent) +
+    facet_grid(role ~ ., scales = "free_y", space = "free_y") +
+    labs(x = "Proportion of conversations", y = NULL,
+         title = "Strategy prevalence",
+         subtitle = "All conversations, Experiments 1-4") +
+    theme_paper +
+    theme(strip.text.y = element_text(size = STRIP_SIZE_QUAL),
+          panel.grid.major.y = element_blank())
+}
+
+# (b/c/d) per-tag OR forests, points coloured by category, roles faceted -------
+# Category colour legend comes once from panel a (same palette), so the forests
+# suppress theirs. CIs carry significance; near-separation rows can be dropped
+# per panel (Concession / Personal in the human-vs-LLM model, as in the Rmd).
+forest_qual <- function(contrast_key, title, subtitle, drop_labels = NULL,
+                        breaks = c(0.3, 1, 3, 10)) {
+  d <- q.ors %>%
+    filter(contrast == contrast_key, !is.na(b), !label %in% drop_labels) %>%
+    fac_qual() %>%
+    or_ci() %>%
+    mutate(label = fct_reorder(label, b),
+           sig_fill = ifelse(p_bh < .05, PAL_CAT[as.character(type)], "white"))
+  ggplot(d, aes(or, label, color = type)) +
+    geom_vline(xintercept = 1, linetype = "dashed", color = "grey65",
+               linewidth = 0.3) +
+    geom_pointrange(aes(xmin = lo, xmax = hi, fill = sig_fill), shape = 21,
+                    size = 0.35, stroke = 0.6, linewidth = EB_LINEWIDTH) +
+    scale_fill_identity() +
+    scale_color_manual(values = PAL_CAT, guide = "none") +
+    scale_x_log10(breaks = breaks,
+                  labels = function(x) ifelse(x < 1, sprintf("%.2g", x),
+                                              scales::comma(x, accuracy = 1))) +
+    facet_grid(role ~ ., scales = "free_y", space = "free_y") +
+    labs(x = "Odds ratio", y = NULL, title = title, subtitle = subtitle) +
+    theme_paper +
+    theme(strip.text.y = element_text(size = STRIP_SIZE_QUAL),
+          panel.grid.major.y = element_blank())
+}
+
+panel_qual_truth_or <- function() forest_qual(
+  "truth_llm", "Falsehood vs. truth",
+  "LLM conversations only",
+  breaks = c(0.3, 1, 10, 100, 1000))
+
+panel_qual_disagree_or <- function() forest_qual(
+  "disagree_llm", "Disagreement vs. agreement",
+  "LLM conversations only")
+
+panel_qual_type_or <- function() forest_qual(
+  "type_e4", "Human vs. LLM",
+  "Experiment 4 only",
+  drop_labels = c("Concession", "Personal"),
+  breaks = c(0.01, 0.1, 1, 10))  # complete/quasi-separation (0/702 LLM concessions)
+```
+
+```{r qual-main-figure, fig.width=6.5, fig.height=5.9}
+FIG_H_QUAL <- 5.9
+qual.main <- (panel_qual_prevalence() | panel_qual_truth_or()) /
+  (panel_qual_disagree_or() | panel_qual_type_or()) +
+  plot_layout(guides = "collect") +
+  plot_annotation(tag_levels = "a") &
+  theme(legend.position = "bottom")
+qual.main
+```
+
+```{r qual-main-save}
+ggsave(file.path(FIG_DIR, "qual_main.pdf"), qual.main,
+       width = FIG_W, height = FIG_H_QUAL)
+ggsave(file.path(DRAFT_DIR, "qual_main_DRAFT.png"), qual.main,
+       width = FIG_W, height = FIG_H_QUAL, dpi = 220, bg = "white")
+```
+
+## Fig 2: what predicts success
+
+```{r qual-probes-builders}
+# (a) per-tag success ORs (LLM disagreement trials, baseline covariate model) --
+panel_qual_success <- function() {
+  d <- q.ors %>%
+    filter(contrast == "success_llm", !is.na(b), se < 5) %>%
+    mutate(role = factor(role, c("Persuader", "Target")),
+           type = factor(type, TYPE_LV),
+           sig_fill = ifelse(p_bh < .05, PAL_CAT[as.character(type)], "white")) %>%
+    or_ci() %>%
+    mutate(label = fct_reorder(label, b))
+  ggplot(d, aes(or, label, color = type)) +
+    geom_vline(xintercept = 1, linetype = "dashed", color = "grey65",
+               linewidth = 0.3) +
+    geom_pointrange(aes(xmin = lo, xmax = hi, fill = sig_fill), shape = 21,
+                    size = 0.35, stroke = 0.6, linewidth = EB_LINEWIDTH) +
+    scale_fill_identity() +
+    scale_color_manual(name = "Category", values = PAL_CAT) +
+    scale_x_log10() +
+    facet_grid(role ~ ., scales = "free_y", space = "free_y") +
+    labs(x = "Odds ratio for persuasion success", y = NULL,
+         title = "Persuasion success by tag",
+         subtitle = "Each tag modeled separately, controlling for truth, confidence, and experiment") +
+    theme_paper +
+    theme(strip.text.y = element_text(size = STRIP_SIZE_QUAL),
+          panel.grid.major.y = element_blank()) +
+    guides(color = guide_legend(nrow = 1, override.aes = list(fill = PAL_CAT[levels(d$type)[levels(d$type) %in% d$type]])))
+}
+
+# Shared style for the three small focal-tag panels (b-d) ----------------------
+FOCAL_LAB <- c("Flattery", "Personal", "Misleading statements", "Authority", "Acknowledge")
+wrap_focal <- function(x) ifelse(x == "Misleading statements", "Misleading\nstatements", x)
+SIG05 <- c("p < .05" = "black", "n.s." = "grey55")
+SIGMONO <- c("BH p < .05" = "black", "n.s." = "grey55")
+focal_panel <- function(d, title, subtitle, xlab = "Odds ratio for success",
+                        breaks = c(0.3, 0.5, 1, 2, 3, 5)) {
+  if (!"type" %in% names(d))
+    d <- d %>% left_join(q.ors %>% distinct(tag, type), by = "tag")
+  d <- d %>% or_ci() %>%
+    mutate(type = factor(type, TYPE_LV),
+           sig_fill = ifelse(p < .05, PAL_CAT[as.character(type)], "white"),
+           label = fct_reorder(wrap_focal(label), b))
+  ggplot(d, aes(or, label, color = type)) +
+    geom_vline(xintercept = 1, linetype = "dashed", color = "grey65", linewidth = 0.3) +
+    geom_pointrange(aes(xmin = lo, xmax = hi, fill = sig_fill), shape = 21,
+                    size = 0.35, stroke = 0.6, linewidth = EB_LINEWIDTH) +
+    scale_fill_identity() +
+    scale_color_manual(values = PAL_CAT, guide = "none") +
+    scale_x_log10(breaks = breaks,
+                  labels = function(x) ifelse(x < 1, sprintf("%.2g", x), scales::comma(x, accuracy = 1))) +
+    labs(x = xlab, y = NULL, title = title, subtitle = subtitle) +
+    theme_paper +
+    theme(panel.grid.major.y = element_blank(), legend.position = "none",
+          plot.subtitle = element_text(size = BASE_SIZE - 4))
+}
+
+# (b) single adjusted model: all persuader tags jointly + target behaviour ------
+panel_qual_adjusted <- function() focal_panel(
+  q.ors %>% filter(contrast == "success_llm_adj", label %in% FOCAL_LAB),
+  "Adjusted", "All tags modeled jointly, including\ntarget tags. Same controls as panel a.")
+
+# (c) opening-move probe: tag from the persuader's first message only -----------
+panel_qual_opening <- function() focal_panel(
+  q.probes %>% filter(probe == "opening", variant == "opening_ctrl", label %in% FOCAL_LAB),
+  "Opening move", "Tags from persuader's first message.\nSame controls as panel a + tags\nfrom target's opening message")
+
+# (d) human persuaders: habitual (leave-one-out) style ---------------------------
+panel_qual_habitual <- function() focal_panel(
+  q.probes %>% filter(probe == "loo", variant == "loo_any", label %in% FOCAL_LAB),
+  "Persuader's other games", "Human persuaders, Experiment 4.\nTag used in persuader's other games.\nControlling for truth and confidence")
+```
+
+```{r qual-probes-figure, fig.width=6.5, fig.height=6.0}
+FIG_H_QUAL2 <- 6.0
+qual.probes <- panel_qual_success() /
+  (panel_qual_adjusted() | panel_qual_opening()) +
+  plot_layout(heights = c(1.6, 1)) +
+  plot_annotation(tag_levels = "a")
+qual.probes
+```
+
+```{r qual-probes-save}
+ggsave(file.path(FIG_DIR, "qual_probes.pdf"), qual.probes,
+       width = FIG_W, height = FIG_H_QUAL2)
+ggsave(file.path(DRAFT_DIR, "qual_probes_DRAFT.png"), qual.probes,
+       width = FIG_W, height = FIG_H_QUAL2, dpi = 220, bg = "white")
+```
+
+## Appendix: by-item variation (fig:qual-items)
+
+```{r qual-items-figure, fig.width=6.5, fig.height=7.2}
+PAL_TOPIC <- c("logic" = "#332288", "physics" = "#88CCEE",
+               "probability" = "#DDCC77", "facts" = "#999933")
+# (a) between-item vs between-participant SD per persuader tag
+ire <- q.ire %>% filter(!is.na(sd_item)) %>%
+  pivot_longer(c(sd_item, sd_ppt), names_to = "level", values_to = "sd") %>%
+  mutate(level = factor(level, c("sd_item", "sd_ppt"), c("Between items", "Between participants")),
+         type = factor(type, TYPE_LV),
+         label = fct_reorder(label, sd, .fun = max))
+panel_items_sd <- ggplot(ire, aes(sd, label, fill = type, alpha = level)) +
+  geom_col(position = position_dodge(width = 0.75), width = 0.7, color = "white", linewidth = 0.2) +
+  scale_fill_manual(name = "Category", values = PAL_CAT) +
+  scale_alpha_manual(name = NULL, values = c("Between items" = 1, "Between participants" = 0.4)) +
+  labs(x = "Random-intercept SD (log-odds)", y = NULL,
+       title = "How much each strategy varies", subtitle = "LLM persuaders, Experiments 1-4") +
+  theme_paper +
+  theme(panel.grid.major.y = element_blank(), legend.box = "vertical",
+        legend.spacing.y = unit(0, "pt")) +
+  guides(fill = guide_legend(nrow = 1, order = 1), alpha = guide_legend(nrow = 1, order = 2))
+
+# (b) which strategies are over/under-represented on which items
+ic <- q.icell %>%
+  mutate(sig = p_bh < .05,
+         direction = ifelse(log_or > 0, "Over-represented", "Under-represented"),
+         type = factor(type, TYPE_LV),
+         truth = factor(truth, c("Truth", "Falsehood"), c("Arguing truth", "Arguing falsehood")),
+         label = factor(label, levels = ire %>% distinct(label, type) %>% arrange(type, label) %>% pull(label)),
+         q_name = fct_reorder(q_name, as.integer(factor(q_subcategory)) * 100 + as.integer(factor(q_name)), .desc = TRUE))
+sig_cells <- ic %>% filter(sig)
+panel_items_cells <- ggplot(ic, aes(label, q_name)) +
+  geom_tile(fill = "grey96", color = "white") +
+  geom_point(data = sig_cells, aes(color = type, shape = direction, size = abs(log_or))) +
+  scale_color_manual(values = PAL_CAT, guide = "none") +
+  scale_shape_manual(name = NULL, values = c("Over-represented" = 16, "Under-represented" = 1)) +
+  scale_size_continuous(name = "|log OR| vs pooled", range = c(0.8, 3.2), breaks = c(1, 2, 4)) +
+  facet_grid(q_subcategory ~ truth, scales = "free_y", space = "free_y", switch = "y") +
+  labs(x = NULL, y = NULL, title = "Item-specific strategy use",
+       subtitle = "Cells differing from the pooled rate (BH p < .05)") +
+  theme_paper +
+  theme(axis.text.x = element_text(angle = 45, hjust = 1, size = BASE_SIZE - 3),
+        axis.text.y = element_text(size = BASE_SIZE - 3.5),
+        strip.text.y.left = element_text(angle = 0, size = BASE_SIZE - 3),
+        strip.placement = "outside", panel.grid = element_blank(),
+        legend.box = "vertical", legend.spacing.y = unit(0, "pt")) +
+  guides(size = guide_legend(nrow = 1, order = 1), shape = guide_legend(nrow = 1, order = 2))
+qual.items <- panel_items_sd / panel_items_cells +
+  plot_layout(heights = c(1, 2.2)) +
+  plot_annotation(tag_levels = "a")
+qual.items
+ggsave(file.path(FIG_DIR, "qual_items.pdf"), qual.items, width = FIG_W, height = 7.2)
+ggsave(file.path(DRAFT_DIR, "qual_items_DRAFT.png"), qual.items, width = FIG_W, height = 7.2, dpi = 220, bg = "white")
+```
+
+## Backup-panel variants
+
+```{r qual-backups, fig.width=6.5, fig.height=4.5}
+# b-alt: the same toolkit contrast as an OR forest (drops the near-separation
+# deception/gave-up tags rather than pretending their ORs are estimable).
+qual.b.alt <- q.ors %>%
+  filter(contrast == "truth_llm", role == "Persuader", !singular, se < 1) %>%
+  or_ci() %>%
+  mutate(label = fct_reorder(label, b),
+         sig = ifelse(p_bh < .05, "BH p < .05", "n.s.")) %>%
+  ggplot(aes(or, label)) +
+  geom_vline(xintercept = 1, linetype = "dashed", color = "grey65", linewidth = 0.3) +
+  geom_pointrange(aes(xmin = lo, xmax = hi, shape = sig), size = 0.35,
+                  linewidth = EB_LINEWIDTH, color = "grey25") +
+  scale_shape_manual(name = NULL, values = c("BH p < .05" = 16, "n.s." = 1)) +
+  scale_x_log10() +
+  labs(x = "OR, falsehood vs truth assignment", y = NULL,
+       title = "LLM toolkit shift (OR variant)",
+       subtitle = "Near-separation deception/concession tags omitted") +
+  theme_paper
+ggsave(file.path(DRAFT_DIR, "qual_b_or_variant_DRAFT.png"), qual.b.alt,
+       width = 4, height = 3.2, dpi = 220, bg = "white")
+
+# probe-B backup: habitual (leave-one-out) style, E4 human persuaders.
+qual.loo <- q.probes %>%
+  filter(probe == "loo", variant == "loo") %>%
+  or_ci() %>%
+  mutate(label = fct_reorder(label, b)) %>%
+  ggplot(aes(or, label)) +
+  geom_vline(xintercept = 1, linetype = "dashed", color = "grey65", linewidth = 0.3) +
+  geom_pointrange(aes(xmin = lo, xmax = hi), size = 0.35,
+                  linewidth = EB_LINEWIDTH, color = "grey25") +
+  scale_x_log10() +
+  labs(x = "OR per unit habitual rate", y = NULL,
+       title = "Within-persuader style (probe B)",
+       subtitle = "E4 human persuaders; low power") +
+  theme_paper
+ggsave(file.path(DRAFT_DIR, "qual_loo_variant_DRAFT.png"), qual.loo,
+       width = 4, height = 3.2, dpi = 220, bg = "white")
+
+rate_panel <- function(d, ylab, title, sub, ylim, lab_fun) {
+  ggplot(d, aes(truth, p, fill = truth)) +
+    geom_col(width = BAR_WIDTH, color = "white", linewidth = 0.3) +
+    geom_errorbar(aes(ymin = lo, ymax = hi), width = EB_WIDTH,
+                  linewidth = EB_LINEWIDTH) +
+    geom_text(aes(y = hi, label = lab_fun(k, n, p)), vjust = -0.6,
+              size = (BASE_SIZE - 3.5) / .pt, color = "grey30") +
+    scale_fill_manual(values = PAL_TRUTH, guide = "none") +
+    scale_y_continuous(labels = scales::percent) +
+    coord_cartesian(ylim = ylim) +
+    facet_grid(. ~ persuader_type) +
+    labs(x = "Persuader argues", y = ylab, title = title, subtitle = sub) +
+    theme_paper +
+    theme(strip.text = element_text(size = STRIP_SIZE_QUAL))
+}
+qual.fab <- q.prev %>% fac_qual() %>%
+  filter(tag == "deception_false", experiment == "E4") %>%
+  group_by(persuader_type, truth) %>%
+  summarize(n = sum(n), k = sum(k), .groups = "drop") %>%
+  mutate(wilson_ci(k, n)) %>%
+  rate_panel("False statements", "Fabrication", "Experiment 4",
+             c(0, 1.05), function(k, n, p) sprintf("%.0f%%", 100 * p))
+qual.conc <- q.gu %>% fac_qual() %>%
+  group_by(persuader_type, truth) %>%
+  summarize(n = sum(n), k = sum(k), .groups = "drop") %>%
+  mutate(wilson_ci(k, n)) %>%
+  rate_panel("Conceded the position", "Concession",
+             "LLM: Experiments 1-4; Human: Experiment 4", c(0, 0.185),
+             function(k, n, p) sprintf("%d / %s", k, format(n, big.mark = ",", trim = TRUE)))
+ggsave(file.path(DRAFT_DIR, "qual_fab_concession_DRAFT.png"),
+       qual.fab | qual.conc, width = FIG_W, height = 3.0, dpi = 220, bg = "white")
+
+qual.b.alt | qual.loo
+```
+
+## Sanity checks
+
+```{r qual-sanity}
+# Panel a vs qualitative_tags.html E4 prevalence table: math LLM .59 / Human .13,
+# acknowledge .58/.25, principle .38/.08 (E4-only; panel a pools LLM E1-4)
+q.prev %>% filter(experiment == "E4", tag %in% c("persuader_math", "persuader_acknowledge", "persuader_principle")) %>%
+  group_by(tag, persuader_type) %>% summarize(p = sum(k) / sum(n), .groups = "drop")
+
+q.prev %>% filter(tag == "deception_false", experiment == "E4") %>%
+  group_by(persuader_type, truth) %>% summarize(p = sum(k) / sum(n), .groups = "drop")
+
+q.gu %>% group_by(persuader_type, truth) %>%
+  summarize(k = sum(k), n = sum(n), .groups = "drop")
+
+q.ors %>% filter(contrast == "success_llm") %>%
+  transmute(label, or = round(exp(b), 2), p = signif(p, 2)) %>% arrange(or)
+
+q.probes %>% filter(tag %in% c("persuader_flattery", "deception_misleading")) %>%
+  transmute(probe, variant, label, or = round(exp(b), 2), p = signif(p, 2))
+```

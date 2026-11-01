@@ -1,0 +1,9 @@
+.DS_Store
+.Rhistory
+.RData
+.Rproj.user
+Rplots.pdf
+*_cache/
+*_files/
+__pycache__/
+figures/drafts/

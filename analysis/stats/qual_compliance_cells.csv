@@ -1,0 +1,11 @@
+"persuader_type","experiment","truth","n","k","k_gave_up","k_both"
+"LLM","E1","Truth",309,5,0,0
+"LLM","E1","Falsehood",292,15,18,3
+"LLM","E2","Truth",345,8,1,1
+"LLM","E2","Falsehood",291,15,18,2
+"LLM","E3","Truth",336,9,0,0
+"LLM","E3","Falsehood",674,50,82,25
+"LLM","E4","Truth",477,0,0,0
+"LLM","E4","Falsehood",225,0,0,0
+"Human","E4","Truth",448,37,22,11
+"Human","E4","Falsehood",166,19,17,11

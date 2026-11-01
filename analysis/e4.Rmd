@@ -1,0 +1,1687 @@
+---
+title: "E4: A Human Baseline"
+output:
+  html_document:
+    toc: yes
+    toc_float: true
+    theme: flatly
+    highlight: kate
+    code_folding: hide
+date: "2026-08-02"
+---
+
+# Setup
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+library(tidyverse)
+library(cowplot)
+library(lmerTest)
+obj_is_vector = function(x){TRUE}
+
+# Load data
+
+participants <- read.csv("../data/conversation_Participant.csv")
+question.response <- read.csv("../data/conversation_QuestionResponse.csv")
+questions <- read.csv("../data/conversation_Question.csv")
+conversation <- read.csv("../data/conversation_Conversation.csv")
+messages <- read.csv("../data/conversation_Message.csv")
+persuadability <- read.csv("../data/conversation_PersuadabilityResponse.csv")
+persuader <- read.csv("../data/conversation_AIPersuader.csv")
+persuadability.questions <- read.csv("../data/conversation_PersuadabilityQuestion.csv")
+
+```
+
+## Merge & Filter data
+
+```{r}
+
+participants <- participants %>%
+  filter(
+    start_time > "2025-08-19 22:00:00",
+    study == "4",
+    status == "completed"
+  ) %>%
+  mutate(
+    id = as.factor(id),
+    source = as.factor(source),
+    study = as.factor(study),
+    gender = as.factor(gender),
+    native_english = as.factor(native_english),
+    consulted = as.factor(consulted),
+    questions_balanced = as.factor(questions_balanced),
+    intro_condition = case_when(
+      intro_condition == 1 ~ "Helpful",
+      intro_condition == 0 ~ "Mixed",
+      intro_condition == -1 ~ "Unhelpful"
+    ),
+    hint_condition = case_when(
+      hint_condition == 1 ~ "Hint",
+      hint_condition == 0 ~ "Conversation"
+    ),
+    feedback_condition = case_when(
+      feedback_condition == 1 ~ "Feedback",
+      feedback_condition == 0 ~ "No Feedback"
+    )
+  )
+
+question.response <- question.response %>%
+  distinct(participant_id, question_id, response_type, .keep_all = TRUE) %>%
+  merge(participants, how="right", by.x = "participant_id", by.y="id") %>%
+  merge(questions, how = "left", by.x = "question_id", by.y= "id") %>%
+  mutate(
+    response_code = ifelse(response == answer1, "answer1", "answer2"),
+    # response = factor(response, levels=c(answer1, answer2)),
+    accuracy = ifelse(response_code == correct_answer, 1, 0),
+    confidence_directional = ifelse(response == answer2, confidence, -1 * confidence)
+  )
+
+attn.checks <- question.response %>%
+  filter(category == "attention_check")
+
+question.response <- question.response %>%
+  filter(category != "attention_check")
+
+qr.pre <- question.response %>%
+  filter(response_type == "pre")
+
+conversation <- conversation %>%
+  rename(conversation_index = "trial_index",
+         conversation_id = "id") %>%
+  filter(end_time != "") %>%
+  mutate(
+    start_time = as.POSIXct(start_time),
+    end_time = as.POSIXct(end_time),
+    conversation_duration = end_time - start_time
+  ) %>%
+  select(-correct_answer, -start_time, -end_time) %>%
+  # Merge persuader
+  # merge(
+  #   persuader %>%
+  #     select(id, model_name),
+  #   by.x = "persuader_id", by.y="id"
+  # ) %>%
+  merge(
+    messages %>%
+    mutate(
+      message_chars = nchar(content),
+      target_chars = ifelse(sender_role == "T", message_chars, 0)
+    ) %>%
+    group_by(conversation_id) %>%
+    summarize(
+      n_messages = n(),
+      total_chars = sum(message_chars),
+      target_chars = sum(target_chars),
+      cost = sum(cost)
+      ), how = "left", by = "conversation_id", all.x = T
+  )
+
+
+qr.post <- question.response %>%
+  filter(response_type == "post") %>%
+  merge(conversation, how="left", all.x=T, by=c("question_id", "participant_id")) %>%
+    merge(
+  qr.pre %>%
+      mutate(
+        response_pre = response,
+        confidence_pre = confidence,
+        confidence_directional_pre = confidence_directional,
+        ) %>%
+      select(question_id, participant_id, response_pre, confidence_pre, confidence_directional_pre)
+  ) %>%
+  mutate(
+    persuader_correct = persuader_answer == correct_answer,
+    participant_correct_pre = target_answer == correct_answer,
+    participant_persuader_disagree = target_answer != persuader_answer,
+    persuader_success = persuader_answer == response_code,
+    mind_changed = target_answer != response_code,
+    persuader_changed_mind = case_when(
+      mind_changed & persuader_success ~ "converted",
+      mind_changed ~ "backfire",
+      persuader_success ~ "sustained",
+      T ~ "recalcitrant"
+    ),
+    confidence_to_persuader_answer = ifelse(persuader_answer == "answer2", confidence_directional, -1 * confidence_directional),
+    confidence_to_persuader_answer_pre = ifelse(persuader_answer == "answer2", confidence_directional_pre, -1 * confidence_directional_pre),
+    # NB: divided by 2 (range -100..100)
+    confidence_change_to_persuader_answer = (confidence_to_persuader_answer - confidence_to_persuader_answer_pre) / 2
+  ) 
+# %>%
+  # filter(
+  #   !(is.na(target_answer))
+  # )
+
+
+persuadability <- persuadability %>%
+  merge(persuadability.questions %>% select(-id, -scoring), by.x="question_id", by.y="item_id")
+
+```
+
+# Exclusions
+
+```{r}
+
+# Completed participants before exclusions
+nrow(participants)
+
+```
+
+## Attn checks
+
+```{r}
+
+mean(attn.checks$accuracy)
+
+```
+
+```{r}
+
+attn.checks %>% group_by(participant_id) %>% summarize(accuracy = mean(accuracy)) %>%
+  filter(accuracy < 1) 
+
+```
+
+```{r}
+
+ppts.attn.fail <- attn.checks %>% group_by(participant_id) %>% summarize(accuracy = mean(accuracy)) %>%
+  filter(accuracy < 1) %>%
+  pull(participant_id)
+
+participants <- participants %>% filter(!(id %in% ppts.attn.fail))
+conversation <- conversation %>% filter(!(participant_id %in% ppts.attn.fail))
+qr.pre <- qr.pre %>% filter(!(participant_id %in% ppts.attn.fail))
+qr.post <- qr.post %>% filter(!(participant_id %in% ppts.attn.fail))
+
+```
+
+## Sources consulted
+
+```{r}
+
+participants %>%
+  group_by(consulted) %>%
+  summarize(n())
+
+```
+
+```{r}
+
+participants %>%
+  select(id, consulted, sources) %>%
+  filter(consulted == "True")
+
+```
+
+```{r}
+
+ppts.sources.consulted <- participants %>%
+  filter(consulted == "True") %>%
+  pull(id)
+
+participants <- participants %>% filter(!(id %in% ppts.sources.consulted))
+conversation <- conversation %>% filter(!(participant_id %in% ppts.sources.consulted))
+qr.pre <- qr.pre %>% filter(!(participant_id %in% ppts.sources.consulted))
+qr.post <- qr.post %>% filter(!(participant_id %in% ppts.sources.consulted))
+
+
+```
+
+## Reaction time
+
+```{r}
+
+qr.pre %>%
+  group_by(participant_id) %>%
+  summarize(rt = mean(reaction_time), accuracy = mean(accuracy)) %>%
+  filter(rt < 5000)
+
+```
+
+```{r}
+
+ppts.fast.rt <- qr.pre %>%
+  group_by(participant_id) %>%
+  summarize(rt = mean(reaction_time), accuracy = mean(accuracy)) %>%
+  filter(rt < 5000) %>%
+  pull(participant_id)
+
+participants <- participants %>% filter(!(id %in% ppts.fast.rt))
+conversation <- conversation %>% filter(!(participant_id %in% ppts.fast.rt))
+qr.pre <- qr.pre %>% filter(!(participant_id %in% ppts.fast.rt))
+qr.post <- qr.post %>% filter(!(participant_id %in% ppts.fast.rt))
+persuadability <- persuadability %>% filter(participant_id %in% participants$id)
+
+```
+
+## Message chars
+
+```{r}
+
+qr.post %>%
+  group_by(participant_id) %>%
+  summarize(target_chars = mean(target_chars)) %>%
+  filter(target_chars < 20) %>%
+  arrange(target_chars)
+
+```
+
+```{r}
+
+ppts.low.chars <- qr.post %>%
+  group_by(participant_id) %>%
+  summarize(target_chars = mean(target_chars)) %>%
+  filter(target_chars < 20) %>%
+  arrange(target_chars) %>%
+  pull(participant_id)
+
+
+participants <- participants %>% filter(!(id %in% ppts.low.chars))
+conversation <- conversation %>% filter(participant_id %in% participants$id)
+qr.pre <- qr.pre %>% filter(participant_id %in% participants$id)
+qr.post <- qr.post %>% filter(participant_id %in% participants$id)
+persuadability <- persuadability %>% filter(participant_id %in% participants$id)
+
+```
+
+## Summary of exclusions
+
+```{r}
+
+reasons <- c(
+  "attn_check",
+  "sources_consulted",
+  "fast_rt",
+  "low_message_chars",
+  "total excluded",
+  "retained"
+)
+excluded <- c(
+  length(ppts.attn.fail),
+  length(ppts.sources.consulted),
+  length(ppts.fast.rt),
+  length(ppts.low.chars),
+  length(ppts.attn.fail) + length(ppts.sources.consulted) + length(ppts.fast.rt) + length(ppts.low.chars),
+  nrow(participants)
+)
+
+exclusions <- data.frame(
+  reasons,
+  excluded
+) %>%
+  mutate(
+    prop = excluded / nrow(participants) * 100
+  )
+
+exclusions
+
+```
+
+# Participants
+
+```{r}
+
+summary(participants)
+
+```
+
+## Conditions
+
+```{r}
+
+participants %>%
+  group_by(interaction_type, intro_condition) %>%
+  summarize(n = n())
+
+```
+
+```{r}
+
+participants %>%
+  group_by(intro_condition, final_condition, interaction_type) %>%
+  summarize(n = n())
+
+```
+
+```{r}
+
+qr.post %>%
+  filter(trial_type == "final") %>%
+  group_by(interaction_type, intro_condition) %>%
+  summarize(n = n())
+
+```
+
+## Duration
+
+```{r}
+
+participants %>%
+  mutate(
+    start_time = as.POSIXct(start_time),
+    end_time = as.POSIXct(end_time),
+    duration = end_time - start_time
+  ) %>%
+  group_by(interaction_type) %>%
+  summarize(
+    mean_duration = mean(duration),
+    median_duration = median(duration),
+    sd_duration = sd(duration),
+    n = n()
+  )
+    
+    
+```
+
+## Targets and reassignment
+
+```{r}
+
+targets <- participants %>% filter(id %in% qr.post$participant_id)
+
+nrow(targets)
+
+targets %>% count(interaction_type)
+
+```
+
+```{r}
+
+targets %>%
+  filter(interaction_type == "human_ai") %>%
+  count(is_timeout_match)
+
+```
+
+# Descriptives
+
+## Survey confidence and accuracy by trial type
+
+```{r}
+
+qr.post %>%
+  group_by(trial_type) %>%
+  summarize(
+    mean_confidence_pre = mean(confidence_pre),
+    mean_confidence_post = mean(confidence),
+    mean_acc_pre = mean(participant_correct_pre),
+    mean_acc_post = mean(accuracy),
+    n_trials = n()
+  )
+
+```
+
+## Final trials
+
+```{r}
+
+qr.post.final <- qr.post %>%
+  filter(trial_type == "final") 
+
+qr.post.final %>%
+  group_by(interaction_type, intro_condition) %>%
+  summarize(
+    persuader_success = mean(persuader_success),
+    confidence_change = mean(confidence_change_to_persuader_answer),
+    n = n(),
+    .groups = "drop"
+  )
+
+```
+
+```{r}
+
+qr.post.final %>%
+  summarize(
+    persuader_success = mean(persuader_success),
+    confidence_change = mean(confidence_change_to_persuader_answer),
+    n = n()
+  )
+
+```
+
+# Hypothesis tests
+
+```{r}
+
+qr.post.intro <- qr.post %>% filter(trial_type == "intro")
+
+qr.post.human <- qr.post %>% filter(interaction_type == "human_human")
+qr.post.ai <- qr.post %>% filter(interaction_type == "human_ai")
+
+qr.post.human.final <- qr.post.final %>% filter(interaction_type == "human_human")
+qr.post.ai.final <- qr.post.final %>% filter(interaction_type == "human_ai")
+
+# H5 frame: first-trial disagreements + Helpful-condition final trials
+qr.post.fal <- qr.post %>% mutate(
+  include_flag = case_when(
+    (trial_type == "final") & (intro_condition == "Helpful") ~ T,
+    (trial_index == 0) & (participant_persuader_disagree) == T ~ T,
+    T ~ F
+    ) 
+) %>%
+    filter(
+      include_flag == T
+    )
+
+qr.post.human.fal <- qr.post.fal %>% filter(interaction_type == "human_human")
+qr.post.ai.fal <- qr.post.fal %>% filter(interaction_type == "human_ai")
+
+```
+
+## Q1: Are humans or LLMs more persuasive overall?
+
+```{r}
+
+qr.post %>%
+  mutate(
+    persuader_correct = ifelse(persuader_correct == T, "Persuader Correct", "Persuader Incorrect")
+  ) %>%
+  ggplot(aes(x = intro_condition, y = as.numeric(persuader_success), fill=persuader_correct)) + 
+  facet_grid(.~interaction_type) +
+  stat_summary(geom="bar", fun="mean", position="dodge") + 
+    stat_summary(geom="errorbar", fun.data="mean_cl_boot", width=0.2,
+               color="#444444", position = position_dodge(width=0.9)) + 
+  theme_minimal() + 
+  theme(legend.position = "bottom") + 
+  labs(
+    y = "Persuader Success",
+    x = "Intro Condition",
+    caption = "All trials"
+  )
+
+```
+
+```{r}
+
+qr.post %>%
+  group_by(interaction_type) %>%
+  summarize(
+    persuader_success = mean(persuader_success),
+    confidence_change = mean(confidence_change_to_persuader_answer),
+    n = n()
+  )
+
+```
+
+### H1a: LLM > human (PS)
+
+```{r}
+
+m.h1.ps <- glmer(persuader_success ~ 
+             interaction_type + 
+             (1 | participant_id) +
+             (1 | question_id) +
+             (1 | intro_condition) +
+            (1 | persuader_correct),
+           data = qr.post, 
+           family = binomial(link = "logit"))
+
+summary(m.h1.ps)
+```
+
+### H1a: LLM > human (CC)
+
+```{r}
+
+m.h1.cc <- lmer(confidence_change_to_persuader_answer ~ 
+             interaction_type + 
+             (1 | participant_id) +
+             (1 | question_id) +
+             (1 | intro_condition) +
+            (1 | persuader_correct),
+           data = qr.post)
+
+summary(m.h1.cc)
+```
+
+```{r}
+
+qr.post %>%
+  filter(trial_index == 0, participant_persuader_disagree == T) %>%
+  group_by(interaction_type) %>%
+  summarize(persuader_success = mean(persuader_success), n = n())
+
+```
+
+#### Robustness: excluding reassigned participants
+
+```{r}
+
+reassigned <- targets %>% filter(is_timeout_match == "True") %>% pull(id)
+
+# Simplified REs (convergence)
+m.h1.ps.noreassign <- glmer(persuader_success ~ 
+             interaction_type + 
+             (1 | participant_id) +
+             (1 | question_id),
+           data = qr.post %>% filter(!(participant_id %in% reassigned)), 
+           family = binomial(link = "logit"))
+
+summary(m.h1.ps.noreassign)
+
+```
+
+## Q2: Is persuasiveness conditional on historically helpful interactions?
+
+```{r}
+
+qr.post %>%
+  filter(trial_type == "final", participant_persuader_disagree == T) %>%
+  ggplot(aes(x = intro_condition, y = as.numeric(persuader_success), fill=intro_condition)) + 
+  facet_grid(.~interaction_type) +
+  stat_summary(geom="bar", fun="mean", position="dodge") + 
+    stat_summary(geom="errorbar", fun.data="mean_cl_boot", width=0.2,
+               color="#444444") + 
+  scale_fill_manual(values=c("#16b3b7", "#f45e5a")) +
+  theme_minimal() + 
+  theme(legend.position = "none") + 
+  labs(
+    y = "Persuader success",
+    x = "Intro Condition",
+    caption = "Final trials"
+  )
+
+```
+
+### H2a: Helpful > Mixed overall
+
+```{r}
+
+m.h2a.ps <- glmer(persuader_success ~ 
+             intro_condition + 
+             (1 | interaction_type) + 
+             (1 | question_id) +
+            (1 | persuader_correct),
+           data = qr.post.final, 
+           family = binomial(link = "logit"))
+
+summary(m.h2a.ps)
+
+```
+
+### H2b: Helpful > Mixed for LLMs
+
+```{r}
+
+m.h2b.ps <- glmer(persuader_success ~ 
+             intro_condition + 
+             (1 | question_id) +
+            (1 | persuader_correct),
+           data = qr.post.ai.final, 
+           family = binomial(link = "logit"))
+
+summary(m.h2b.ps)
+
+```
+
+```{r}
+
+m.h2b.cc <- lmer(confidence_change_to_persuader_answer ~ 
+             intro_condition + 
+             (1 | question_id) +
+            (1 | persuader_correct),
+           data = qr.post.ai.final)
+
+summary(m.h2b.cc)
+
+```
+
+### H2c: Helpful > Mixed for humans
+
+```{r}
+
+m.h2c.ps <- glmer(persuader_success ~ 
+             intro_condition + 
+             (1 | question_id) +
+            (1 | persuader_correct),
+           data = qr.post.human.final, 
+           family = binomial(link = "logit"))
+
+summary(m.h2c.ps)
+
+```
+
+```{r}
+
+m.h2c.cc <- lmer(confidence_change_to_persuader_answer ~ 
+             intro_condition + 
+             (1 | question_id) +
+            (1 | persuader_correct),
+           data = qr.post.human.final)
+
+summary(m.h2c.cc)
+
+```
+
+## Q3: Does historical helpfulness increase persuasiveness more for human or LLM persuaders?
+
+### H3a: Positive ixn of LLM:Helpful
+
+```{r}
+
+m.h3a.ps <- glmer(persuader_success ~ 
+             intro_condition * interaction_type + 
+             (1 | question_id) +
+            (1 | persuader_correct),
+           data = qr.post.final, 
+           family = binomial(link = "logit"))
+
+summary(m.h3a.ps)
+
+```
+
+```{r}
+
+m.h3a.cc <- lmer(confidence_change_to_persuader_answer ~ 
+             intro_condition * interaction_type + 
+             (1 | question_id) +
+            (1 | persuader_correct),
+           data = qr.post.final)
+
+summary(m.h3a.cc)
+
+```
+
+#### Robustness: excluding reassigned participants
+
+```{r}
+
+# Simplified REs (convergence)
+m.h3a.ps.noreassign <- glmer(persuader_success ~ 
+             intro_condition * interaction_type + 
+             (1 | question_id),
+           data = qr.post.final %>% filter(!(participant_id %in% reassigned)), 
+           family = binomial(link = "logit"))
+
+summary(m.h3a.ps.noreassign)
+
+```
+
+## Q4: Is it easier to argue for true rather than false statements?
+
+```{r}
+
+qr.post %>%
+  filter(trial_type == "final", participant_persuader_disagree == T) %>%
+  ggplot(aes(x = intro_condition, y = as.numeric(persuader_success), fill=persuader_correct)) + 
+  facet_grid(.~interaction_type) +
+  stat_summary(geom="bar", fun="mean", position=position_dodge(width=0.9)) + 
+    stat_summary(geom="errorbar", fun.data="mean_cl_boot", width=0.2,
+               color="#444444", position=position_dodge(width=0.9)) + 
+  scale_fill_manual(values=c("#f45e5a", "#16b3b7")) +
+  theme_minimal() + 
+  theme(legend.position = "bottom") + 
+  labs(
+    y = "Persuader success",
+    x = "Intro Condition",
+    caption = "Final trials"
+  )
+
+```
+
+```{r}
+
+qr.post.final %>%
+  group_by(interaction_type, persuader_correct) %>%
+  summarize(persuader_success = mean(persuader_success), n = n(), .groups = "drop")
+
+```
+
+### H4a: True > False in final trials
+
+```{r}
+
+m.h4a.ps <- glmer(persuader_success ~ persuader_correct +
+           (1 | interaction_type) + 
+             (1 | question_id) +
+           (1 | intro_condition),
+           data = qr.post.final, 
+           family = binomial(link = "logit"))
+
+summary(m.h4a.ps)
+
+```
+
+```{r}
+
+m.h4a.cc <- lmer(confidence_change_to_persuader_answer ~ persuader_correct +
+           (1 | interaction_type) + 
+             (1 | question_id) +
+           (1 | intro_condition),
+           data = qr.post.final)
+
+summary(m.h4a.cc)
+
+```
+
+### H4b: True > False for LLMs
+
+```{r}
+
+m.h4b.ps <- glmer(persuader_success ~ persuader_correct +
+             (1 | question_id) +
+           (1 | intro_condition),
+           data = qr.post.ai.final, 
+           family = binomial(link = "logit"))
+
+summary(m.h4b.ps)
+
+```
+
+### H4c: True > False for humans
+
+```{r}
+
+m.h4c.ps <- glmer(persuader_success ~ persuader_correct +
+             (1 | question_id) +
+           (1 | intro_condition),
+           data = qr.post.human.final, 
+           family = binomial(link = "logit"))
+
+summary(m.h4c.ps)
+
+```
+
+### H4d: Interaction of human:true
+
+```{r}
+
+m.h4d.ps <- glmer(persuader_success ~ persuader_correct * interaction_type + 
+             (1 | intro_condition),
+             # (1 | question_id),
+           data = qr.post.final, 
+           family = binomial(link = "logit"))
+
+summary(m.h4d.ps)
+
+```
+
+```{r}
+
+m.h4d.cc <- lmer(confidence_change_to_persuader_answer ~ persuader_correct * interaction_type + 
+             (1 | question_id) +
+             (1 | intro_condition),
+           data = qr.post.final)
+
+summary(m.h4d.cc)
+
+```
+
+## Q5: Does helpfulness increase persuasiveness over the first trial baseline?
+
+```{r}
+
+qr.post %>%
+  filter(
+    participant_persuader_disagree == T
+  ) %>%
+  ggplot(aes(x = trial_index, y = as.numeric(persuader_success), color=intro_condition)) + 
+  facet_grid(.~interaction_type) +
+  stat_summary(geom="point", fun="mean", position="dodge") + 
+  stat_summary(geom="line", fun="mean", position="dodge") + 
+    stat_summary(geom="errorbar", fun.data="mean_cl_boot", width=0.2,
+               position="dodge") + 
+  theme_minimal() + 
+  scale_color_manual(values=c("#16b3b7", "#f45e5a")) +
+  labs(
+    y = "Persuader success",
+    x = "Trial Index",
+    color = "Intro Condition",
+    caption = "Only disagree trials"
+  )
+
+```
+
+```{r}
+
+qr.post.fal %>%
+  filter(participant_persuader_disagree == T) %>%
+  group_by(interaction_type, trial_type) %>%
+  summarize(persuader_success = mean(persuader_success), n = n(), .groups = "drop")
+
+```
+
+### H5a: Helpfulness increases persuasiveness overall
+
+```{r}
+
+m.h5a.ps <- glmer(persuader_success ~ trial_type + 
+             (1 | interaction_type) + 
+             (1 | question_id) +
+           (1 | persuader_correct),
+           data = qr.post.fal, 
+           family = binomial(link = "logit"))
+
+summary(m.h5a.ps)
+
+```
+
+### H5b: Helpfulness increases persuasiveness for LLMs
+
+```{r}
+
+m.h5b.ps <- glm(persuader_success ~ trial_type, 
+             # (1 | question_id) +
+           # (1 | persuader_correct),
+           data = qr.post.ai.fal, 
+           family = binomial(link = "logit"))
+
+summary(m.h5b.ps)
+
+```
+
+### H5c: Helpfulness increases persuasiveness for humans
+
+```{r}
+
+m.h5c.ps <- glmer(persuader_success ~ trial_type + 
+             (1 | question_id),
+             # (1 | persuader_correct),
+           data = qr.post.human.fal, 
+           family = binomial(link = "logit"))
+
+summary(m.h5c.ps)
+
+```
+
+### Truth-adjusted track record (deviation from prereg)
+
+```{r}
+
+qr.post.track <- qr.post %>%
+  filter(participant_persuader_disagree == T,
+         trial_index == 0 | trial_type == "final") %>%
+  mutate(track_record = factor(case_when(
+    trial_index == 0 ~ "none",
+    intro_condition == "Helpful" ~ "helpful",
+    T ~ "mixed"
+  ), levels = c("none", "helpful", "mixed")))
+
+m.track.ai <- glmer(persuader_success ~ track_record + persuader_correct + (1 | question_id),
+           data = qr.post.track %>% filter(interaction_type == "human_ai"),
+           family = binomial(link = "logit"))
+
+summary(m.track.ai)
+
+```
+
+```{r}
+
+m.track.human <- glmer(persuader_success ~ track_record + persuader_correct + (1 | question_id),
+           data = qr.post.track %>% filter(interaction_type == "human_human"),
+           family = binomial(link = "logit"))
+
+summary(m.track.human)
+
+```
+
+### Mixed first trial vs. Helpful final trial (exploratory)
+
+```{r}
+
+qr.post.base <- qr.post.track %>%
+  filter((track_record == "none" & intro_condition == "Mixed") | track_record == "helpful") %>%
+  mutate(final = as.integer(track_record == "helpful"),
+         llm = as.integer(interaction_type == "human_ai"))
+
+qr.post.base %>%
+  group_by(interaction_type, final) %>%
+  summarize(persuader_success = mean(persuader_success),
+            confidence_change = mean(confidence_change_to_persuader_answer),
+            truth = mean(persuader_correct), n = n())
+
+base.ai <- qr.post.base %>% filter(interaction_type == "human_ai")
+base.human <- qr.post.base %>% filter(interaction_type == "human_human")
+
+m.base.ai <- glmer(persuader_success ~ final + persuader_correct + (1 | question_id),
+           data = base.ai, family = binomial(link = "logit"))
+m.base.human <- glmer(persuader_success ~ final + persuader_correct + (1 | question_id),
+           data = base.human, family = binomial(link = "logit"))
+m.base.ixn <- glmer(persuader_success ~ final * llm + persuader_correct + (1 | question_id),
+           data = qr.post.base, family = binomial(link = "logit"))
+
+m.base.ai.unadj <- glmer(persuader_success ~ final + (1 | question_id),
+           data = base.ai, family = binomial(link = "logit"))
+m.base.human.unadj <- glmer(persuader_success ~ final + (1 | question_id),
+           data = base.human, family = binomial(link = "logit"))
+
+m.base.ai.cc <- lmer(confidence_change_to_persuader_answer ~ final + persuader_correct + (1 | question_id),
+           data = base.ai)
+m.base.human.cc <- lmer(confidence_change_to_persuader_answer ~ final + persuader_correct + (1 | question_id),
+           data = base.human)
+m.base.ixn.cc <- lmer(confidence_change_to_persuader_answer ~ final * llm + persuader_correct + (1 | question_id),
+           data = qr.post.base)
+
+summary(m.base.ai)
+summary(m.base.human)
+summary(m.base.ixn)
+summary(m.base.ai.cc)
+summary(m.base.human.cc)
+summary(m.base.ixn.cc)
+
+# Trial-1 positions on true items: same cell by design (no condition is visible yet)
+qr.post.track %>%
+  filter(track_record == "none", persuader_correct) %>%
+  group_by(interaction_type, intro_condition) %>%
+  summarize(persuader_success = mean(persuader_success), k = sum(persuader_success), n = n())
+
+```
+
+# Exploratory
+
+## Advisor identification
+
+```{r}
+
+targets %>%
+  filter(advisor_type != "") %>%
+  group_by(interaction_type) %>%
+  summarize(judged_ai = mean(advisor_type == "ai"), n = n())
+
+```
+
+```{r}
+
+qr.post.ai.final.judged <- qr.post.ai.final %>%
+  filter(advisor_type != "") %>%
+  mutate(judged_human = advisor_type == "human")
+
+qr.post.ai.final.judged %>%
+  group_by(judged_human) %>%
+  summarize(persuader_success = mean(persuader_success), n = n())
+
+```
+
+```{r}
+
+# Plain glm: only 9 participants judged the LLM to be human
+m.judged.ps <- glm(persuader_success ~ judged_human,
+           data = qr.post.ai.final.judged,
+           family = binomial(link = "logit"))
+
+summary(m.judged.ps)
+
+```
+
+## Message delay and length
+
+```{r}
+
+persuader.messages <- messages %>%
+  filter(conversation_id %in% conversation$conversation_id) %>%
+  mutate(ts = as.POSIXct(timestamp, format = "%Y-%m-%d %H:%M:%OS", tz = "UTC"),
+         chars = nchar(content)) %>%
+  arrange(conversation_id, ts) %>%
+  group_by(conversation_id) %>%
+  mutate(gap = as.numeric(ts - lag(ts), units = "secs")) %>%
+  ungroup() %>%
+  filter(sender_role != "T") %>%
+  merge(conversation %>% select(conversation_id, persuader_is_human), by = "conversation_id")
+
+persuader.messages %>%
+  group_by(persuader_is_human) %>%
+  summarize(
+    median_delay = median(gap, na.rm = T),
+    mean_delay = mean(gap, na.rm = T),
+    median_chars = median(chars),
+    mean_chars = mean(chars),
+    median_delay_per_100_chars = median(gap / chars * 100, na.rm = T),
+    n = n()
+  )
+
+```
+
+## Human persuaders
+
+```{r}
+
+persuader_ids <- qr.post %>%
+  group_by(human_persuader_id) %>%
+  summarize(n = n()) %>%
+  filter(n == 5) %>%
+  pull(human_persuader_id)
+
+persuaders <- participants %>%
+  filter(id %in% persuader_ids)
+
+qr.post.persuader <- merge(
+      qr.post,
+  qr.pre %>%
+      mutate(
+        persuader_response_pre = response,
+        persuader_confidence_pre = confidence,
+        persuader_confidence_directional_pre = confidence_directional,
+        ) %>%
+      select(question_id, participant_id, persuader_response_pre, persuader_confidence_pre, persuader_confidence_directional_pre),
+  by.x = c("question_id", "human_persuader_id"), by.y=c("question_id", "participant_id")
+  ) %>%
+  mutate(
+    persuader_response_pre = ifelse(persuader_response_pre == answer1, "answer1", "answer2"),
+    persuader_honest = persuader_response_pre == persuader_answer,
+    persuader_responses_agree = persuader_response_pre == target_answer
+  )
+  
+```
+
+```{r}
+
+qr.post.persuader %>%
+  group_by(persuader_honest) %>%
+  summarize(n=n(), persuader_success = mean(persuader_success))
+
+```
+
+```{r}
+
+qr.post.persuader %>%
+  filter(trial_type == "final") %>%
+  group_by(persuader_honest) %>%
+  summarize(n=n(), persuader_success = mean(persuader_success))
+
+```
+
+```{r}
+
+m.honest.ps <- glmer(persuader_success ~ persuader_honest + (1 | question_id),
+           data = qr.post.persuader %>% filter(trial_type == "final"),
+           family = binomial(link = "logit"))
+
+summary(m.honest.ps)
+
+```
+
+```{r}
+
+qr.post.persuader %>%
+  filter(trial_type == "final") %>%
+  group_by(persuader_correct, persuader_honest) %>%
+  summarize(persuader_success = mean(persuader_success), n = n(), .groups = "drop")
+
+```
+
+```{r}
+
+m.honest.truth.final <- glmer(persuader_success ~ persuader_honest * persuader_correct + (1 | question_id),
+           data = qr.post.persuader %>% filter(trial_type == "final"),
+           family = binomial(link = "logit"))
+
+summary(m.honest.truth.final)
+
+```
+
+```{r}
+
+m.honest.truth.all <- glmer(persuader_success ~ persuader_honest * persuader_correct + (1 | question_id),
+           data = qr.post.persuader %>% filter(participant_persuader_disagree == T),
+           family = binomial(link = "logit"))
+
+summary(m.honest.truth.all)
+
+```
+
+## Exit survey
+
+```{r}
+
+targets %>%
+  group_by(interaction_type, intro_condition) %>%
+  summarize(
+    persuasiveness = mean(model_persuasiveness, na.rm = T),
+    likeability = mean(model_likeability, na.rm = T),
+    reliability = mean(model_reliability, na.rm = T),
+    error_rate = mean(model_error_rate, na.rm = T),
+    n = n(),
+    .groups = "drop"
+  )
+
+```
+
+```{r}
+
+m.rel.ai <- lm(model_reliability ~ intro_condition,
+  data = targets %>% filter(interaction_type == "human_ai"))
+summary(m.rel.ai)
+
+```
+
+```{r}
+
+m.rel.human <- lm(model_reliability ~ intro_condition,
+  data = targets %>% filter(interaction_type == "human_human"))
+summary(m.rel.human)
+
+```
+
+```{r}
+
+m.err.ai <- lm(model_error_rate ~ intro_condition,
+  data = targets %>% filter(interaction_type == "human_ai"))
+summary(m.err.ai)
+
+```
+
+```{r}
+
+m.err.human <- lm(model_error_rate ~ intro_condition,
+  data = targets %>% filter(interaction_type == "human_human"))
+summary(m.err.human)
+
+```
+
+```{r}
+
+m.persuasiveness <- lm(model_persuasiveness ~ interaction_type, data = targets)
+summary(m.persuasiveness)
+
+```
+
+```{r}
+
+rating.cols <- c("model_persuasiveness", "model_likeability", "model_reliability",
+                 "model_error_rate", "model_incorrect_training", "model_incorrect_instruction")
+
+for (col in rating.cols) {
+  m <- lm(reformulate("interaction_type", col), data = targets)
+  cs <- coef(summary(m))
+  cat(sprintf("%-28s type effect:  b=%+.3f t=%+.2f p=%.4f\n",
+              col, cs[2, 1], cs[2, 3], cs[2, 4]))
+}
+
+for (col in rating.cols) {
+  m <- lm(reformulate("interaction_type * intro_condition", col), data = targets)
+  cs <- coef(summary(m))
+  i <- grep(":", rownames(cs))
+  cat(sprintf("%-28s type x helpfulness ixn:  b=%+.3f t=%+.2f p=%.4f\n",
+              col, cs[i, 1], cs[i, 3], cs[i, 4]))
+}
+
+for (type in c("human_ai", "human_human")) {
+  for (col in rating.cols) {
+    m <- lm(reformulate("intro_condition", col),
+            data = targets %>% filter(interaction_type == type))
+    cs <- coef(summary(m))
+    cat(sprintf("%-12s %-28s helpfulness contrast:  b=%+.3f t=%+.2f p=%.4f\n",
+                type, col, cs[2, 1], cs[2, 3], cs[2, 4]))
+  }
+}
+
+```
+
+## Initial confidence predicts persuasion
+
+```{r}
+
+qr.post.disagree <- qr.post %>%
+  filter(participant_persuader_disagree == T) %>%
+  mutate(confidence_pre_10 = confidence_pre / 10)
+
+m.conf.ps <- glmer(persuader_success ~ confidence_pre_10 + (1 | question_id),
+            family = "binomial",
+            data = qr.post.disagree)
+summary(m.conf.ps)
+
+```
+
+```{r}
+
+m.conf.ps.trial <- glmer(persuader_success ~ trial_type + confidence_pre_10 + (1 | question_id),
+            family = "binomial",
+            data = qr.post.disagree)
+summary(m.conf.ps.trial)
+
+```
+
+## Conversation length
+
+```{r}
+
+qr.post %>%
+  group_by(interaction_type) %>%
+  summarize(n_messages = mean(n_messages, na.rm = T))
+
+```
+
+```{r}
+
+m.length.ps <- glmer(persuader_success ~ n_messages + (1 | question_id),
+            family = "binomial",
+            data = qr.post.final)
+summary(m.length.ps)
+
+```
+
+# Stats file
+
+```{r}
+
+stat_row <- function(model, hypothesis, measure, term = NULL) {
+  cs <- coef(summary(model))
+  if (is.null(term)) term <- rownames(cs)[nrow(cs)]
+  z.model <- "z value" %in% colnames(cs)
+  data.frame(
+    experiment = "E4",
+    hypothesis = hypothesis,
+    measure = measure,
+    term = term,
+    b = cs[term, "Estimate"],
+    se = cs[term, "Std. Error"],
+    stat_type = ifelse(z.model, "z", "t"),
+    stat = cs[term, ifelse(z.model, "z value", "t value")],
+    df = ifelse(z.model, NA, ifelse("df" %in% colnames(cs), cs[term, "df"], df.residual(model))),
+    p = cs[term, ifelse(z.model, "Pr(>|z|)", "Pr(>|t|)")],
+    n = nobs(model)
+  )
+}
+
+e4.stats <- bind_rows(
+  stat_row(m.h1.ps, "H1a", "PS", term = "interaction_typehuman_human"),
+  stat_row(m.h1.cc, "H1a", "CC", term = "interaction_typehuman_human"),
+  stat_row(m.h1.ps.noreassign, "H1a_noreassign", "PS", term = "interaction_typehuman_human"),
+  stat_row(m.h2a.ps, "H2a", "PS", term = "intro_conditionMixed"),
+  stat_row(m.h2b.ps, "H2b", "PS", term = "intro_conditionMixed"),
+  stat_row(m.h2b.cc, "H2b", "CC", term = "intro_conditionMixed"),
+  stat_row(m.h2c.ps, "H2c", "PS", term = "intro_conditionMixed"),
+  stat_row(m.h2c.cc, "H2c", "CC", term = "intro_conditionMixed"),
+  stat_row(m.h3a.ps, "H3a", "PS", term = "intro_conditionMixed:interaction_typehuman_human"),
+  stat_row(m.h3a.cc, "H3a", "CC", term = "intro_conditionMixed:interaction_typehuman_human"),
+  stat_row(m.h3a.ps.noreassign, "H3a_noreassign", "PS", term = "intro_conditionMixed:interaction_typehuman_human"),
+  stat_row(m.h4a.ps, "H4a", "PS", term = "persuader_correctTRUE"),
+  stat_row(m.h4a.cc, "H4a", "CC", term = "persuader_correctTRUE"),
+  stat_row(m.h4b.ps, "H4b", "PS", term = "persuader_correctTRUE"),
+  stat_row(m.h4c.ps, "H4c", "PS", term = "persuader_correctTRUE"),
+  stat_row(m.h4d.ps, "H4d", "PS", term = "persuader_correctTRUE:interaction_typehuman_human"),
+  stat_row(m.h4d.cc, "H4d", "CC", term = "persuader_correctTRUE:interaction_typehuman_human"),
+  stat_row(m.h5a.ps, "H5a", "PS", term = "trial_typeintro"),
+  stat_row(m.h5b.ps, "H5b", "PS", term = "trial_typeintro"),
+  stat_row(m.h5c.ps, "H5c", "PS", term = "trial_typeintro"),
+  stat_row(m.track.ai, "track_ai_helpful", "PS", term = "track_recordhelpful"),
+  stat_row(m.track.ai, "track_ai_mixed", "PS", term = "track_recordmixed"),
+  stat_row(m.base.ai, "base_ai", "PS", term = "final"),
+  stat_row(m.base.human, "base_human", "PS", term = "final"),
+  stat_row(m.base.ixn, "base_ixn", "PS", term = "final:llm"),
+  stat_row(m.base.ai.unadj, "base_ai_unadj", "PS", term = "final"),
+  stat_row(m.base.human.unadj, "base_human_unadj", "PS", term = "final"),
+  stat_row(m.base.ai.cc, "base_ai", "CC", term = "final"),
+  stat_row(m.base.human.cc, "base_human", "CC", term = "final"),
+  stat_row(m.base.ixn.cc, "base_ixn", "CC", term = "final:llm"),
+  stat_row(m.track.human, "track_human_helpful", "PS", term = "track_recordhelpful"),
+  stat_row(m.track.human, "track_human_mixed", "PS", term = "track_recordmixed"),
+  stat_row(m.judged.ps, "judged_human_ps", "PS", term = "judged_humanTRUE"),
+  stat_row(m.honest.ps, "honesty_final", "PS", term = "persuader_honestTRUE"),
+  stat_row(m.honest.truth.final, "honesty_x_truth_final", "PS", term = "persuader_honestTRUE:persuader_correctTRUE"),
+  stat_row(m.honest.truth.all, "honesty_x_truth_all", "PS", term = "persuader_honestTRUE:persuader_correctTRUE"),
+  stat_row(m.rel.ai, "reliability_ai", "rating", term = "intro_conditionMixed"),
+  stat_row(m.rel.human, "reliability_human", "rating", term = "intro_conditionMixed"),
+  stat_row(m.err.ai, "error_rate_ai", "rating", term = "intro_conditionMixed"),
+  stat_row(m.err.human, "error_rate_human", "rating", term = "intro_conditionMixed"),
+  stat_row(m.persuasiveness, "persuasiveness_ai_vs_human", "rating", term = "interaction_typehuman_human"),
+  stat_row(m.conf.ps, "confidence_ps", "PS", term = "confidence_pre_10"),
+  stat_row(m.conf.ps.trial, "confidence_ps_trial_type", "PS", term = "confidence_pre_10"),
+  stat_row(m.length.ps, "length_ps_final", "PS", term = "n_messages")
+)
+
+e4.stats
+
+```
+
+```{r}
+
+e4.descriptives <- qr.post.final %>%
+  group_by(interaction_type, intro_condition) %>%
+  summarize(
+    persuader_success = mean(persuader_success),
+    confidence_change = mean(confidence_change_to_persuader_answer),
+    n = n(),
+    .groups = "drop"
+  ) %>%
+  bind_rows(
+    qr.post.final %>%
+      summarize(
+        persuader_success = mean(persuader_success),
+        confidence_change = mean(confidence_change_to_persuader_answer),
+        n = n()
+      )
+  ) %>%
+  mutate(experiment = "E4", .before = 1)
+
+e4.descriptives
+
+write.csv(e4.stats, "stats/e4_stats.csv", row.names = FALSE)
+write.csv(e4.descriptives, "stats/e4_descriptives.csv", row.names = FALSE)
+
+```
+
+# Trial-level data
+
+```{r}
+
+qr.post %>%
+  transmute(
+    experiment = "E4",
+    participant_id, question_id, trial_type, trial_index,
+    intro_condition,
+    feedback_condition = "Feedback",
+    hint_condition = "Conversation",
+    interaction_type,
+    persuader_correct,
+    participant_persuader_disagree,
+    persuader_success,
+    confidence_pre,
+    confidence_change = confidence_change_to_persuader_answer,
+    accuracy
+  ) %>%
+  write.csv("stats/e4_trials.csv", row.names = FALSE)
+
+qr.pre %>%
+  filter(participant_id %in% targets$id) %>%
+  transmute(experiment = "E4", participant_id, question_id, confidence, accuracy) %>%
+  write.csv("stats/e4_survey.csv", row.names = FALSE)
+
+targets %>%
+  transmute(
+    experiment = "E4",
+    participant_id = id,
+    intro_condition,
+    feedback_condition = "Feedback",
+    hint_condition = "Conversation",
+    interaction_type,
+    persuasiveness = model_persuasiveness,
+    likeability = model_likeability,
+    reliability = model_reliability,
+    error_rate = model_error_rate,
+    incorrect_training = model_incorrect_training,
+    incorrect_instruction = model_incorrect_instruction
+  ) %>%
+  write.csv("stats/e4_exit_survey.csv", row.names = FALSE)
+
+```
+
+## Additional exploratory analyses
+
+### Self-reported expertise (physics / logic / probability)
+
+```{r}
+
+add_expertise <- function(d) {
+  d %>%
+    mutate(expertise = case_when(
+      subcategory == "physics" ~ physics,
+      subcategory == "logic" ~ logic,
+      subcategory == "probability" ~ probability
+    )) %>%
+    filter(!is.na(expertise))
+}
+
+qr.pre.expertise <- add_expertise(qr.pre)
+nrow(qr.pre.expertise)
+
+m.expertise.acc <- glmer(accuracy ~ expertise + (1 | question_id) + (1 | participant_id),
+                         family = "binomial", data = qr.pre.expertise,
+                         control = glmerControl(optimizer = "bobyqa"))
+summary(m.expertise.acc)
+
+```
+
+```{r}
+
+qr.post.final.expertise <- qr.post.final %>%
+  add_expertise() %>%
+  mutate(confidence_pre_10 = confidence_pre / 10)
+
+nrow(qr.post.final.expertise)
+
+m.expertise.ps <- glmer(persuader_success ~ expertise + (1 | question_id),
+                        family = "binomial", data = qr.post.final.expertise,
+                        control = glmerControl(optimizer = "bobyqa"))
+summary(m.expertise.ps)
+
+```
+
+```{r}
+
+m.expertise.ps.conf <- glmer(persuader_success ~ expertise + confidence_pre_10 + (1 | question_id),
+                             family = "binomial", data = qr.post.final.expertise,
+                             control = glmerControl(optimizer = "bobyqa"))
+summary(m.expertise.ps.conf)
+
+```
+
+```{r}
+
+m.expertise.cc <- lmer(confidence_change_to_persuader_answer ~ expertise + (1 | question_id),
+                       data = qr.post.final.expertise)
+summary(m.expertise.cc)
+
+```
+
+### Confidence-change scaling and full flips
+
+```{r}
+
+qr.post.final %>%
+  group_by(interaction_type, intro_condition) %>%
+  summarize(
+    min_cc = min(confidence_change_to_persuader_answer),
+    max_cc = max(confidence_change_to_persuader_answer),
+    mean_cc = mean(confidence_change_to_persuader_answer),
+    sd_cc = sd(confidence_change_to_persuader_answer),
+    mean_conf_pre = mean(confidence_pre),
+    n = n(),
+    .groups = "drop"
+  )
+
+```
+
+```{r}
+
+helpful.llm.finals <- qr.post.final %>%
+  filter(interaction_type == "human_ai", intro_condition == "Helpful")
+
+helpful.llm.finals %>%
+  summarize(
+    n = n(),
+    n_flips = sum(persuader_success),
+    flip_rate = mean(persuader_success),
+    mean_cc = mean(confidence_change_to_persuader_answer),
+    mean_conf_pre = mean(confidence_pre),
+    mean_post_conf_to_persuader_flips =
+      mean(confidence_to_persuader_answer[persuader_success])
+  )
+
+```
+
+### Decomposition of the truth advantage
+
+```{r}
+
+qr.post.final %>%
+  group_by(interaction_type, persuader_correct) %>%
+  summarize(
+    flip_rate = mean(persuader_success),
+    cc = mean(confidence_change_to_persuader_answer),
+    cc_flip = mean(confidence_change_to_persuader_answer[persuader_success]),
+    cc_nonflip = mean(confidence_change_to_persuader_answer[!persuader_success]),
+    n = n(),
+    n_flip = sum(persuader_success),
+    .groups = "drop"
+  )
+
+```
+
+```{r}
+
+m.nonflip.ai <- lmer(confidence_change_to_persuader_answer ~ persuader_correct + (1 | question_id),
+                     data = qr.post.final %>%
+                       filter(interaction_type == "human_ai", !persuader_success))
+summary(m.nonflip.ai)
+
+```
+
+```{r}
+
+m.nonflip.human <- lmer(confidence_change_to_persuader_answer ~ persuader_correct + (1 | question_id),
+                        data = qr.post.final %>%
+                          filter(interaction_type == "human_human", !persuader_success))
+summary(m.nonflip.human)
+
+```
+
+```{r}
+
+flip.model <- function(d) {
+  tryCatch(
+    lmer(confidence_change_to_persuader_answer ~ persuader_correct + (1 | question_id), data = d),
+    error = function(e) lm(confidence_change_to_persuader_answer ~ persuader_correct, data = d)
+  )
+}
+
+m.flip.ai <- flip.model(qr.post.final %>%
+                          filter(interaction_type == "human_ai", persuader_success))
+summary(m.flip.ai)
+
+```
+
+```{r}
+
+m.flip.human <- flip.model(qr.post.final %>%
+                             filter(interaction_type == "human_human", persuader_success))
+summary(m.flip.human)
+
+```
+
+```{r}
+
+m.nonflip.pooled <- lmer(confidence_change_to_persuader_answer ~ persuader_correct +
+                           (1 | question_id) + (1 | interaction_type),
+                         data = qr.post.final %>% filter(!persuader_success))
+summary(m.nonflip.pooled)
+
+```
+
+```{r}
+
+m.flip.pooled <- lmer(confidence_change_to_persuader_answer ~ persuader_correct +
+                        (1 | question_id) + (1 | interaction_type),
+                      data = qr.post.final %>% filter(persuader_success))
+summary(m.flip.pooled)
+
+```
+
+```{r}
+
+decomp <- function(d) {
+  s <- d %>%
+    group_by(persuader_correct) %>%
+    summarize(
+      p = mean(persuader_success),
+      mf = mean(confidence_change_to_persuader_answer[persuader_success]),
+      mn = mean(confidence_change_to_persuader_answer[!persuader_success]),
+      m = mean(confidence_change_to_persuader_answer),
+      .groups = "drop"
+    )
+  T_ <- s %>% filter(persuader_correct)
+  F_ <- s %>% filter(!persuader_correct)
+  D <- T_$m - F_$m
+  pbar <- (T_$p + F_$p) / 2
+  mfbar <- (T_$mf + F_$mf) / 2
+  mnbar <- (T_$mn + F_$mn) / 2
+  flip_rate_comp <- (T_$p - F_$p) * (mfbar - mnbar)
+  within_flip_comp <- pbar * (T_$mf - F_$mf)
+  within_nonflip_comp <- (1 - pbar) * (T_$mn - F_$mn)
+  data.frame(D_total = D, flip_rate = flip_rate_comp,
+             within_flip = within_flip_comp, within_nonflip = within_nonflip_comp,
+             pct_flip_rate = 100 * flip_rate_comp / D,
+             pct_within_flip = 100 * within_flip_comp / D,
+             pct_within_nonflip = 100 * within_nonflip_comp / D)
+}
+
+decomp(qr.post.final)
+
+```
+
+```{r}
+
+qr.post.final %>%
+  group_by(interaction_type) %>%
+  group_map(~ cbind(.y, decomp(.x))) %>%
+  bind_rows()
+
+```
+
+### StP-II was not collected in E4
+
+```{r}
+
+# Raw tables (the `persuadability` object above is already merged/filtered)
+persuadability.all.raw <- read.csv("../data/conversation_PersuadabilityResponse.csv")
+participants.all.raw <- read.csv("../data/conversation_Participant.csv")
+
+p.e4.raw <- participants.all.raw %>%
+  filter(start_time > "2025-08-19 22:00:00", study == "4", status == "completed")
+
+data.frame(
+  e4_participants_pre_exclusion = nrow(p.e4.raw),
+  e4_min_id = min(p.e4.raw$id),
+  e4_with_stp_rows = sum(unique(persuadability.all.raw$participant_id) %in% p.e4.raw$id),
+  stp_rows_for_e4_ids = sum(persuadability.all.raw$participant_id %in% p.e4.raw$id),
+  max_id_in_stp_table = max(persuadability.all.raw$participant_id),
+  latest_stp_response = max(persuadability.all.raw$created),
+  earliest_e4_start = min(p.e4.raw$start_time)
+)
+
+```
+
+### Giving up: concession-phrase keyword proxy
+
+```{r}
+
+concession_rx <- paste0(
+  "(you('|’)?re right|you are right|you may be right|you might be right|",
+  "i agree with you|fair enough|i concede|you win|i give up|",
+  "i('|’)?ve changed my mind|you('|’)?ve convinced me|i was wrong)")
+
+persuader.concessions <- messages %>%
+  filter(conversation_id %in% qr.post$conversation_id, sender_role != "T") %>%
+  arrange(conversation_id, timestamp) %>%
+  group_by(conversation_id) %>%
+  summarize(
+    any_concede_kw = any(grepl(concession_rx, tolower(content))),
+    last_concede_kw = grepl(concession_rx, tolower(content[n()]))
+  )
+
+qr.post.kw <- qr.post %>% merge(persuader.concessions, by = "conversation_id")
+
+qr.post.kw %>%
+  group_by(interaction_type, intro_condition) %>%
+  summarize(
+    last_msg = mean(last_concede_kw),
+    any_msg = mean(any_concede_kw),
+    n = n(),
+    .groups = "drop"
+  )
+
+```
+
+```{r}
+
+qr.post.kw %>%
+  filter(trial_type == "final") %>%
+  group_by(interaction_type, intro_condition) %>%
+  summarize(
+    last_msg = mean(last_concede_kw),
+    any_msg = mean(any_concede_kw),
+    n = n(),
+    .groups = "drop"
+  )
+
+```
+
+```{r}
+
+m.concede.kw.ps <- glmer(persuader_success ~ any_concede_kw + interaction_type + (1 | question_id),
+                         family = "binomial",
+                         control = glmerControl(optimizer = "bobyqa"),
+                         data = qr.post.kw %>% filter(trial_type == "final"))
+summary(m.concede.kw.ps)
+
+```

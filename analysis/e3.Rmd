@@ -1,0 +1,1839 @@
+---
+title: "E3: Cue Validity"
+output:
+  html_document:
+    toc: yes
+    toc_float: true
+    theme: flatly
+    highlight: kate
+    code_folding: hide
+date: "2025-01-20"
+---
+
+# Setup
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+library(tidyverse)
+library(cowplot)
+library(lmerTest)
+obj_is_vector = function(x){TRUE}
+
+# Load data
+
+participants <- read.csv("../data/conversation_Participant.csv")
+question.response <- read.csv("../data/conversation_QuestionResponse.csv")
+questions <- read.csv("../data/conversation_Question.csv")
+conversation <- read.csv("../data/conversation_Conversation.csv")
+messages <- read.csv("../data/conversation_Message.csv")
+persuadability <- read.csv("../data/conversation_PersuadabilityResponse.csv")
+persuader <- read.csv("../data/conversation_AIPersuader.csv")
+persuadability.questions <- read.csv("../data/conversation_PersuadabilityQuestion.csv")
+
+```
+
+## Merge & Filter data
+
+```{r}
+
+participants <- participants %>%
+  filter(
+    study == "3",
+    source == "sona",
+    !(sona_code %in% c("131", "test")),
+    end_time != "",
+    start_time > "2025-04-29",
+    start_time < "2025-05-27"
+  ) %>%
+  mutate(
+    id = as.factor(id),
+    source = as.factor(source),
+    study = as.factor(study),
+    gender = as.factor(gender),
+    native_english = as.factor(native_english),
+    consulted = as.factor(consulted),
+    questions_balanced = as.factor(questions_balanced),
+    # Reference levels set so coefficients match the prereg's stated directions
+    # (positive Helpfulness effect; Hint & No-Feedback as treatment terms)
+    intro_condition = factor(case_when(
+      intro_condition == 1 ~ "Helpful",
+      intro_condition == 0 ~ "Mixed",
+      intro_condition == -1 ~ "Unhelpful"
+    ), levels = c("Unhelpful", "Mixed", "Helpful")),
+    hint_condition = factor(case_when(
+      hint_condition == 1 ~ "Hint",
+      hint_condition == 0 ~ "Conversation"
+    ), levels = c("Conversation", "Hint")),
+    feedback_condition = factor(case_when(
+      feedback_condition == 1 ~ "Feedback",
+      feedback_condition == 0 ~ "No Feedback"
+    ), levels = c("Feedback", "No Feedback"))
+  )
+
+question.response <- question.response %>%
+  distinct(participant_id, question_id, response_type, .keep_all = TRUE) %>%
+  merge(participants, how="right", by.x = "participant_id", by.y="id") %>%
+  merge(questions, how = "left", by.x = "question_id", by.y= "id") %>%
+  mutate(
+    response_code = ifelse(response == answer1, "answer1", "answer2"),
+    # response = factor(response, levels=c(answer1, answer2)),
+    accuracy = ifelse(response_code == correct_answer, 1, 0),
+    confidence_directional = ifelse(response == answer2, confidence, -1 * confidence)
+  )
+
+attn.checks <- question.response %>%
+  filter(category == "attention_check")
+
+question.response <- question.response %>%
+  filter(category != "attention_check")
+
+qr.pre <- question.response %>%
+  filter(response_type == "pre")
+
+conversation <- conversation %>%
+  rename(conversation_index = "trial_index",
+         conversation_id = "id") %>%
+  filter(end_time != "") %>%
+  mutate(
+    start_time = as.POSIXct(start_time),
+    end_time = as.POSIXct(end_time),
+    conversation_duration = end_time - start_time
+  ) %>%
+  select(-correct_answer, -start_time, -end_time) %>%
+  # Merge persuader
+  # merge(
+  #   persuader %>%
+  #     select(id, model_name),
+  #   by.x = "ai_persuader_id", by.y="id"
+  # ) %>%
+  merge(
+    messages %>%
+    mutate(
+      message_chars = nchar(content),
+      target_chars = ifelse(sender_role == "T", message_chars, 0)
+    ) %>%
+    group_by(conversation_id) %>%
+    summarize(
+      n_messages = n(),
+      total_chars = sum(message_chars),
+      target_chars = sum(target_chars),
+      cost = sum(cost)
+      ), how = "left", by = "conversation_id", all.x = T
+  )
+
+
+qr.post <- question.response %>%
+  filter(response_type == "post") %>%
+  merge(conversation, how="left", all.x=T, by=c("question_id", "participant_id")) %>%
+    merge(
+  qr.pre %>%
+      mutate(
+        response_pre = response,
+        confidence_pre = confidence,
+        confidence_directional_pre = confidence_directional,
+        ) %>%
+      select(question_id, participant_id, response_pre, confidence_pre, confidence_directional_pre)
+  ) %>%
+  mutate(
+    persuader_correct = persuader_answer == correct_answer,
+    participant_correct_pre = target_answer == correct_answer,
+    participant_persuader_disagree = target_answer != persuader_answer,
+    persuader_success = persuader_answer == response_code,
+    mind_changed = target_answer != response_code,
+    persuader_changed_mind = case_when(
+      mind_changed & persuader_success ~ "converted",
+      mind_changed ~ "backfire",
+      persuader_success ~ "sustained",
+      T ~ "recalcitrant"
+    ),
+    confidence_to_persuader_answer = ifelse(persuader_answer == "answer2", confidence_directional, -1 * confidence_directional),
+    confidence_to_persuader_answer_pre = ifelse(persuader_answer == "answer2", confidence_directional_pre, -1 * confidence_directional_pre),
+    # NB: divided by 2 (range -100..100)
+    confidence_change_to_persuader_answer = (confidence_to_persuader_answer - confidence_to_persuader_answer_pre) / 2
+  )
+# %>%
+  # filter(
+  #   !(is.na(target_answer))
+  # )
+
+
+persuadability <- persuadability %>%
+  merge(persuadability.questions %>% select(-id, -scoring), by.x="question_id", by.y="item_id")
+
+```
+
+# Exclusions
+
+## Attn checks
+
+```{r}
+
+mean(attn.checks$accuracy)
+
+```
+
+```{r}
+attn.checks %>% group_by(participant_id) %>% summarize(accuracy = mean(accuracy)) %>%
+  filter(accuracy < 1) 
+
+```
+
+```{r}
+
+ppts.attn.fail <- attn.checks %>% group_by(participant_id) %>% summarize(accuracy = mean(accuracy)) %>%
+  filter(accuracy < 1) %>%
+  pull(participant_id)
+
+participants <- participants %>% filter(!(id %in% ppts.attn.fail))
+conversation <- conversation %>% filter(!(participant_id %in% ppts.attn.fail))
+qr.pre <- qr.pre %>% filter(!(participant_id %in% ppts.attn.fail))
+qr.post <- qr.post %>% filter(!(participant_id %in% ppts.attn.fail))
+
+```
+
+## Sources consulted
+
+```{r}
+
+participants %>%
+  group_by(consulted) %>%
+  summarize(n())
+
+```
+
+```{r}
+
+participants %>%
+  select(id, consulted, sources) %>%
+  filter(consulted == "True")
+
+```
+
+```{r}
+
+ppts.sources.consulted <- participants %>%
+  filter(consulted == "True") %>%
+  pull(id)
+
+participants <- participants %>% filter(!(id %in% ppts.sources.consulted))
+conversation <- conversation %>% filter(!(participant_id %in% ppts.sources.consulted))
+qr.pre <- qr.pre %>% filter(!(participant_id %in% ppts.sources.consulted))
+qr.post <- qr.post %>% filter(!(participant_id %in% ppts.sources.consulted))
+
+
+```
+
+## Reaction time
+
+```{r}
+
+qr.pre %>%
+  group_by(participant_id) %>%
+  summarize(rt = mean(reaction_time), accuracy = mean(accuracy)) %>%
+  filter(rt < 5000)
+
+```
+
+```{r}
+
+ppts.fast.rt <- qr.pre %>%
+  group_by(participant_id) %>%
+  summarize(rt = mean(reaction_time), accuracy = mean(accuracy)) %>%
+  filter(rt < 5000) %>%
+  pull(participant_id)
+
+participants <- participants %>% filter(!(id %in% ppts.fast.rt))
+conversation <- conversation %>% filter(!(participant_id %in% ppts.fast.rt))
+qr.pre <- qr.pre %>% filter(!(participant_id %in% ppts.fast.rt))
+qr.post <- qr.post %>% filter(!(participant_id %in% ppts.fast.rt))
+persuadability <- persuadability %>% filter(participant_id %in% participants$id)
+
+```
+
+## Message chars
+
+```{r}
+
+qr.post %>%
+  group_by(participant_id) %>%
+  summarize(target_chars = sum(target_chars)) %>%
+  filter(target_chars < 150) %>%
+  arrange(target_chars)
+
+```
+
+#### Low-character check (not applied; not preregistered)
+
+```{r}
+
+ppts.low.chars <- qr.post %>%
+  group_by(participant_id) %>%
+  summarize(target_chars = mean(target_chars)) %>%
+  filter(target_chars < 15) %>%
+  arrange(target_chars) %>%
+  pull(participant_id)
+
+length(ppts.low.chars)
+
+# participants <- participants %>% filter(!(id %in% ppts.low.chars))
+# conversation <- conversation %>% filter(!(participant_id %in% ppts.low.chars))
+# qr.pre <- qr.pre %>% filter(!(participant_id %in% ppts.low.chars))
+# qr.post <- qr.post %>% filter(!(participant_id %in% ppts.low.chars))
+persuadability <- persuadability %>% filter(participant_id %in% participants$id)
+
+```
+
+## Summary of exclusions
+
+```{r}
+
+reasons <- c(
+  "attn_check",
+  "sources_consulted",
+  "fast_rt",
+  "total excluded (unique)",
+  "retained"
+)
+excluded <- c(
+  length(ppts.attn.fail),
+  length(ppts.sources.consulted),
+  length(ppts.fast.rt),
+  # counts overlap: some participants meet multiple criteria
+  length(unique(c(ppts.attn.fail, ppts.sources.consulted, ppts.fast.rt))),
+  nrow(participants)
+)
+
+exclusions <- data.frame(
+  reasons,
+  excluded
+) %>%
+  mutate(
+    prop = excluded / nrow(participants) * 100
+  )
+
+exclusions
+
+```
+
+# Messages
+
+```{r, eval=FALSE}
+
+conversation <- conversation %>% filter(participant_id %in% participants$id)
+
+messages <- messages %>% filter(
+  conversation_id %in% conversation$conversation_id
+)
+
+set.seed(43)
+tagging_sample.conversations <- qr.post %>% filter(n_messages > 3) %>% select(conversation_id, question, answer1, answer2, correct_answer, persuader_answer, persuader_correct) %>%
+  sample_n(150) %>%
+  arrange(conversation_id)
+
+tagging_sample.messages <- messages %>%
+  merge(tagging_sample.conversations, by = "conversation_id") %>%
+  arrange(conversation_id, timestamp)
+
+tagging_sample.messages %>%
+  write.csv("../data/tagging_sample_1_messages.csv", row.names = FALSE)
+
+write.csv(tagging_sample.conversations, "../data/tagging_sample_1_conversations.csv", row.names = FALSE)
+
+```
+
+# Participants
+
+```{r}
+
+summary(participants)
+
+```
+
+## Date
+
+```{r}
+
+participants %>%
+  mutate(
+    date = as.Date(start_time),
+  ) %>%
+  ggplot(
+    aes(x = date)
+  ) +
+  geom_histogram(
+    binwidth = 1,
+    fill = "steelblue",
+    color = "black"
+  )
+
+```
+
+```{r}
+
+participants %>%
+  mutate(
+    date = as.Date(start_time),
+  ) %>%
+  group_by(date) %>%
+  summarize(n = n()) %>%
+  summarize(mean_n = mean(n), sd_n = sd(n))
+
+```
+
+```{r}
+
+(400 - 88) / 11
+
+```
+
+## Duration
+
+```{r}
+
+participants %>%
+  mutate(
+    start_time = as.POSIXct(start_time),
+    end_time = as.POSIXct(end_time),
+    duration = end_time - start_time
+  ) %>%
+  group_by(hint_condition) %>%
+  summarize(
+    mean_duration = mean(duration),
+    median_duration = median(duration),
+    sd_duration = sd(duration),
+    n = n()
+  )
+    
+    
+```
+
+# Intro Trials
+
+## Perusader Success
+
+```{r}
+
+qr.post.intro <- qr.post %>% filter(trial_type == "intro")
+
+```
+
+```{r}
+
+qr.post.intro %>%
+  ggplot(aes(x = intro_condition, y = as.numeric(persuader_success), fill=persuader_correct)) + 
+  facet_grid(feedback_condition~hint_condition) +
+  stat_summary(geom="bar", fun="mean", position="dodge") + 
+    stat_summary(geom="errorbar", fun.data="mean_cl_boot", width=0.2,
+               color="#444444") + 
+  theme_minimal() + 
+  theme(legend.position = "none") + 
+  labs(
+    y = "Persuader Success",
+    x = "Intro Condition",
+    caption = "Intro trials"
+  )
+
+```
+
+```{r}
+
+qr.post %>%
+  filter(trial_index < 4) %>%
+  ggplot(aes(x = trial_index, y = as.numeric(persuader_success), color=intro_condition)) + 
+  facet_grid(feedback_condition~hint_condition) +
+  stat_summary(geom="point", fun="mean", position="dodge") + 
+  stat_summary(geom="line", fun="mean", position="dodge") + 
+    stat_summary(geom="errorbar", fun.data="mean_cl_boot", width=0.2,
+               position="dodge") + 
+  theme_minimal() + 
+  scale_color_manual(values=c("#16b3b7", "#f45e5a")) +
+  labs(
+    y = "Persuader success",
+    x = "Trial Index",
+    color = "Intro Condition",
+    caption = "Intro trials"
+  )
+
+```
+
+```{r}
+
+qr.post %>%
+  filter(trial_index < 4, participant_persuader_disagree == T) %>%
+  ggplot(aes(x = trial_index, y = as.numeric(mind_changed), color=intro_condition)) + 
+  facet_grid(feedback_condition~hint_condition) +
+  stat_summary(geom="point", fun="mean", position="dodge") + 
+  stat_summary(geom="line", fun="mean", position="dodge") + 
+    stat_summary(geom="errorbar", fun.data="mean_cl_boot", width=0.2,
+               position="dodge") + 
+  theme_minimal() + 
+  scale_color_manual(values=c("#16b3b7", "#f45e5a")) +
+  labs(
+    y = "Mind Changed",
+    x = "Trial Index",
+    color = "Intro Condition",
+    caption = "Intro trials where ppt & persuader disagreed pre-convo"
+  )
+
+```
+
+```{r}
+
+qr.post %>%
+  filter(trial_type == "intro", trial_index==3, intro_condition=="Helpful", feedback_condition == "No Feedback", hint_condition == "Conversation", 
+         participant_persuader_disagree == T) %>%
+  select(persuader_success)
+
+```
+
+# Final Trials
+
+```{r}
+
+qr.post.final <- qr.post %>%
+  filter(trial_type == "final") 
+
+```
+
+## Survey confidence and accuracy by trial type
+
+```{r}
+
+qr.post %>%
+  group_by(trial_type) %>%
+  summarize(
+    mean_confidence_pre = mean(confidence_pre),
+    mean_confidence_post = mean(confidence),
+    mean_acc_pre = mean(participant_correct_pre),
+    mean_acc_post = mean(accuracy),
+    n_trials = n()
+  )
+
+```
+
+```{r}
+
+qr.post %>%
+  filter(trial_type == "final") %>%
+  group_by(participant_persuader_disagree) %>%
+  summarize(accuracy=mean(accuracy), persuader_success = mean(persuader_success), n=n())
+
+```
+
+```{r}
+
+qr.post %>%
+  filter(trial_type == "final") %>%
+  group_by(participant_persuader_disagree, intro_condition, hint_condition, feedback_condition) %>%
+  summarize(accuracy=mean(accuracy), persuader_success = mean(persuader_success), n=n())
+
+```
+
+## Persuader Success
+
+```{r}
+
+qr.post %>%
+  filter(trial_type == "final", participant_persuader_disagree == T) %>%
+  ggplot(aes(x = intro_condition, y = as.numeric(persuader_success), fill=intro_condition)) + 
+  facet_grid(feedback_condition~hint_condition) +
+  stat_summary(geom="bar", fun="mean", position="dodge") + 
+    stat_summary(geom="errorbar", fun.data="mean_cl_boot", width=0.2,
+               color="#444444") + 
+  # Set 1 item 1 and 3
+  scale_fill_manual(values=c("#4DAF4A", "#E41A1C")) +
+  theme_minimal(base_size = 20) + 
+  theme(
+    legend.position = "none") + 
+  labs(
+    y = "Persuader success",
+    x = "Intro Condition",
+    caption = "Final trials"
+  )
+
+```
+
+# First vs Last trial
+
+```{r}
+
+qr.post %>%
+  ggplot(aes(x = trial_index, y = as.numeric(persuader_success), color=intro_condition)) + 
+  facet_grid(feedback_condition~hint_condition) +
+  stat_summary(geom="point", fun="mean", position="dodge") + 
+  stat_summary(geom="line", fun="mean", position="dodge") + 
+    stat_summary(geom="errorbar", fun.data="mean_cl_boot", width=0.2,
+               position="dodge") + 
+  theme_minimal() + 
+  scale_color_manual(values=c("#16b3b7", "#f45e5a")) +
+  labs(
+    y = "Persuader success",
+    x = "Trial Index",
+    color = "Intro Condition",
+    caption = "All trials"
+  )
+
+```
+
+```{r}
+
+qr.post %>%
+  filter(
+    participant_persuader_disagree == T
+  ) %>%
+  ggplot(aes(x = trial_index, y = as.numeric(persuader_success), color=intro_condition)) + 
+  facet_grid(feedback_condition~hint_condition) +
+  stat_summary(geom="point", fun="mean") + 
+  stat_summary(geom="line", fun="mean", position="dodge") + 
+    stat_summary(geom="errorbar", fun.data="mean_cl_boot", width=0.2) + 
+  theme_minimal() + 
+  # theme(legend.position = "bottom") +
+  scale_color_manual(values=c("#16b3b7", "#f45e5a")) +
+  labs(
+    y = "Persuader success",
+    x = "Trial Index",
+    color = "Intro Condition",
+    caption = "Only disagree trials"
+  ) + 
+scale_color_manual(
+    # Set 1 Reversed
+    values=c("Helpful"="#4daf4a", "Mixed"="#377eb8",  "Unhelpful"="#e41a1c"
+  ))
+
+```
+
+```{r}
+
+qr.post %>%
+  group_by(trial_index) %>%
+  summarize(
+    mean_confidence_pre = mean(confidence_pre),
+  )
+
+```
+
+# Hypotheses
+
+```{r}
+
+qr.post.final.disagree <- qr.post.final %>%
+  filter(participant_persuader_disagree == T)
+
+```
+
+## H1: Conversation > Hint overall
+
+```{r}
+
+qr.post.final.disagree %>%
+  ggplot(aes(x = hint_condition, y = as.numeric(persuader_success), fill=hint_condition)) + 
+  stat_summary(geom="bar", fun="mean") + 
+  stat_summary(geom="errorbar", fun.data="mean_cl_boot", width=0.2,
+               color="#444444") + 
+  theme_minimal() + 
+  theme(legend.position = "none") + 
+  labs(
+    y = "Persuader success (final trials)",
+    x = "Hint Condition"
+  )
+  
+
+```
+
+```{r}
+
+# Prereg: random intercepts by question + condition vars not under test
+m.h1.ps <- glmer(persuader_success ~ hint_condition + (1|question_id) + (1|feedback_condition) + (1|intro_condition),
+            data = qr.post.final.disagree,
+            family = binomial(link = "logit"),
+            control = glmerControl(optimizer = "bobyqa"))
+
+summary(m.h1.ps)
+
+```
+
+## H2: Helpful > Unhelpful (feedback)
+
+### Main effect (convo only)
+
+```{r}
+
+qr.post.final.disagree %>%
+  filter(feedback_condition == "Feedback", hint_condition == "Conversation") %>%
+  ggplot(aes(x = intro_condition, y = as.numeric(persuader_success), fill=intro_condition)) + 
+  stat_summary(geom="bar", fun="mean") + 
+  stat_summary(geom="errorbar", fun.data="mean_cl_boot", width=0.2,
+               color="#444444") + 
+  theme_minimal() + 
+  theme(legend.position = "none") + 
+  labs(
+    y = "Persuader success (final trials)",
+    x = "Intro Condition"
+  )
+
+```
+
+```{r}
+
+m.h2a.ps <- glmer(persuader_success ~ intro_condition + (1|question_id),
+              family = binomial(link = "logit"),
+              control = glmerControl(optimizer = "bobyqa"),
+            data = qr.post.final.disagree %>%
+              filter(intro_condition %in% c("Helpful", "Unhelpful"),
+                     feedback_condition == "Feedback",
+                     hint_condition == "Conversation") %>% droplevels())
+summary(m.h2a.ps)
+
+```
+
+### Ixn w/ hint condition
+
+```{r}
+
+qr.post.final.disagree %>%
+  filter(feedback_condition == "Feedback") %>%
+  ggplot(aes(x = intro_condition, y = as.numeric(persuader_success), fill=intro_condition)) + 
+  facet_grid(.~hint_condition) +
+  stat_summary(geom="bar", fun="mean", position="dodge") + 
+  stat_summary(geom="errorbar", fun.data="mean_cl_boot", width=0.2,
+               color="#444444") + 
+  theme_minimal() + 
+  theme(legend.position = "none") + 
+  labs(
+    y = "Persuader success (final trials)",
+    x = "Intro Condition"
+  )
+
+```
+
+```{r}
+
+m.h2b.ps <- glmer(persuader_success ~ intro_condition * hint_condition + (1|question_id),
+              family = binomial(link = "logit"),
+              control = glmerControl(optimizer = "bobyqa"),
+            data = qr.post.final.disagree %>%
+              filter(intro_condition %in% c("Helpful", "Unhelpful"),
+                     feedback_condition == "Feedback",
+                     hint_condition %in% c("Hint", "Conversation")) %>% droplevels())
+summary(m.h2b.ps)
+
+```
+
+## H3: Helpful > Unhelpful (no feedback)
+
+### Main effect (convo only)
+
+```{r}
+
+qr.post.final.disagree %>%
+  filter(feedback_condition == "No Feedback", hint_condition == "Conversation") %>%
+  ggplot(aes(x = intro_condition, y = as.numeric(persuader_success), fill=intro_condition)) + 
+  stat_summary(geom="bar", fun="mean") + 
+  stat_summary(geom="errorbar", fun.data="mean_cl_boot", width=0.2,
+               color="#444444") + 
+  theme_minimal() + 
+  theme(legend.position = "none") + 
+  labs(
+    y = "Persuader success (final trials)",
+    x = "Intro Condition"
+  )
+
+```
+
+```{r}
+
+m.h3a.ps <- glmer(persuader_success ~ intro_condition + (1|question_id),
+              family = binomial(link = "logit"),
+              control = glmerControl(optimizer = "bobyqa"),
+            data = qr.post.final.disagree %>%
+              filter(intro_condition %in% c("Helpful", "Unhelpful"),
+                     feedback_condition == "No Feedback",
+                     hint_condition == "Conversation") %>% droplevels())
+summary(m.h3a.ps)
+
+```
+
+### Ixn w/ hint condition
+
+```{r}
+
+qr.post.final.disagree %>%
+  filter(feedback_condition == "No Feedback") %>%
+  ggplot(aes(x = intro_condition, y = as.numeric(persuader_success), fill=intro_condition)) + 
+  facet_grid(.~hint_condition) +
+  stat_summary(geom="bar", fun="mean", position="dodge") + 
+  stat_summary(geom="errorbar", fun.data="mean_cl_boot", width=0.2,
+               color="#444444") + 
+  theme_minimal() + 
+  theme(legend.position = "none") + 
+  labs(
+    y = "Persuader success (final trials)",
+    x = "Intro Condition"
+  )
+
+```
+
+```{r}
+
+m.h3b.ps <- glmer(persuader_success ~ intro_condition * hint_condition + (1|question_id),
+              family = binomial(link = "logit"),
+              control = glmerControl(optimizer = "bobyqa"),
+            data = qr.post.final.disagree %>%
+              filter(intro_condition %in% c("Helpful", "Unhelpful"),
+                     feedback_condition == "No Feedback",
+                     hint_condition %in% c("Hint", "Conversation")) %>% droplevels())
+summary(m.h3b.ps)
+
+```
+
+## H4: Effects are greater w/ Feedback vs No feedback
+
+### H vs U (convo only)
+
+```{r}
+
+qr.post.final.disagree %>%
+  filter(hint_condition == "Conversation") %>%
+  ggplot(aes(x = intro_condition, y = as.numeric(persuader_success), fill=intro_condition)) + 
+  facet_grid(.~feedback_condition) +
+  stat_summary(geom="bar", fun="mean", position="dodge") + 
+  stat_summary(geom="errorbar", fun.data="mean_cl_boot", width=0.2,
+               color="#444444") + 
+  theme_minimal() + 
+  theme(legend.position = "none") + 
+  labs(
+    y = "Persuader success (final trials)",
+    x = "Feedback Condition",
+    caption = "Conversation only"
+  )
+
+```
+
+```{r}
+
+m.h4a.ps <- glmer(persuader_success ~ intro_condition * feedback_condition + (1|question_id),
+              family = binomial(link = "logit"),
+              control = glmerControl(optimizer = "bobyqa"),
+            data = qr.post.final.disagree %>%
+              filter(intro_condition %in% c("Helpful", "Unhelpful"),
+                     hint_condition == "Conversation") %>% droplevels())
+summary(m.h4a.ps)
+
+```
+
+### Helpfulness:Hint (3-way ixn)
+
+```{r}
+
+qr.post.final.disagree %>%
+  ggplot(aes(x = intro_condition, y = as.numeric(persuader_success), fill=intro_condition)) + 
+  facet_grid(feedback_condition~hint_condition) +
+  stat_summary(geom="bar", fun="mean", position="dodge") + 
+  stat_summary(geom="errorbar", fun.data="mean_cl_boot", width=0.2,
+               color="#444444") + 
+  theme_minimal() + 
+  theme(legend.position = "none") + 
+  labs(
+    y = "Persuader success (final trials)",
+    x = "Intro Condition"
+  )
+
+```
+
+```{r}
+
+m.h4b.ps <- glmer(persuader_success ~ intro_condition * feedback_condition * hint_condition + (1|question_id),
+              family = binomial(link = "logit"),
+              control = glmerControl(optimizer = "bobyqa"),
+            data = qr.post.final.disagree %>%
+              filter(intro_condition %in% c("Helpful", "Unhelpful"),
+                     hint_condition %in% c("Hint", "Conversation")) %>% droplevels())
+summary(m.h4b.ps)
+
+```
+
+# Confidence shifts
+
+## H1: Conversation > Hint overall
+
+```{r}
+
+qr.post.final.disagree %>%
+  ggplot(aes(x = hint_condition, y = as.numeric(confidence_change_to_persuader_answer), fill=hint_condition)) + 
+  stat_summary(geom="bar", fun="mean") + 
+  stat_summary(geom="errorbar", fun.data="mean_cl_boot", width=0.2,
+               color="#444444") + 
+  theme_minimal() + 
+  theme(legend.position = "none") + 
+  labs(
+    x = "Hint Condition"
+  )
+  
+
+```
+
+```{r}
+
+m.h1.cc <- lmer(confidence_change_to_persuader_answer ~ hint_condition + (1|question_id) + (1|feedback_condition) + (1|intro_condition),
+            data = qr.post.final.disagree)
+
+summary(m.h1.cc)
+
+```
+
+## H2: Helpful > Unhelpful (feedback)
+
+### Main effect (convo only)
+
+```{r}
+
+qr.post.final.disagree %>%
+  filter(feedback_condition == "Feedback", hint_condition == "Conversation") %>%
+  ggplot(aes(x = intro_condition, y = as.numeric(confidence_change_to_persuader_answer), fill=intro_condition)) + 
+  stat_summary(geom="bar", fun="mean") + 
+  stat_summary(geom="errorbar", fun.data="mean_cl_boot", width=0.2,
+               color="#444444") + 
+  theme_minimal() + 
+  theme(legend.position = "none") + 
+  labs(
+    x = "Intro Condition"
+  )
+
+```
+
+```{r}
+
+m.h2a.cc <- lmer(confidence_change_to_persuader_answer ~ intro_condition + (1|question_id),
+            data = qr.post.final.disagree %>%
+              filter(intro_condition %in% c("Helpful", "Unhelpful"),
+                     feedback_condition == "Feedback",
+                     hint_condition == "Conversation") %>% droplevels())
+summary(m.h2a.cc)
+
+```
+
+### Ixn w/ hint condition
+
+```{r}
+
+qr.post.final.disagree %>%
+  filter(feedback_condition == "Feedback") %>%
+  ggplot(aes(x = intro_condition, y = as.numeric(confidence_change_to_persuader_answer), fill=intro_condition)) + 
+  facet_grid(.~hint_condition) +
+  stat_summary(geom="bar", fun="mean", position="dodge") + 
+  stat_summary(geom="errorbar", fun.data="mean_cl_boot", width=0.2,
+               color="#444444") + 
+  theme_minimal() + 
+  theme(legend.position = "none") + 
+  labs(
+    x = "Intro Condition"
+  )
+
+```
+
+```{r}
+
+m.h2b.cc <- lmer(confidence_change_to_persuader_answer ~ intro_condition * hint_condition + (1|question_id),
+            data = qr.post.final.disagree %>%
+              filter(intro_condition %in% c("Helpful", "Unhelpful"),
+                     feedback_condition == "Feedback",
+                     hint_condition %in% c("Hint", "Conversation")) %>% droplevels())
+summary(m.h2b.cc)
+
+```
+
+## H3: Helpful > Unhelpful (no feedback)
+
+### Main effect (convo only)
+
+```{r}
+
+qr.post.final.disagree %>%
+  filter(feedback_condition == "No Feedback", hint_condition == "Conversation") %>%
+  ggplot(aes(x = intro_condition, y = as.numeric(confidence_change_to_persuader_answer), fill=intro_condition)) + 
+  stat_summary(geom="bar", fun="mean") + 
+  stat_summary(geom="errorbar", fun.data="mean_cl_boot", width=0.2,
+               color="#444444") + 
+  theme_minimal() + 
+  theme(legend.position = "none") + 
+  labs(
+    x = "Intro Condition"
+  )
+
+```
+
+```{r}
+
+m.h3a.cc <- lmer(confidence_change_to_persuader_answer ~ intro_condition + (1|question_id),
+            data = qr.post.final.disagree %>%
+              filter(intro_condition %in% c("Helpful", "Unhelpful"),
+                     feedback_condition == "No Feedback",
+                     hint_condition == "Conversation") %>% droplevels())
+summary(m.h3a.cc)
+
+```
+
+### Ixn w/ hint condition
+
+```{r}
+
+qr.post.final.disagree %>%
+  filter(feedback_condition == "No Feedback") %>%
+  ggplot(aes(x = intro_condition, y = as.numeric(confidence_change_to_persuader_answer), fill=intro_condition)) + 
+  facet_grid(.~hint_condition) +
+  stat_summary(geom="bar", fun="mean", position="dodge") + 
+  stat_summary(geom="errorbar", fun.data="mean_cl_boot", width=0.2,
+               color="#444444") + 
+  theme_minimal() + 
+  theme(legend.position = "none") + 
+  labs(
+    x = "Intro Condition"
+  )
+
+```
+
+```{r}
+
+m.h3b.cc <- lmer(confidence_change_to_persuader_answer ~ intro_condition * hint_condition + (1|question_id),
+            data = qr.post.final.disagree %>%
+              filter(intro_condition %in% c("Helpful", "Unhelpful"),
+                     feedback_condition == "No Feedback",
+                     hint_condition %in% c("Hint", "Conversation")) %>% droplevels())
+summary(m.h3b.cc)
+
+```
+
+## H4: Effects are greater w/ Feedback vs No feedback
+
+### H vs U (convo only)
+
+```{r}
+
+qr.post.final.disagree %>%
+  filter(hint_condition == "Conversation") %>%
+  ggplot(aes(x = intro_condition, y = as.numeric(confidence_change_to_persuader_answer), fill=intro_condition)) + 
+  facet_grid(.~feedback_condition) +
+  stat_summary(geom="bar", fun="mean", position="dodge") + 
+  stat_summary(geom="errorbar", fun.data="mean_cl_boot", width=0.2,
+               color="#444444") + 
+  theme_minimal() + 
+  theme(legend.position = "none") + 
+  labs(
+    x = "Feedback Condition",
+    caption = "Conversation only"
+  )
+
+```
+
+```{r}
+
+m.h4a.cc <- lmer(confidence_change_to_persuader_answer ~ intro_condition * feedback_condition + (1|question_id),
+            data = qr.post.final.disagree %>%
+              filter(intro_condition %in% c("Helpful", "Unhelpful"),
+                     hint_condition == "Conversation") %>% droplevels())
+summary(m.h4a.cc)
+
+```
+
+### Helpfulness:Hint (3-way ixn)
+
+```{r}
+
+qr.post.final.disagree %>%
+  ggplot(aes(x = intro_condition, y = as.numeric(confidence_change_to_persuader_answer), fill=intro_condition)) + 
+  facet_grid(feedback_condition~hint_condition) +
+  stat_summary(geom="bar", fun="mean", position="dodge") + 
+  stat_summary(geom="errorbar", fun.data="mean_cl_boot", width=0.2,
+               color="#444444") + 
+  theme_minimal() + 
+  theme(legend.position = "none") + 
+  labs(
+    x = "Intro Condition"
+  )
+
+```
+
+```{r}
+
+m.h4b.cc <- lmer(confidence_change_to_persuader_answer ~ intro_condition * feedback_condition * hint_condition + (1|question_id),
+            data = qr.post.final.disagree %>%
+              filter(intro_condition %in% c("Helpful", "Unhelpful"),
+                     hint_condition %in% c("Hint", "Conversation")) %>% droplevels())
+summary(m.h4b.cc)
+
+```
+
+# Exploratory
+
+```{r}
+
+qr.post.intro.disagree <- qr.post %>%
+  filter(trial_type == "intro", participant_persuader_disagree == T)
+
+```
+
+## Persuasion vs chance by cell
+
+```{r}
+
+qr.post.final.disagree <- qr.post.final.disagree %>%
+  mutate(
+    p_chance = (1 - confidence_pre / 100) / 2,
+    p_chance = pmin(pmax(p_chance, 0.005), 0.995),
+    chance_offset = qlogis(p_chance)
+  )
+
+mean(qr.post.final.disagree$p_chance)
+
+ps_vs_chance <- function(d) {
+  # Falls back to a plain glm when the mixed model fails to converge
+  tryCatch(
+    glmer(persuader_success ~ 1 + (1 | question_id) + offset(chance_offset),
+          family = "binomial", data = d,
+          control = glmerControl(optimizer = "bobyqa")),
+    error = function(e) glm(persuader_success ~ 1 + offset(chance_offset),
+                            family = "binomial", data = d)
+  )
+}
+
+chance.models <- qr.post.final.disagree %>%
+  group_by(feedback_condition, hint_condition, intro_condition) %>%
+  group_map(function(d, g) {
+    m <- ps_vs_chance(d)
+    cs <- coef(summary(m))
+    data.frame(g,
+               persuader_success = mean(d$persuader_success),
+               n = nrow(d),
+               b = cs[1, "Estimate"],
+               z = cs[1, "z value"],
+               p = cs[1, "Pr(>|z|)"])
+  }) %>%
+  bind_rows()
+
+chance.models
+
+```
+
+## Initial confidence predicts persuasion
+
+```{r}
+
+qr.post.disagree <- qr.post %>%
+  filter(participant_persuader_disagree == T) %>%
+  mutate(confidence_pre_10 = confidence_pre / 10)
+
+m.conf.ps <- glmer(persuader_success ~ confidence_pre_10 + (1 | question_id),
+            family = "binomial",
+            control = glmerControl(optimizer = "bobyqa"),
+            data = qr.post.disagree)
+summary(m.conf.ps)
+
+```
+
+```{r}
+
+m.conf.ps.final <- glmer(persuader_success ~ confidence_pre_10 + (1 | question_id),
+            family = "binomial",
+            control = glmerControl(optimizer = "bobyqa"),
+            data = qr.post.disagree %>% filter(trial_type == "final"))
+summary(m.conf.ps.final)
+
+```
+
+## Persuader success trajectories over intro trials
+
+```{r}
+
+qr.post.intro.disagree %>%
+  group_by(feedback_condition, hint_condition, intro_condition, trial_index) %>%
+  summarize(
+    persuader_success = mean(persuader_success),
+    n = n(),
+    .groups = "drop"
+  ) %>%
+  pivot_wider(names_from = trial_index, values_from = c(persuader_success, n))
+
+```
+
+```{r}
+
+m.traj.conv.fb <- glmer(persuader_success ~ trial_index * intro_condition + (1 | question_id),
+            family = "binomial",
+            control = glmerControl(optimizer = "bobyqa"),
+            data = qr.post.intro.disagree %>%
+              filter(feedback_condition == "Feedback", hint_condition == "Conversation"))
+summary(m.traj.conv.fb)
+
+```
+
+```{r}
+
+m.traj.hint.fb.unhelpful <- glmer(persuader_success ~ trial_index + (1 | question_id),
+            family = "binomial",
+            control = glmerControl(optimizer = "bobyqa"),
+            data = qr.post.intro.disagree %>%
+              filter(feedback_condition == "Feedback", hint_condition == "Hint",
+                     intro_condition == "Unhelpful"))
+summary(m.traj.hint.fb.unhelpful)
+
+```
+
+```{r}
+
+m.traj.conv.nofb.helpful <- glmer(persuader_success ~ trial_index + (1 | question_id),
+            family = "binomial",
+            control = glmerControl(optimizer = "bobyqa"),
+            data = qr.post.intro.disagree %>%
+              filter(feedback_condition == "No Feedback", hint_condition == "Conversation",
+                     intro_condition == "Helpful"))
+summary(m.traj.conv.nofb.helpful)
+
+```
+
+## Truth advantage via interaction mode
+
+```{r}
+
+qr.post.intro.disagree.nofb <- qr.post.intro.disagree %>%
+  filter(feedback_condition == "No Feedback")
+
+qr.post.intro.disagree.nofb %>%
+  group_by(hint_condition, persuader_correct) %>%
+  summarize(
+    persuader_success = mean(persuader_success),
+    confidence_change = mean(confidence_change_to_persuader_answer),
+    n = n(),
+    .groups = "drop"
+  )
+
+```
+
+```{r}
+
+m.truth.conv <- glmer(persuader_success ~ persuader_correct + (1 | question_id),
+            family = "binomial",
+            control = glmerControl(optimizer = "bobyqa"),
+            data = qr.post.intro.disagree.nofb %>% filter(hint_condition == "Conversation"))
+summary(m.truth.conv)
+
+```
+
+```{r}
+
+m.truth.mode <- glmer(persuader_success ~ persuader_correct * hint_condition + (1 | question_id),
+            family = "binomial",
+            control = glmerControl(optimizer = "bobyqa"),
+            data = qr.post.intro.disagree.nofb)
+summary(m.truth.mode)
+
+```
+
+## Exit survey
+
+```{r}
+
+participants %>%
+  group_by(feedback_condition, hint_condition, intro_condition) %>%
+  summarize(
+    reliability = mean(model_reliability),
+    error_rate = mean(model_error_rate),
+    incorrect_training = mean(model_incorrect_training),
+    incorrect_instruction = mean(model_incorrect_instruction),
+    n = n(),
+    .groups = "drop"
+  )
+
+```
+
+```{r}
+
+m.rel.conv.fb <- lm(model_reliability ~ intro_condition,
+  data = participants %>% filter(feedback_condition == "Feedback", hint_condition == "Conversation"))
+summary(m.rel.conv.fb)
+
+```
+
+```{r}
+
+m.rel.conv.nofb <- lm(model_reliability ~ intro_condition,
+  data = participants %>% filter(feedback_condition == "No Feedback", hint_condition == "Conversation"))
+summary(m.rel.conv.nofb)
+
+```
+
+```{r}
+
+m.rel.hint.fb <- lm(model_reliability ~ intro_condition,
+  data = participants %>% filter(feedback_condition == "Feedback", hint_condition == "Hint"))
+summary(m.rel.hint.fb)
+
+```
+
+```{r}
+
+m.rel.hint.nofb <- lm(model_reliability ~ intro_condition,
+  data = participants %>% filter(feedback_condition == "No Feedback", hint_condition == "Hint"))
+summary(m.rel.hint.nofb)
+
+```
+
+```{r}
+
+m.err.ixn <- lm(model_error_rate ~ intro_condition * feedback_condition,
+                data = participants %>% filter(hint_condition == "Conversation"))
+summary(m.err.ixn)
+
+```
+
+### Mode main effects and helpfulness simple effects with feedback
+
+```{r}
+
+for (m in c("model_persuasiveness", "model_likeability", "model_reliability",
+            "model_error_rate", "model_incorrect_training",
+            "model_incorrect_instruction")) {
+  f <- lm(reformulate("hint_condition", m), data = participants)
+  cs <- coef(summary(f))
+  co <- cs["hint_conditionHint", ]
+  cat(sprintf("%-28s b=%+.2f t=%+.2f p=%.4f\n", m, co[1], co[3], co[4]))
+}
+
+```
+
+```{r}
+
+fb.hu <- participants %>%
+  filter(feedback_condition == "Feedback", intro_condition != "Mixed") %>%
+  droplevels()
+for (mode in c("Conversation", "Hint")) {
+  for (m in c("model_likeability", "model_reliability", "model_error_rate",
+              "model_incorrect_training", "model_incorrect_instruction")) {
+    f <- lm(reformulate("intro_condition", m),
+            data = fb.hu %>% filter(hint_condition == mode))
+    cs <- coef(summary(f))
+    co <- cs["intro_conditionHelpful", ]
+    cat(sprintf("%-13s %-28s b=%+.2f t=%+.2f p=%.4f\n",
+                mode, m, co[1], co[3], co[4]))
+  }
+}
+
+```
+
+```{r}
+
+m.pers.hint.fb <- lm(model_persuasiveness ~ intro_condition,
+  data = fb.hu %>% filter(hint_condition == "Hint"))
+summary(m.pers.hint.fb)
+
+```
+
+```{r}
+
+m.pers.conv.fb <- lm(model_persuasiveness ~ intro_condition,
+  data = fb.hu %>% filter(hint_condition == "Conversation"))
+summary(m.pers.conv.fb)
+
+```
+
+### Helpfulness discernment without feedback
+
+```{r}
+
+conv.ppts <- participants %>% filter(hint_condition == "Conversation")
+for (m in c("model_reliability", "model_error_rate", "model_persuasiveness",
+            "model_incorrect_instruction", "model_incorrect_training")) {
+  f <- lm(reformulate("intro_condition * feedback_condition", m),
+          data = conv.ppts)
+  cs <- coef(summary(f))
+  co <- cs[grep(":", rownames(cs)), ]
+  cat(sprintf("%-28s ixn b=%+.2f t=%+.2f p=%.4f\n", m, co[1], co[3], co[4]))
+}
+
+```
+
+```{r}
+
+nofb.ppts <- participants %>% filter(feedback_condition == "No Feedback")
+for (m in c("model_persuasiveness", "model_incorrect_instruction",
+            "model_incorrect_training", "model_reliability",
+            "model_error_rate")) {
+  f <- lm(reformulate("intro_condition * hint_condition", m), data = nofb.ppts)
+  cs <- coef(summary(f))
+  co <- cs[grep(":", rownames(cs)), ]
+  cat(sprintf("%-28s ixn b=%+.2f t=%+.2f p=%.4f\n", m, co[1], co[3], co[4]))
+}
+
+```
+
+```{r}
+
+nofb.conv.long <- participants %>%
+  filter(feedback_condition == "No Feedback",
+         hint_condition == "Conversation") %>%
+  select(id, intro_condition, model_incorrect_training,
+         model_incorrect_instruction) %>%
+  pivot_longer(c(model_incorrect_training, model_incorrect_instruction),
+               names_to = "measure", values_to = "rating")
+
+m.decep.vs.mist <- lmer(rating ~ intro_condition * measure + (1 | id),
+                        data = nofb.conv.long)
+summary(m.decep.vs.mist)
+
+```
+
+```{r}
+
+nofb.conv <- participants %>%
+  filter(feedback_condition == "No Feedback", hint_condition == "Conversation")
+nofb.hint <- participants %>%
+  filter(feedback_condition == "No Feedback", hint_condition == "Hint")
+
+m.pers.conv.nofb <- lm(model_persuasiveness ~ intro_condition, data = nofb.conv)
+summary(m.pers.conv.nofb)
+
+```
+
+```{r}
+
+m.decep.conv.nofb <- lm(model_incorrect_instruction ~ intro_condition,
+                        data = nofb.conv)
+summary(m.decep.conv.nofb)
+
+```
+
+```{r}
+
+m.mist.conv.nofb <- lm(model_incorrect_training ~ intro_condition,
+                       data = nofb.conv)
+summary(m.mist.conv.nofb)
+
+```
+
+```{r}
+
+for (m in c("model_persuasiveness", "model_likeability", "model_reliability",
+            "model_error_rate", "model_incorrect_training",
+            "model_incorrect_instruction")) {
+  f <- lm(reformulate("intro_condition", m), data = nofb.hint)
+  cs <- coef(summary(f))
+  co <- cs[grep("^intro_condition", rownames(cs)), ]
+  cat(sprintf("%-28s b=%+.2f t=%+.2f p=%.3f\n", m, co[1], co[3], co[4]))
+}
+
+```
+
+## Susceptibility to persuasion (StP-II)
+
+```{r}
+
+stp.scores <- persuadability %>%
+  mutate(
+    response_coded = ifelse(category == "similarity", 8 - response, response)
+  ) %>%
+  group_by(participant_id) %>%
+  summarize(stp = mean(response_coded))
+
+stp.final <- qr.post.final.disagree %>%
+  merge(stp.scores, by = "participant_id")
+
+m.stp.ps <- glmer(persuader_success ~ stp + (1 | question_id),
+            family = "binomial",
+            control = glmerControl(optimizer = "bobyqa"),
+            data = stp.final)
+summary(m.stp.ps)
+
+```
+
+```{r}
+
+m.stp.cc <- lmer(confidence_change_to_persuader_answer ~ stp + (1 | question_id),
+            data = stp.final)
+summary(m.stp.cc)
+
+```
+
+## Conversation length
+
+```{r}
+
+m.length.ps <- glmer(persuader_success ~ n_messages + (1 | question_id),
+            family = "binomial",
+            control = glmerControl(optimizer = "bobyqa"),
+            data = qr.post.final.disagree %>% filter(hint_condition == "Conversation"))
+summary(m.length.ps)
+
+```
+
+```{r}
+
+m.length.cc <- lmer(confidence_change_to_persuader_answer ~ n_messages + (1 | question_id),
+            data = qr.post.final.disagree %>% filter(hint_condition == "Conversation"))
+summary(m.length.cc)
+
+```
+
+# Stats file
+
+```{r}
+
+stat_row <- function(model, hypothesis, measure, term = NULL) {
+  cs <- coef(summary(model))
+  if (is.null(term)) term <- rownames(cs)[nrow(cs)]
+  z.model <- "z value" %in% colnames(cs)
+  data.frame(
+    experiment = "E3",
+    hypothesis = hypothesis,
+    measure = measure,
+    term = term,
+    b = cs[term, "Estimate"],
+    se = cs[term, "Std. Error"],
+    stat_type = ifelse(z.model, "z", "t"),
+    stat = cs[term, ifelse(z.model, "z value", "t value")],
+    df = ifelse(z.model, NA, ifelse("df" %in% colnames(cs), cs[term, "df"], df.residual(model))),
+    p = cs[term, ifelse(z.model, "Pr(>|z|)", "Pr(>|t|)")],
+    n = nobs(model)
+  )
+}
+
+e3.stats <- bind_rows(
+  stat_row(m.h1.ps, "H1", "PS", term = "hint_conditionHint"),
+  stat_row(m.h1.cc, "H1", "CC", term = "hint_conditionHint"),
+  stat_row(m.h2a.ps, "H2a", "PS", term = "intro_conditionHelpful"),
+  stat_row(m.h2a.cc, "H2a", "CC", term = "intro_conditionHelpful"),
+  stat_row(m.h2b.ps, "H2b", "PS", term = "intro_conditionHelpful:hint_conditionHint"),
+  stat_row(m.h2b.cc, "H2b", "CC", term = "intro_conditionHelpful:hint_conditionHint"),
+  stat_row(m.h3a.ps, "H3a", "PS", term = "intro_conditionHelpful"),
+  stat_row(m.h3a.cc, "H3a", "CC", term = "intro_conditionHelpful"),
+  stat_row(m.h3b.ps, "H3b", "PS", term = "intro_conditionHelpful:hint_conditionHint"),
+  stat_row(m.h3b.cc, "H3b", "CC", term = "intro_conditionHelpful:hint_conditionHint"),
+  stat_row(m.h4a.ps, "H4a", "PS", term = "intro_conditionHelpful:feedback_conditionNo Feedback"),
+  stat_row(m.h4a.cc, "H4a", "CC", term = "intro_conditionHelpful:feedback_conditionNo Feedback"),
+  stat_row(m.h4b.ps, "H4b", "PS", term = "intro_conditionHelpful:feedback_conditionNo Feedback:hint_conditionHint"),
+  stat_row(m.h4b.cc, "H4b", "CC", term = "intro_conditionHelpful:feedback_conditionNo Feedback:hint_conditionHint"),
+  stat_row(m.conf.ps, "confidence_ps", "PS", term = "confidence_pre_10"),
+  stat_row(m.conf.ps.final, "confidence_ps_final", "PS", term = "confidence_pre_10"),
+  stat_row(m.traj.conv.fb, "traj_conv_fb_ixn", "PS", term = "trial_index:intro_conditionHelpful"),
+  stat_row(m.traj.hint.fb.unhelpful, "traj_hint_fb_unhelpful", "PS", term = "trial_index"),
+  stat_row(m.traj.conv.nofb.helpful, "traj_conv_nofb_helpful", "PS", term = "trial_index"),
+  stat_row(m.truth.conv, "truth_conv_nofb", "PS", term = "persuader_correctTRUE"),
+  stat_row(m.truth.mode, "truth_x_mode_nofb", "PS", term = "persuader_correctTRUE:hint_conditionHint"),
+  stat_row(m.rel.conv.fb, "reliability_conv_fb", "rating", term = "intro_conditionHelpful"),
+  stat_row(m.rel.conv.nofb, "reliability_conv_nofb", "rating", term = "intro_conditionHelpful"),
+  stat_row(m.rel.hint.fb, "reliability_hint_fb", "rating", term = "intro_conditionHelpful"),
+  stat_row(m.rel.hint.nofb, "reliability_hint_nofb", "rating", term = "intro_conditionHelpful"),
+  stat_row(m.err.ixn, "error_rate_ixn", "rating", term = "intro_conditionHelpful:feedback_conditionNo Feedback"),
+  stat_row(m.stp.ps, "stp_ps_final", "PS", term = "stp"),
+  stat_row(m.stp.cc, "stp_cc_final", "CC", term = "stp"),
+  stat_row(m.length.ps, "length_ps_final", "PS", term = "n_messages"),
+  stat_row(m.length.cc, "length_cc_final", "CC", term = "n_messages")
+)
+
+e3.stats
+
+```
+
+```{r}
+
+e3.descriptives <- qr.post.final.disagree %>%
+  group_by(feedback_condition, hint_condition, intro_condition) %>%
+  summarize(
+    persuader_success = mean(persuader_success),
+    confidence_change = mean(confidence_change_to_persuader_answer),
+    n = n(),
+    .groups = "drop"
+  ) %>%
+  bind_rows(
+    qr.post.final.disagree %>%
+      summarize(
+        persuader_success = mean(persuader_success),
+        confidence_change = mean(confidence_change_to_persuader_answer),
+        n = n()
+      )
+  ) %>%
+  mutate(experiment = "E3", .before = 1)
+
+e3.descriptives
+
+write.csv(e3.stats, "stats/e3_stats.csv", row.names = FALSE)
+write.csv(e3.descriptives, "stats/e3_descriptives.csv", row.names = FALSE)
+
+```
+
+# Trial-level data
+
+```{r}
+
+qr.post %>%
+  transmute(
+    experiment = "E3",
+    participant_id, question_id, trial_type, trial_index,
+    intro_condition = as.character(intro_condition),
+    feedback_condition = as.character(feedback_condition),
+    hint_condition = as.character(hint_condition),
+    interaction_type = "human_ai",
+    persuader_correct,
+    participant_persuader_disagree,
+    persuader_success,
+    confidence_pre,
+    confidence_change = confidence_change_to_persuader_answer,
+    accuracy
+  ) %>%
+  write.csv("stats/e3_trials.csv", row.names = FALSE)
+
+qr.pre %>%
+  transmute(experiment = "E3", participant_id, question_id, confidence, accuracy) %>%
+  write.csv("stats/e3_survey.csv", row.names = FALSE)
+
+participants %>%
+  transmute(
+    experiment = "E3",
+    participant_id = id,
+    intro_condition,
+    feedback_condition,
+    hint_condition,
+    persuasiveness = model_persuasiveness,
+    likeability = model_likeability,
+    reliability = model_reliability,
+    error_rate = model_error_rate,
+    incorrect_training = model_incorrect_training,
+    incorrect_instruction = model_incorrect_instruction
+  ) %>%
+  write.csv("stats/e3_exit_survey.csv", row.names = FALSE)
+
+```
+
+## Additional exploratory analyses
+
+### Self-reported expertise (physics / logic / probability)
+
+```{r}
+
+add_expertise <- function(d) {
+  d %>%
+    mutate(expertise = case_when(
+      subcategory == "physics" ~ physics,
+      subcategory == "logic" ~ logic,
+      subcategory == "probability" ~ probability
+    )) %>%
+    filter(!is.na(expertise))
+}
+
+qr.pre.expertise <- add_expertise(qr.pre)
+nrow(qr.pre.expertise)
+
+m.expertise.acc <- glmer(accuracy ~ expertise + (1 | question_id) + (1 | participant_id),
+                         family = "binomial", data = qr.pre.expertise,
+                         control = glmerControl(optimizer = "bobyqa"))
+summary(m.expertise.acc)
+
+```
+
+```{r}
+
+qr.post.final.expertise <- qr.post.final.disagree %>%
+  add_expertise() %>%
+  mutate(confidence_pre_10 = confidence_pre / 10)
+
+nrow(qr.post.final.expertise)
+
+m.expertise.ps <- glmer(persuader_success ~ expertise + (1 | question_id),
+                        family = "binomial", data = qr.post.final.expertise,
+                        control = glmerControl(optimizer = "bobyqa"))
+summary(m.expertise.ps)
+
+```
+
+```{r}
+
+m.expertise.ps.conf <- glmer(persuader_success ~ expertise + confidence_pre_10 + (1 | question_id),
+                             family = "binomial", data = qr.post.final.expertise,
+                             control = glmerControl(optimizer = "bobyqa"))
+summary(m.expertise.ps.conf)
+
+```
+
+```{r}
+
+m.expertise.cc <- lmer(confidence_change_to_persuader_answer ~ expertise + (1 | question_id),
+                       data = qr.post.final.expertise)
+summary(m.expertise.cc)
+
+```
+
+### StP-II x interaction mode
+
+```{r}
+
+nrow(stp.final)
+
+m.stp.mode.ps <- glmer(persuader_success ~ stp * hint_condition + (1 | question_id),
+                       family = "binomial",
+                       control = glmerControl(optimizer = "bobyqa"),
+                       data = stp.final)
+summary(m.stp.mode.ps)
+
+```
+
+```{r}
+
+m.stp.mode.cc <- lmer(confidence_change_to_persuader_answer ~ stp * hint_condition + (1 | question_id),
+                      data = stp.final)
+summary(m.stp.mode.cc)
+
+```
+
+```{r}
+
+stp.final.conv <- stp.final %>% filter(hint_condition == "Conversation")
+nrow(stp.final.conv)
+
+m.stp.ps.conv <- glmer(persuader_success ~ stp + (1 | question_id),
+                       family = "binomial",
+                       control = glmerControl(optimizer = "bobyqa"),
+                       data = stp.final.conv)
+summary(m.stp.ps.conv)
+
+```
+
+```{r}
+
+m.stp.cc.conv <- lmer(confidence_change_to_persuader_answer ~ stp + (1 | question_id),
+                      data = stp.final.conv)
+summary(m.stp.cc.conv)
+
+```
+
+```{r}
+
+stp.final.hint <- stp.final %>% filter(hint_condition == "Hint")
+nrow(stp.final.hint)
+
+m.stp.ps.hint <- glmer(persuader_success ~ stp + (1 | question_id),
+                       family = "binomial",
+                       control = glmerControl(optimizer = "bobyqa"),
+                       data = stp.final.hint)
+summary(m.stp.ps.hint)
+
+```
+
+```{r}
+
+m.stp.cc.hint <- lmer(confidence_change_to_persuader_answer ~ stp + (1 | question_id),
+                      data = stp.final.hint)
+summary(m.stp.cc.hint)
+
+```
+
+### Persuader corrigibility (giving up)
+
+```{r}
+
+corrigibility.tags <- read.csv("../data/corrigibility_tags.csv")
+
+qr.post.conv.tagged <- qr.post %>%
+  filter(hint_condition == "Conversation") %>%
+  merge(corrigibility.tags, by = "conversation_id")
+
+# Coverage and overall concession rate
+nrow(qr.post.conv.tagged)
+mean(qr.post.conv.tagged$corrigibility_tag == "Yes")
+
+```
+
+```{r}
+
+qr.post.conv.tagged %>%
+  group_by(intro_condition) %>%
+  summarize(concession_rate = mean(corrigibility_tag == "Yes"), n = n())
+
+```
+
+```{r}
+
+qr.post.conv.tagged %>%
+  group_by(trial_type) %>%
+  summarize(concession_rate = mean(corrigibility_tag == "Yes"), n = n())
+
+```
+
+```{r}
+
+qr.post.conv.tagged %>%
+  group_by(trial_type, intro_condition) %>%
+  summarize(concession_rate = mean(corrigibility_tag == "Yes"), n = n(),
+            .groups = "drop")
+
+```
+
+```{r}
+
+fin.tagged <- qr.post.conv.tagged %>%
+  filter(trial_type == "final", participant_persuader_disagree == TRUE)
+
+nrow(fin.tagged)
+mean(fin.tagged$corrigibility_tag == "Yes")
+
+m.conceded.ps <- glmer(persuader_success ~ conceded + (1 | question_id),
+                       family = "binomial",
+                       control = glmerControl(optimizer = "bobyqa"),
+                       data = fin.tagged %>%
+                         filter(corrigibility_tag != "Unclear") %>%
+                         mutate(conceded = corrigibility_tag == "Yes"))
+summary(m.conceded.ps)
+
+```
+
+### Truth effect on first trials and across intro trials
+
+```{r}
+
+# counterbalance check: disagreement rate by condition (intros, both modes)
+qr.post.intro %>%
+  group_by(intro_condition) %>%
+  summarize(disagree_rate = mean(participant_persuader_disagree), n = n())
+
+conv.intro.disagree <- qr.post.intro.disagree %>%
+  filter(hint_condition == "Conversation")
+
+first.conv <- conv.intro.disagree %>% filter(trial_index == 0)
+nrow(first.conv)
+
+first.conv %>%
+  group_by(feedback_condition, persuader_correct) %>%
+  summarize(persuader_success = mean(persuader_success), n = n(),
+            .groups = "drop")
+
+m.first.ps <- glmer(persuader_success ~ persuader_correct + (1 | question_id),
+                    family = "binomial",
+                    control = glmerControl(optimizer = "bobyqa"),
+                    data = first.conv %>%
+                      filter(feedback_condition == "No Feedback"))
+summary(m.first.ps)
+
+```
+
+```{r}
+
+# truth x trial slope, No-Feedback conversations
+m.truth.slope.nf <- glmer(persuader_success ~ persuader_correct * trial_index
+                          + (1 | participant_id) + (1 | question_id),
+                          family = "binomial",
+                          control = glmerControl(optimizer = "bobyqa"),
+                          data = conv.intro.disagree %>%
+                            filter(feedback_condition == "No Feedback"))
+summary(m.truth.slope.nf)
+
+```
+
+```{r}
+
+# same slope, Feedback conversations (for comparison)
+m.truth.slope.fb <- glmer(persuader_success ~ persuader_correct * trial_index
+                          + (1 | participant_id) + (1 | question_id),
+                          family = "binomial",
+                          control = glmerControl(optimizer = "bobyqa"),
+                          data = conv.intro.disagree %>%
+                            filter(feedback_condition == "Feedback"))
+summary(m.truth.slope.fb)
+
+```

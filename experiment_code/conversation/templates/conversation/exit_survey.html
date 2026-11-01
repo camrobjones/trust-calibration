@@ -1,0 +1,619 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <script src="https://cdn.jsdelivr.net/gh/jspsych/jsPsych@6.3.1/jspsych.js"></script>
+    <script src="https://cdn.jsdelivr.net/gh/jspsych/jsPsych@6.3.1/plugins/jspsych-html-keyboard-response.js"></script>
+    <script src="https://cdn.jsdelivr.net/gh/jspsych/jsPsych@6.3.1/plugins/jspsych-html-button-response.js"></script>
+    <script src="https://cdn.jsdelivr.net/gh/jspsych/jsPsych@6.3.1/plugins/jspsych-html-slider-response.js"></script>
+    <script src="https://cdn.jsdelivr.net/gh/jspsych/jsPsych@6.3.1/plugins/jspsych-instructions.js"></script>
+    <script src="https://cdn.jsdelivr.net/gh/jspsych/jsPsych@6.3.1/plugins/jspsych-survey-html-form.js"></script>
+
+    <!-- Css -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/jspsych/jsPsych@6.3.1/css/jspsych.css">
+    <link rel="stylesheet" href="{% static 'conversation/conversation.css' %}">
+
+    <!-- Cookies -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/js-cookie/2.0.4/js.cookie.min.js"
+        integrity="sha512-Nonc2AqL1+VEN+97F3n4YxucBOAL5BgqNwEVc2uUjdKOWAmzwj5ChdJQvN2KldAxkCxE4OenuJ/RL18bWxGGzA=="
+        crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+
+    <!-- Axios -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/axios/1.7.8/axios.min.js"
+        integrity="sha512-v8+bPcpk4Sj7CKB11+gK/FnsbgQ15jTwZamnBf/xDmiQDcgOIYufBo6Acu1y30vrk8gg5su4x0CG3zfPaq5Fcg=="
+        crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+
+    {% csrf_token %}
+</head>
+
+<body>
+    <div id="jspsych-target"></div>
+
+    {{ conf | json_script:"conf" }}
+
+    <script>
+        const conf = JSON.parse(document.getElementById('conf').textContent);
+        console.log(conf);
+        const pptId = conf.ppt_id;
+        const questions = conf.questions;
+    </script>
+
+    <script>
+        function saveResults() {
+            // POST user data to server
+            let url = `/conversation/save_exit_survey_results/`;
+            let csrftoken = Cookies.get('csrftoken');
+            let headers = { "X-CSRFToken": csrftoken };
+            let results = jsPsych.data.get().values();
+            let data = { results: results, ppt_id: pptId };
+            axios.post(url, data, { headers: headers })
+                .then(response => {
+                    console.log(response);
+                });
+        }
+    </script>
+
+    <script>
+        var instructionsPage1 = {
+            type: 'instructions',
+            pages: [
+                "<h2>Exit Survey</h2><p>Thank you. You have completed the conversation part of the experiment.</p><p>You will now answer a short series of questions about yourself.</p><p>Each question will ask you the extent to which you agree with a statement, on a scale of 1-7.</p>"
+            ],
+            show_clickable_nav: true
+        };
+
+        
+        var trial = {
+            type: 'survey-html-form',
+            data: function () {
+                var item_id = jsPsych.timelineVariable('id');
+                return {
+                    "item_type": "persuasion_scale",
+                    "item_id": item_id,
+                    "category": jsPsych.timelineVariable('category'),
+                    "sub_category": jsPsych.timelineVariable('sub-category'),
+                    "scoring": jsPsych.timelineVariable('scoring')
+                };
+            },
+            html: function () {
+                // Display the question text.
+                let questionHTML = `
+        <div class="q-container">
+            <p>Please indicate the extent to which you agree with this statement:</p>
+            <p class="question">${jsPsych.timelineVariable('question')}</p>
+        </div>
+        `;
+                // Likert scale slider: 1 (Strongly Disagree) to 7 (Strongly Agree)
+                let likertHTML = `
+        <div class="likert-container">
+            <div class="likert-scale">
+            <div class="likert-labels">
+                <span>1<br><small>(Strongly Disagree)</small></span>
+                <output id="output_trial">4</output>
+                <span>7<br><small>(Strongly Agree)</small></span>
+            </div>
+            <input class="likert-range" type="range" name="likert" min="1" max="7" step="1" value="4"
+                data-changed="false"
+                oninput="this.dataset.changed = 'true'; document.getElementById('output_trial').value = this.value" required>
+            </div>
+        </div>
+        `;
+                return questionHTML + likertHTML;
+            },
+            on_load: function () {
+                let nextButton = document.querySelector('#jspsych-survey-html-form-next');
+                if (nextButton) {
+                    nextButton.addEventListener('click', function (e) {
+                        // Check that all sliders on this page have been adjusted at least once.
+                        let sliders = document.querySelectorAll('.likert-range');
+                        let allChanged = true;
+                        sliders.forEach(function (slider) {
+                            if (slider.dataset.changed !== 'true') {
+                                allChanged = false;
+                            }
+                        });
+                        if (!allChanged) {
+                            e.preventDefault();
+                            alert("Please adjust the slider at least once before continuing.");
+                        }
+                    });
+                }
+            }
+        };
+
+        var modelEvaluation = {
+            type: 'survey-html-form',
+            data: { item_type: "model_evaluation" },
+            html: `
+        <div class="q-container">
+        <h2>Advisor</h2>
+        <p>Please indicate the extent to which you agree with the following statements about the advisor.</p>
+        </div>
+        <div class="q-container">
+        <div class="likert-scale">
+            <p>How persuasive did you find the advisor?</p>
+            <div class="likert-labels">
+            <span>1<br><small>(Very Unpersuasive)</small></span>
+            <output id="output_persuasiveness">4</output>
+            <span>7<br><small>(Very Persuasive)</small></span>
+            </div>
+            <input class="likert-range" type="range" name="persuasiveness" min="1" max="7" step="1" value="4"
+            data-changed="false"
+            oninput="this.dataset.changed = 'true'; document.getElementById('output_persuasiveness').value = this.value" required>
+        </div>
+        <div class="likert-scale">
+            <p>How likeable did you find the advisor?</p>
+            <div class="likert-labels">
+            <span>1<br><small>(Very Unlikable)</small></span>
+            <output id="output_likeability">4</output>
+            <span>7<br><small>(Very Likable)</small></span>
+            </div>
+            <input class="likert-range" type="range" name="likeability" min="1" max="7" step="1" value="4"
+            data-changed="false"
+            oninput="this.dataset.changed = 'true'; document.getElementById('output_likeability').value = this.value" required>
+        </div>
+        <div class="likert-scale">
+            <p>If you needed advice in a real situation, how likely would you be to follow the advisor's recommendations?</p>
+            <div class="likert-labels">
+            <span>1<br><small>(Not at all likely)</small></span>
+            <output id="output_reliability">4</output>
+            <span>7<br><small>(Very likely)</small></span>
+            </div>
+            <input class="likert-range" type="range" name="reliability" min="1" max="7" step="1" value="4"
+            data-changed="false"
+            oninput="this.dataset.changed = 'true'; document.getElementById('output_reliability').value = this.value" required>
+        </div>
+    `,
+            on_load: function () {
+                let nextButton = document.querySelector('#jspsych-survey-html-form-next');
+                if (nextButton) {
+                    nextButton.addEventListener('click', function (e) {
+                        let sliders = document.querySelectorAll('.likert-range');
+                        let allChanged = true;
+                        sliders.forEach(function (slider) {
+                            if (slider.dataset.changed !== 'true') {
+                                allChanged = false;
+                            }
+                        });
+                        if (!allChanged) {
+                            e.preventDefault();
+                            alert("Please adjust all sliders at least once before continuing.");
+                        }
+                    });
+                }
+            }
+        };
+
+        var funnelDebrief = {
+            type: 'survey-html-form',
+            data: { item_type: "funnel_debrief" },
+            html: `
+        <div class="q-container">
+        <h2>Advisor</h2>
+        <p>Please indicate the extent to which you agree with the following statements.</p>
+        </div>
+        <div class="q-container">
+        <div class="likert-scale">
+            <p>How often did the advisor say things that were incorrect or wrong?</p>
+            <div class="likert-labels">
+            <span>1<br><small>(Rarely)</small></span>
+            <output id="output_error_rate">4</output>
+            <span>7<br><small>(Very often)</small></span>
+            </div>
+            <input class="likert-range" type="range" name="model_error_rate" min="1" max="7" step="1" value="4"
+            data-changed="false"
+            oninput="this.dataset.changed = 'true'; document.getElementById('output_error_rate').value = this.value" required>
+        </div>
+        <div class="likert-scale">
+            <p>How likely do you think it is that the advisor made errors or had incorrect information?</p>
+            <div class="likert-labels">
+            <span>1<br><small>(Very unlikely)</small></span>
+            <output id="output_incorrect_training">4</output>
+            <span>7<br><small>(Very likely)</small></span>
+            </div>
+            <input class="likert-range" type="range" name="model_incorrect_training" min="1" max="7" step="1" value="4"
+            data-changed="false"
+            oninput="this.dataset.changed = 'true'; document.getElementById('output_incorrect_training').value = this.value" required>
+        </div>
+        <div class="likert-scale">
+            <p>How likely do you think it is that the advisor was intentionally instructed to argue for an incorrect answer?</p>
+            <div class="likert-labels">
+            <span>1<br><small>(Very unlikely)</small></span>
+            <output id="output_incorrect_instruction">4</output>
+            <span>7<br><small>(Very likely)</small></span>
+            </div>
+            <input class="likert-range" type="range" name="model_incorrect_instruction" min="1" max="7" step="1" value="4"
+            data-changed="false"
+            oninput="this.dataset.changed = 'true'; document.getElementById('output_incorrect_instruction').value = this.value" required>
+        </div>
+        </div>
+        <div class="q-container">
+        <p>Do you have any other thoughts on the advisor and your interactions with them?</p>
+        <textarea name="model_incorrect_open" rows="4" cols="50" class="form-control debrief"></textarea>
+        </div>
+    `,
+            on_load: function () {
+                let nextButton = document.querySelector('#jspsych-survey-html-form-next');
+                if (nextButton) {
+                    nextButton.addEventListener('click', function (e) {
+                        let sliders = document.querySelectorAll('.likert-range');
+                        let allChanged = true;
+                        sliders.forEach(function (slider) {
+                            if (slider.dataset.changed !== 'true') {
+                                allChanged = false;
+                            }
+                        });
+                        if (!allChanged) {
+                            e.preventDefault();
+                            alert("Please adjust all sliders at least once before continuing.");
+                        }
+                    });
+                }
+            }
+        };
+
+        var demographics = {
+            type: 'survey-html-form',
+            data: { item_type: "demographics" },
+            html: function () {
+                return `
+            <div class='debrief-container'>
+              <h2 class='title'>Demographics</h2>
+              <div class='question demographics'>
+                <h3 class='question-title demographics'>In what year were you born?</h3>
+                <input type="number" min="1800" max="2025" style="width:100px" name="demographics_year" class='form-control demographics'>
+              </div>
+              <div class='question demographics'>
+                <h3 class='question-title demographics'>What is your gender?</h3>
+                <div class='radio-option demographics'>
+                  <input type='radio' name='demographics_gender' id='gender_1' value="f" required>
+                  <label for='gender_1'>1) Female</label>
+                </div>
+                <div class='radio-option demographics'>
+                  <input type='radio' name='demographics_gender' id='gender_2' value="m" required>
+                  <label for='gender_2'>2) Male</label>
+                </div>
+                <div class='radio-option demographics'>
+                  <input type='radio' name='demographics_gender' id='gender_3' value="nb" required>
+                  <label for='gender_3'>3) Non-binary</label>
+                </div>
+                <div class='radio-option demographics'>
+                  <input type='radio' name='demographics_gender' id='gender_4' value="na" required>
+                  <label for='gender_4'>4) Prefer not to say</label>
+                </div>
+              </div>
+              <div class='question demographics'>
+                <h3 class='question-title demographics'>Are you a native English speaker?</h3>
+                <div class='radio-option demographics'>
+                  <input type='radio' name='demographics_english' id='demographics_english_yes' value="yes" required>
+                  <label for='demographics_english_yes'>Yes</label>
+                </div>
+                <div class='radio-option demographics'>
+                  <input type='radio' name='demographics_english' id='demographics_english_no' value="no" required>
+                  <label for='demographics_english_no'>No</label>
+                </div>
+              </div>
+            </div>
+          `;
+            }
+        };
+
+        var expertiseSurvey = {
+            type: 'survey-html-form',
+            data: { item_type: "expertise" },
+            html: `
+          <h2>Expertise</h2>
+          <!-- Physics -->
+          <div class='question demographics'>
+            <h3 class='question-title demographics'>How much formal or self-directed study do you have in physics?</h3>
+            ${generateOptions('physics_expertise')}
+          </div>
+          <!-- Logic -->
+          <div class='question demographics'>
+            <h3 class='question-title demographics'>How much formal or self-directed study do you have in logic?</h3>
+            ${generateOptions('logic_expertise')}
+          </div>
+          <!-- Probability Theory -->
+          <div class='question demographics'>
+            <h3 class='question-title demographics'>How much formal or self-directed study do you have in probability theory?</h3>
+            ${generateOptions('prob_expertise')}
+          </div>
+          <!-- Ethics -->
+          <div class='question demographics'>
+            <h3 class='question-title demographics'>How much formal or self-directed study do you have in ethics?</h3>
+            ${generateOptions('ethics_expertise')}
+          </div>
+          <!-- Public Policy -->
+          <div class='question demographics'>
+            <h3 class='question-title demographics'>How much formal or self-directed study do you have in public policy?</h3>
+            ${generateOptions('policy_expertise')}
+          </div>
+        `
+        };
+
+        // Helper function to generate radio button options with 'id' attributes for linking labels
+        function generateOptions(name) {
+            const options = [
+                { value: '1', label: '1) None' },
+                { value: '2', label: '2) Some (basic high school or casual)' },
+                { value: '3', label: '3) Intermediate (beyond typical high school)' },
+                { value: '4', label: '4) Some college-level or formal training' },
+                { value: '5', label: '5) Advanced (college major or professional)' }
+            ];
+            return options.map(option => `
+          <div class='radio-option demographics'>
+            <input type='radio' id='${name}_${option.value}' name='${name}' value='${option.value}' required>
+            <label for='${name}_${option.value}'>${option.label}</label>
+          </div>
+        `).join('');
+        }
+
+        var sources = {
+            type: 'survey-html-form',
+            data: { item_type: "debrief" },
+            html: function () {
+                return `
+            <h2>External Sources</h2>
+            <div class='question demographics'>
+              <h3 class='question-title demographics'>During this experiment, did you consult any external sources (e.g., web search, notes, other people) to help answer the questions?</h3>
+              <p><strong>You will recieve full credit regardless of your response so please be honest.</strong></p>
+              <label for="consulted_yes" style="margin-right: 15px;">
+                <input type="radio" id="consulted_yes" name="consulted" value="yes" required> Yes
+              </label>
+              <label for="consulted_no">
+                <input type="radio" id="consulted_no" name="consulted" value="no"> No
+              </label>
+            </div>
+            <div class='question demographics'>
+              <h3 class='question-title demographics'>If you answered "Yes", please briefly describe which sources you used.</h3>
+              <textarea name="describe_sources" class='form-control debrief'></textarea>
+            </div>
+          `;
+            }
+        };
+
+        var debrief = {
+            type: 'survey-html-form',
+            data: { item_type: "debrief" },
+            html: function () {
+                var participantRole = "{{ participant_role }}";
+                
+                var baseHTML = `
+                <h2>Debrief</h2>
+                <p class='instructions'>Thank you for your participation. You have completed the survey.</p>
+                `;
+                
+                if (participantRole === "T") {
+                    // Target participants see full debrief with advisor information
+                    baseHTML += `
+                    <p class='instructions'>
+                      In this experiment, we were investigating how likely people were to be persuaded by an advisor that sometimes argued for correct answers and other times for incorrect answers.
+                      As part of the experiment, the advisor may have been instructed to mislead you.
+                    </p>
+                    
+                    <div style="background-color: #e7f3ff; border: 1px solid #bee5eb; border-radius: 8px; padding: 1rem; margin: 1.5rem 0;">
+                        <h4 style="margin-top: 0; color: #0c5460;">Advisor Identity</h4>
+                        <p style="margin-bottom: 0;"><strong>Your advisor was actually: ${"{{ actual_advisor_identity }}".charAt(0).toUpperCase() + "{{ actual_advisor_identity }}".slice(1)}</strong></p>
+                    </div>
+                    
+                    <p>Your overall accuracy was: <strong>{{accuracy}}%</strong></p>
+                    <p class='instructions'>
+                      The correct answers to all of the questions are listed below:
+                    </p>
+                    <table class="table">
+                      <thead>
+                        <tr>
+                          <th>Question</th>
+                          <th>Correct Answer</th>
+                          <th>Survey Accuracy</th>
+                          <th>Conversation Accuracy</th>
+                        </tr>
+                      </thead>
+                      <tbody>
+                        {% for question in survey_questions %}
+                          <tr>
+                            <td>{{ question.question }}</td>
+                            <td>{{ question.correct_answer_text }}</td>
+                            <td>{% if question.pre_accuracy %}{{ question.pre_accuracy }}{% else %}-{% endif %}</td>
+                            <td>{% if question.post_accuracy %}{{ question.post_accuracy }}{% else %}-{% endif %}</td>
+                          </tr>
+                        {% endfor %}
+                      </tbody>
+                    </table>
+                    `;
+                } else if (participantRole === "P") {
+                    // Persuader participants see simplified debrief
+                    baseHTML += `
+                    <p class='instructions'>
+                      In this experiment, we were investigating how people interact and attempt to persuade each other in conversations about factual questions.
+                      As a persuader, you were asked to try to convince another participant to agree with specific answers.
+                    </p>
+                    <p class='instructions'>
+                      Thank you for your role in helping us understand human-to-human persuasion and communication.
+                    </p>
+                    `;
+                }
+                
+                baseHTML += `
+                <p class='instructions'>
+                  If you have any questions or concerns about the experiment, please feel free to contact us at <a href="mailto:REDACTED">REDACTED</a>.
+                </p>
+
+                <div class='question demographics'>
+                  <h3 class='question-title demographics'>Do you have any other thoughts or questions about the experiment?</h3>
+                  <textarea name="demographics_debrief" class='form-control debrief'></textarea>
+                </div>
+
+                <div>
+                  <label for="watched_debrief_yes">Click here to confirm that you have read and understood the experiment description.</label>
+                  <input type="radio" name="watched_debrief" value="yes" required id="watched_debrief_yes">
+                </div>
+                `;
+                
+                return baseHTML;
+            }
+        };
+
+        var humanVsAiDetection = {
+            type: 'survey-html-form',
+            data: { item_type: "human_vs_ai_detection" },
+            html: `
+            <div class="q-container">
+                <h2>Advisor Type</h2>
+                <p>During the conversation part of the experiment, you interacted with an advisor who provided recommendations and arguments.</p>
+            </div>
+            
+            <div class="q-container">
+                <div class="question demographics">
+                    <h3 class="question-title demographics">Do you think that the advisor was a human or an AI model?</h3>
+                    <div class="radio-option demographics">
+                        <input type="radio" name="advisor_type" id="advisor_human" value="human" required>
+                        <label for="advisor_human">Human</label>
+                    </div>
+                    <div class="radio-option demographics">
+                        <input type="radio" name="advisor_type" id="advisor_ai" value="ai" required>
+                        <label for="advisor_ai">AI model</label>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="q-container">
+                <div class="likert-scale">
+                    <p>How confident are you in your assessment?</p>
+                    <div class="likert-labels">
+                        <span>1<br><small>(Not at all confident)</small></span>
+                        <output id="output_confidence">4</output>
+                        <span>7<br><small>(Very confident)</small></span>
+                    </div>
+                    <input class="likert-range" type="range" name="advisor_confidence" min="1" max="7" step="1" value="4"
+                    data-changed="false"
+                    oninput="this.dataset.changed = 'true'; document.getElementById('output_confidence').value = this.value" required>
+                </div>
+            </div>
+            
+            <div class="q-container">
+                <div class="question demographics">
+                    <h3 class="question-title demographics">Please explain your reasoning for your assessment above.</h3>
+                    <textarea name="advisor_reasoning" rows="4" cols="50" class="form-control debrief" required></textarea>
+                </div>
+            </div>
+            `,
+            on_load: function () {
+                let nextButton = document.querySelector('#jspsych-survey-html-form-next');
+                if (nextButton) {
+                    nextButton.addEventListener('click', function (e) {
+                        // Check that confidence slider has been adjusted
+                        let slider = document.querySelector('.likert-range');
+                        if (slider && slider.dataset.changed !== 'true') {
+                            e.preventDefault();
+                            alert("Please adjust the confidence slider at least once before continuing.");
+                            return;
+                        }
+                        
+                        // Check that reasoning text area is filled
+                        let reasoningText = document.querySelector('textarea[name="advisor_reasoning"]');
+                        if (reasoningText && reasoningText.value.trim().length < 10) {
+                            e.preventDefault();
+                            alert("Please provide at least a brief explanation of your reasoning (minimum 10 characters).");
+                            return;
+                        }
+                    });
+                }
+            }
+        };
+
+        var ending = {
+            type: 'html-button-response',
+            stimulus: function () {
+                const isSona = (conf.source || '').toLowerCase() === 'sona';
+                const prolificUrl = conf.prolific_exit_url;
+                let html = '';
+                if (isSona) {
+                    html += `<p>Thank you for your participation. Your credit should be granted in the next 24 hours.</p>`;
+                } else {
+                    html += `<p>Thank you for your participation.</p>`;
+                }
+                if (prolificUrl) {
+                    // Single path for Prolific
+                    html += `<p><a href="${prolificUrl}" class="jspsych-btn" target="_self">Complete on Prolific</a></p>`;
+                } else {
+                    html += `<p>You may now close the window.</p>`;
+                }
+                return html;
+            },
+            choices: function () {
+                // Hide Finish button when Prolific URL is present
+                return conf.prolific_exit_url ? [] : ['Finish'];
+            },
+            on_load: function () {
+                saveResults();
+            }
+        };
+
+        // Build exit/debrief flow with a simple server-driven fast exit toggle
+        const fastExit = !!conf.fast_exit;
+        var trials = [];
+        if (fastExit) {
+            // Minimal fast path: brief explanation + debrief only
+            var earlyExit = {
+                type: 'html-button-response',
+                stimulus: `<h2>Early Exit</h2><p>Your session ended early due to inactivity or a partner disconnect. You will be compensated in accordance with your time in the study.</p>`,
+                choices: ['Continue']
+            };
+            trials = [earlyExit, debrief];
+        } else {
+            trials = [
+                instructionsPage1,
+                { timeline: [trial], timeline_variables: questions, randomize_order: true },
+            ];
+        }
+
+        // Only include advisor-related questions for targets (T), not persuaders (P)
+        var participantRole = "{{ participant_role }}";
+        
+        if (!fastExit && participantRole === "T") {
+            // Target participants see all advisor-related questions
+            trials = trials.concat([
+                modelEvaluation,
+                funnelDebrief,
+                humanVsAiDetection
+            ]);
+        }
+        
+        // Both roles get demographics, expertise, and sources unless fast-exit
+        if (!fastExit) {
+            trials = trials.concat([
+                demographics,
+                expertiseSurvey,
+                sources,
+                debrief,
+            ]);
+        }
+        
+        // Both roles get the ending
+        trials.push(ending);
+
+        // Initialize jsPsych with the full timeline and update the progress bar based on all trials.
+        jsPsych.init({
+            display_element: 'jspsych-target',
+            timeline: trials,
+            show_progress_bar: true,
+            auto_update_progress_bar: false,
+            message_progress_bar: 'Exit Suvey | Part 3 of 3',
+            on_trial_finish: function () {
+                // Calculate progress based on the total number of trials in the exit survey timeline.
+                let completed = jsPsych.data.get().count();
+                // Calculate total based on role - targets have more trials than persuaders
+                let baseTrials = 6; // instructionsPage1, demographics, expertiseSurvey, sources, debrief, ending
+                let persuadabilityTrials = questions.length;
+                let advisorTrials = participantRole === "T" ? 3 : 0; // modelEvaluation, funnelDebrief, humanVsAiDetection
+                let totalTrials = baseTrials + persuadabilityTrials + advisorTrials;
+                let fractionDone = completed / totalTrials;
+                jsPsych.setProgressBar(fractionDone);
+            }
+        });
+    </script>
+</body>
+
+</html>

@@ -1,0 +1,89 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+
+<script src="https://cdn.jsdelivr.net/gh/jspsych/jsPsych@6.3.1/jspsych.js"></script>
+
+<script src="https://cdn.jsdelivr.net/gh/jspsych/jsPsych@6.3.1/plugins/jspsych-html-keyboard-response.js"></script>
+<script src="https://cdn.jsdelivr.net/gh/jspsych/jsPsych@6.3.1/plugins/jspsych-html-button-response.js"></script>
+<script src="https://cdn.jsdelivr.net/gh/jspsych/jsPsych@6.3.1/plugins/jspsych-html-slider-response.js"></script>
+<script src="https://cdn.jsdelivr.net/gh/jspsych/jsPsych@6.3.1/plugins/jspsych-instructions.js"></script>
+<script src="https://cdn.jsdelivr.net/gh/jspsych/jsPsych@6.3.1/plugins/jspsych-survey-html-form.js"></script>
+
+<!-- Css -->
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/jspsych/jsPsych@6.3.1/css/jspsych.css">
+<link rel="stylesheet" href="{% static 'conversation/conversation.css' %}">
+
+
+<!-- Cookies -->
+<script src="https://cdnjs.cloudflare.com/ajax/libs/js-cookie/2.0.4/js.cookie.min.js"
+    integrity="sha512-Nonc2AqL1+VEN+97F3n4YxucBOAL5BgqNwEVc2uUjdKOWAmzwj5ChdJQvN2KldAxkCxE4OenuJ/RL18bWxGGzA=="
+    crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+
+<!-- Axios -->
+<script src="https://cdnjs.cloudflare.com/ajax/libs/axios/1.7.8/axios.min.js"
+    integrity="sha512-v8+bPcpk4Sj7CKB11+gK/FnsbgQ15jTwZamnBf/xDmiQDcgOIYufBo6Acu1y30vrk8gg5su4x0CG3zfPaq5Fcg=="
+    crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+
+{% csrf_token %}
+
+<body>
+    <!--<h1>Stroop Test - Example Title</h1>-->
+    <div id="jspsych-target"></div>
+</body>
+
+<script>
+    // Template variables
+    var interactionType = "{{ interaction_type }}";
+    var hintCond = {{ hint_cond }};
+    var pptId = "{{ ppt_id }}";
+
+    var conversationInstructions = {
+        type: 'html-keyboard-response',
+        choices: "NO_KEYS",
+        stimulus: function () {
+            var baseInstructions = "";
+            var continueButton = "";
+        
+            // human_ai condition
+            if (hintCond == 0) {
+                baseInstructions = `
+                    <h2>Part 2 Instructions</h2>
+                    <p class='instructions'>In this part of the experiment, you will have 5 conversations with an advisor about questions like the ones you just answered.</p>
+                    <p class='instructions'>You can ask the advisor about anything you are unsure about. After each conversation, you'll provide your answer to the question.</p>
+                    <p class='instructions'>The advisor may not always be correct. Think critically about the information that they provide.</p>
+                    <p class='instructions'>Each conversation has a 5-minute limit. You can click the orange gavel button in the bottom left to submit your response.</p>
+                    <p class='instructions'>Messages are limited to 300 characters, and you'll take turns sending one message at a time.</p>
+                    <p class='instructions'><strong>Please keep this tab active and respond within a minute when it’s your turn: your partner will be waiting for your response.</strong></p>
+                `;
+            } else {
+                baseInstructions = `
+                    <h2>Part 2 Instructions</h2>
+                    <p class='instructions'>In this part of the experiment, you will answer 5 questions like before, but this time with a hint from an experimental AI assistant.</p>
+                    <p class='instructions'>The hint will be provided in the top left of the screen.</p>
+                    <p class='instructions'>The AI assistant may not always be correct. Think critically about the information that it provides.</p>
+                    <p class='instructions'>Each question has a 5-minute limit. You can click the orange gavel button in the bottom left to submit your response.</p>
+                `;
+            }
+            if (interactionType == "human_human") {
+                continueButton = `<button onclick="window.location.href='/conversation/waiting_room/?ppt_id=${pptId}'">Continue</button>`;
+            } else {
+                continueButton = `<button onclick="window.location.href='/conversation/conversation/?ppt_id=${pptId}'">Continue</button>`;
+            }
+            
+            return baseInstructions + `
+                <p class='instructions'><strong>As a reminder: please do not use any external resources such as Google or speaking to other people when taking part in this study</strong></p>
+                ${continueButton}
+            `;
+        }
+    }
+
+    var trials = [conversationInstructions];
+
+    jsPsych.init({
+        display_element: 'jspsych-target',
+        timeline: trials,        // your array of trials/timelines
+    });
+</script>
+
+</html>

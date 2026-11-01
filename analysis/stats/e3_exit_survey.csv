@@ -1,0 +1,422 @@
+"experiment","participant_id","intro_condition","feedback_condition","hint_condition","persuasiveness","likeability","reliability","error_rate","incorrect_training","incorrect_instruction"
+"E3","841","Helpful","No Feedback","Conversation",5,5,6,5,2,1
+"E3","842","Helpful","Feedback","Conversation",5,6,5,5,5,5
+"E3","843","Unhelpful","Feedback","Conversation",5,3,1,5,2,7
+"E3","844","Helpful","No Feedback","Hint",1,3,3,6,6,6
+"E3","845","Helpful","Feedback","Conversation",5,5,3,3,5,5
+"E3","847","Unhelpful","No Feedback","Conversation",5,5,5,3,4,5
+"E3","850","Helpful","Feedback","Conversation",5,3,5,3,3,6
+"E3","852","Unhelpful","Feedback","Conversation",5,2,1,7,5,5
+"E3","853","Helpful","Feedback","Hint",6,3,5,2,6,6
+"E3","854","Helpful","Feedback","Conversation",5,5,2,3,6,5
+"E3","855","Unhelpful","Feedback","Hint",2,3,4,4,4,5
+"E3","859","Unhelpful","No Feedback","Conversation",3,7,3,6,6,5
+"E3","860","Unhelpful","No Feedback","Hint",3,4,4,4,5,5
+"E3","865","Unhelpful","No Feedback","Hint",2,3,2,6,6,6
+"E3","866","Unhelpful","Feedback","Conversation",3,4,2,6,7,6
+"E3","867","Unhelpful","Feedback","Hint",2,6,2,5,7,7
+"E3","868","Helpful","No Feedback","Hint",5,4,2,3,5,6
+"E3","869","Unhelpful","No Feedback","Hint",3,5,5,5,5,5
+"E3","872","Helpful","No Feedback","Hint",5,3,2,5,5,6
+"E3","873","Helpful","No Feedback","Conversation",7,7,5,3,7,7
+"E3","875","Unhelpful","Feedback","Hint",5,1,5,7,7,7
+"E3","878","Helpful","No Feedback","Conversation",6,2,5,3,5,3
+"E3","880","Helpful","Feedback","Conversation",5,6,5,4,4,5
+"E3","881","Helpful","No Feedback","Conversation",5,5,6,3,4,6
+"E3","882","Helpful","No Feedback","Hint",2,2,1,5,7,7
+"E3","883","Helpful","Feedback","Hint",5,5,5,3,2,3
+"E3","884","Helpful","Feedback","Conversation",7,7,7,3,3,3
+"E3","887","Unhelpful","No Feedback","Hint",3,3,3,5,7,7
+"E3","888","Unhelpful","No Feedback","Conversation",5,3,4,3,5,5
+"E3","892","Helpful","Feedback","Hint",3,4,3,2,5,6
+"E3","893","Helpful","Feedback","Conversation",6,7,5,2,3,5
+"E3","895","Helpful","Feedback","Conversation",5,5,3,2,5,3
+"E3","896","Helpful","Feedback","Hint",1,4,2,5,7,7
+"E3","897","Unhelpful","Feedback","Hint",2,1,2,5,6,6
+"E3","899","Unhelpful","Feedback","Hint",2,1,2,3,5,3
+"E3","900","Helpful","No Feedback","Hint",3,3,3,5,5,2
+"E3","902","Unhelpful","Feedback","Conversation",6,7,5,6,7,7
+"E3","909","Unhelpful","No Feedback","Conversation",5,4,2,4,6,7
+"E3","910","Unhelpful","Feedback","Conversation",2,3,3,7,6,6
+"E3","911","Unhelpful","No Feedback","Conversation",6,5,3,5,5,5
+"E3","913","Helpful","Feedback","Hint",2,3,3,7,3,5
+"E3","916","Unhelpful","Feedback","Conversation",6,7,7,7,7,7
+"E3","919","Helpful","Feedback","Hint",3,5,3,5,5,6
+"E3","923","Unhelpful","Feedback","Conversation",5,5,2,6,6,6
+"E3","924","Helpful","Feedback","Conversation",5,6,3,2,4,2
+"E3","925","Helpful","No Feedback","Conversation",6,5,5,1,2,2
+"E3","926","Helpful","No Feedback","Conversation",5,6,5,3,5,5
+"E3","927","Helpful","Feedback","Hint",6,5,7,2,3,5
+"E3","928","Helpful","No Feedback","Conversation",5,5,5,2,3,5
+"E3","929","Unhelpful","No Feedback","Conversation",5,5,5,3,5,7
+"E3","933","Helpful","Feedback","Hint",2,1,1,2,5,3
+"E3","935","Helpful","Feedback","Hint",6,6,5,2,5,3
+"E3","936","Unhelpful","No Feedback","Conversation",1,6,2,6,5,7
+"E3","937","Unhelpful","No Feedback","Conversation",2,4,5,3,5,7
+"E3","938","Unhelpful","Feedback","Conversation",5,5,3,4,6,6
+"E3","939","Helpful","No Feedback","Hint",5,2,5,5,3,5
+"E3","940","Helpful","Feedback","Conversation",4,4,1,4,4,3
+"E3","941","Unhelpful","No Feedback","Conversation",3,5,2,5,7,6
+"E3","942","Helpful","Feedback","Hint",5,6,5,1,3,3
+"E3","943","Helpful","Feedback","Conversation",6,5,2,2,3,7
+"E3","944","Unhelpful","Feedback","Hint",1,1,3,7,7,7
+"E3","945","Unhelpful","Feedback","Hint",5,5,5,5,6,7
+"E3","946","Unhelpful","Feedback","Conversation",5,5,1,7,7,7
+"E3","948","Unhelpful","No Feedback","Hint",5,3,3,3,3,3
+"E3","949","Unhelpful","Feedback","Conversation",2,4,1,7,7,7
+"E3","951","Helpful","No Feedback","Conversation",6,6,5,2,3,2
+"E3","952","Helpful","Feedback","Hint",5,4,3,2,3,5
+"E3","953","Helpful","Feedback","Conversation",6,6,3,1,7,2
+"E3","954","Unhelpful","Feedback","Conversation",2,2,2,7,7,6
+"E3","956","Helpful","No Feedback","Hint",5,2,3,6,6,7
+"E3","957","Unhelpful","No Feedback","Hint",5,2,1,5,6,6
+"E3","958","Unhelpful","No Feedback","Hint",1,1,1,3,5,5
+"E3","959","Unhelpful","Feedback","Conversation",5,7,6,6,6,6
+"E3","961","Unhelpful","No Feedback","Hint",2,2,5,4,5,6
+"E3","962","Helpful","No Feedback","Hint",5,5,3,5,4,3
+"E3","963","Unhelpful","Feedback","Hint",2,4,2,7,7,7
+"E3","966","Helpful","No Feedback","Hint",5,3,5,5,3,5
+"E3","967","Unhelpful","Feedback","Conversation",3,5,3,6,6,6
+"E3","968","Helpful","No Feedback","Hint",5,5,5,3,3,3
+"E3","969","Helpful","No Feedback","Conversation",5,3,4,2,5,6
+"E3","970","Unhelpful","No Feedback","Hint",2,3,3,6,5,5
+"E3","972","Unhelpful","No Feedback","Hint",6,5,6,5,6,5
+"E3","973","Unhelpful","No Feedback","Hint",5,6,5,6,6,5
+"E3","974","Helpful","Feedback","Hint",6,6,2,1,2,2
+"E3","975","Unhelpful","No Feedback","Conversation",3,4,4,4,4,7
+"E3","976","Unhelpful","No Feedback","Hint",3,4,4,5,5,5
+"E3","981","Helpful","Feedback","Hint",2,2,5,3,6,3
+"E3","982","Unhelpful","Feedback","Hint",3,2,1,7,7,6
+"E3","983","Helpful","Feedback","Conversation",5,6,5,6,6,6
+"E3","984","Helpful","No Feedback","Hint",3,3,3,1,5,5
+"E3","985","Unhelpful","Feedback","Hint",1,1,1,7,6,7
+"E3","987","Helpful","Feedback","Hint",2,5,3,2,2,2
+"E3","988","Unhelpful","Feedback","Conversation",6,5,2,6,6,6
+"E3","989","Unhelpful","No Feedback","Hint",2,5,2,3,3,3
+"E3","994","Helpful","No Feedback","Conversation",1,1,1,4,7,6
+"E3","996","Helpful","Feedback","Hint",7,5,5,4,5,5
+"E3","997","Unhelpful","Feedback","Hint",1,1,2,5,6,5
+"E3","998","Helpful","No Feedback","Hint",1,4,3,6,7,7
+"E3","1001","Helpful","Feedback","Hint",6,5,3,5,5,5
+"E3","1003","Unhelpful","No Feedback","Conversation",5,6,7,5,5,6
+"E3","1005","Helpful","Feedback","Conversation",6,5,6,5,2,2
+"E3","1008","Helpful","Feedback","Hint",3,3,1,5,6,6
+"E3","1009","Unhelpful","No Feedback","Conversation",2,2,1,6,7,7
+"E3","1010","Helpful","Feedback","Hint",5,5,6,2,2,5
+"E3","1011","Helpful","No Feedback","Hint",2,2,1,5,3,6
+"E3","1013","Unhelpful","No Feedback","Conversation",1,3,2,5,6,7
+"E3","1014","Unhelpful","No Feedback","Hint",6,6,3,6,6,3
+"E3","1015","Helpful","No Feedback","Hint",2,1,2,6,6,7
+"E3","1016","Unhelpful","No Feedback","Conversation",1,5,2,7,7,7
+"E3","1020","Unhelpful","Feedback","Conversation",5,6,5,2,2,2
+"E3","1021","Helpful","Feedback","Conversation",5,5,5,1,1,5
+"E3","1027","Unhelpful","No Feedback","Hint",5,5,5,5,3,7
+"E3","1028","Helpful","Feedback","Hint",5,2,4,3,3,3
+"E3","1029","Unhelpful","Feedback","Hint",1,5,3,6,7,7
+"E3","1030","Helpful","Feedback","Hint",7,6,7,2,3,3
+"E3","1031","Helpful","Feedback","Hint",5,4,5,5,3,5
+"E3","1033","Helpful","No Feedback","Hint",2,1,1,7,2,7
+"E3","1035","Unhelpful","No Feedback","Hint",3,2,2,5,5,3
+"E3","1036","Unhelpful","Feedback","Conversation",1,4,1,6,6,5
+"E3","1037","Unhelpful","Feedback","Hint",5,5,5,5,3,3
+"E3","1038","Unhelpful","Feedback","Conversation",3,7,2,6,7,7
+"E3","1039","Unhelpful","No Feedback","Hint",3,2,5,5,5,5
+"E3","1043","Unhelpful","No Feedback","Conversation",5,5,2,2,3,3
+"E3","1044","Unhelpful","Feedback","Conversation",3,2,1,7,6,6
+"E3","1050","Unhelpful","Feedback","Conversation",2,5,3,6,5,6
+"E3","1059","Unhelpful","No Feedback","Hint",1,1,1,5,3,7
+"E3","1060","Unhelpful","Feedback","Hint",1,4,1,7,7,7
+"E3","1061","Unhelpful","Feedback","Hint",4,3,5,5,7,6
+"E3","1062","Unhelpful","No Feedback","Hint",1,4,2,5,7,3
+"E3","1063","Unhelpful","No Feedback","Hint",2,2,1,6,2,6
+"E3","1066","Helpful","Feedback","Hint",1,3,6,1,1,1
+"E3","1067","Helpful","No Feedback","Conversation",2,3,5,5,6,7
+"E3","1069","Unhelpful","Feedback","Conversation",5,3,2,7,7,6
+"E3","1070","Unhelpful","No Feedback","Conversation",1,1,1,7,7,7
+"E3","1077","Unhelpful","Feedback","Hint",2,4,3,6,5,5
+"E3","1079","Helpful","No Feedback","Conversation",6,5,3,5,3,5
+"E3","1080","Helpful","No Feedback","Hint",5,5,3,5,5,7
+"E3","1081","Unhelpful","Feedback","Conversation",6,2,5,6,7,7
+"E3","1082","Unhelpful","Feedback","Conversation",7,5,2,6,7,2
+"E3","1083","Helpful","Feedback","Conversation",3,2,3,2,6,2
+"E3","1084","Helpful","Feedback","Hint",2,3,2,3,5,5
+"E3","1086","Helpful","Feedback","Hint",3,4,4,3,5,5
+"E3","1088","Helpful","No Feedback","Conversation",5,6,7,3,6,3
+"E3","1089","Helpful","No Feedback","Hint",5,3,3,5,5,5
+"E3","1091","Helpful","Feedback","Hint",3,2,1,4,6,7
+"E3","1094","Helpful","Feedback","Hint",2,6,3,3,5,6
+"E3","1095","Helpful","Feedback","Conversation",6,5,5,2,5,6
+"E3","1097","Unhelpful","No Feedback","Hint",7,3,3,5,5,6
+"E3","1099","Unhelpful","Feedback","Hint",2,2,2,6,5,6
+"E3","1100","Helpful","No Feedback","Hint",1,2,2,4,4,2
+"E3","1101","Helpful","Feedback","Conversation",6,7,4,2,5,6
+"E3","1103","Unhelpful","No Feedback","Conversation",5,5,5,5,5,5
+"E3","1105","Helpful","Feedback","Conversation",6,6,5,2,6,4
+"E3","1106","Helpful","No Feedback","Hint",1,1,1,4,7,7
+"E3","1107","Helpful","No Feedback","Hint",2,3,1,3,3,3
+"E3","1108","Unhelpful","No Feedback","Conversation",4,1,3,6,6,6
+"E3","1110","Helpful","No Feedback","Conversation",5,5,3,5,5,7
+"E3","1111","Unhelpful","No Feedback","Hint",5,5,3,5,5,5
+"E3","1112","Helpful","No Feedback","Hint",5,5,5,5,6,7
+"E3","1115","Unhelpful","Feedback","Hint",1,1,1,7,6,7
+"E3","1116","Helpful","No Feedback","Hint",6,6,6,7,6,6
+"E3","1118","Helpful","Feedback","Hint",2,2,2,3,5,6
+"E3","1119","Unhelpful","Feedback","Hint",2,3,3,6,4,5
+"E3","1120","Helpful","No Feedback","Hint",2,3,3,5,5,5
+"E3","1123","Unhelpful","No Feedback","Conversation",5,6,5,2,5,5
+"E3","1124","Helpful","No Feedback","Conversation",7,7,5,1,2,1
+"E3","1125","Helpful","No Feedback","Conversation",6,3,3,5,5,3
+"E3","1126","Unhelpful","Feedback","Conversation",5,6,4,2,3,6
+"E3","1127","Unhelpful","No Feedback","Conversation",4,4,4,4,7,7
+"E3","1129","Helpful","Feedback","Hint",3,2,3,1,3,1
+"E3","1132","Unhelpful","Feedback","Conversation",7,7,1,7,7,7
+"E3","1133","Unhelpful","Feedback","Hint",6,4,4,4,4,4
+"E3","1135","Helpful","No Feedback","Hint",2,3,1,5,5,5
+"E3","1136","Unhelpful","No Feedback","Hint",5,5,3,6,3,3
+"E3","1137","Helpful","No Feedback","Conversation",7,6,3,3,3,3
+"E3","1138","Unhelpful","Feedback","Hint",3,3,3,6,5,6
+"E3","1140","Helpful","Feedback","Hint",6,6,6,2,4,6
+"E3","1141","Helpful","No Feedback","Hint",1,1,1,3,6,3
+"E3","1142","Helpful","No Feedback","Hint",5,4,5,3,3,5
+"E3","1144","Helpful","No Feedback","Hint",2,4,6,6,6,6
+"E3","1146","Helpful","No Feedback","Hint",2,3,2,6,6,5
+"E3","1149","Unhelpful","No Feedback","Conversation",6,4,5,3,3,3
+"E3","1152","Helpful","Feedback","Hint",6,2,7,3,3,5
+"E3","1153","Unhelpful","Feedback","Conversation",5,6,1,7,7,7
+"E3","1154","Helpful","Feedback","Conversation",6,5,5,2,5,7
+"E3","1156","Unhelpful","No Feedback","Conversation",3,2,5,3,5,6
+"E3","1157","Helpful","No Feedback","Conversation",6,5,6,2,2,2
+"E3","1158","Helpful","No Feedback","Hint",5,3,3,3,5,3
+"E3","1159","Helpful","Feedback","Conversation",5,7,5,2,5,6
+"E3","1160","Helpful","Feedback","Hint",5,5,3,3,5,5
+"E3","1161","Unhelpful","No Feedback","Conversation",3,5,4,5,4,5
+"E3","1162","Helpful","Feedback","Hint",2,4,3,2,2,2
+"E3","1163","Unhelpful","Feedback","Conversation",5,2,1,6,3,7
+"E3","1164","Helpful","No Feedback","Hint",2,3,4,5,6,6
+"E3","1166","Unhelpful","No Feedback","Hint",2,3,3,6,5,5
+"E3","1168","Unhelpful","Feedback","Hint",4,4,4,5,4,7
+"E3","1169","Unhelpful","No Feedback","Hint",5,6,5,2,5,6
+"E3","1170","Helpful","No Feedback","Conversation",6,7,7,4,5,3
+"E3","1171","Unhelpful","Feedback","Conversation",3,5,3,4,4,5
+"E3","1177","Helpful","Feedback","Hint",6,6,3,4,5,6
+"E3","1180","Helpful","Feedback","Conversation",2,1,1,7,7,7
+"E3","1183","Unhelpful","No Feedback","Hint",3,3,3,3,6,5
+"E3","1184","Helpful","No Feedback","Hint",3,4,3,5,5,5
+"E3","1185","Unhelpful","Feedback","Hint",3,3,5,5,5,5
+"E3","1186","Helpful","Feedback","Conversation",5,6,6,5,3,3
+"E3","1187","Unhelpful","Feedback","Hint",3,2,1,4,6,6
+"E3","1188","Unhelpful","No Feedback","Hint",3,3,2,6,7,6
+"E3","1189","Helpful","Feedback","Hint",6,4,5,5,5,3
+"E3","1190","Helpful","Feedback","Hint",2,3,1,5,6,2
+"E3","1193","Unhelpful","No Feedback","Hint",2,6,4,2,6,4
+"E3","1194","Unhelpful","No Feedback","Conversation",3,3,4,6,5,5
+"E3","1196","Unhelpful","No Feedback","Conversation",3,4,5,5,5,3
+"E3","1198","Unhelpful","Feedback","Conversation",5,7,5,6,6,7
+"E3","1199","Unhelpful","Feedback","Conversation",5,5,1,7,5,7
+"E3","1200","Unhelpful","Feedback","Conversation",7,7,7,5,6,5
+"E3","1202","Unhelpful","Feedback","Hint",4,4,2,6,5,6
+"E3","1203","Helpful","No Feedback","Conversation",6,7,5,3,3,1
+"E3","1204","Helpful","No Feedback","Hint",3,2,2,6,2,6
+"E3","1205","Unhelpful","Feedback","Conversation",5,2,1,7,7,7
+"E3","1206","Helpful","Feedback","Hint",2,3,5,3,2,3
+"E3","1207","Helpful","No Feedback","Hint",3,3,2,4,5,4
+"E3","1208","Unhelpful","Feedback","Conversation",6,5,4,7,7,7
+"E3","1209","Helpful","No Feedback","Conversation",5,6,3,4,5,2
+"E3","1210","Unhelpful","No Feedback","Hint",7,7,3,3,4,4
+"E3","1211","Unhelpful","Feedback","Conversation",6,6,5,7,5,5
+"E3","1212","Unhelpful","No Feedback","Hint",5,5,3,5,3,3
+"E3","1213","Unhelpful","Feedback","Hint",1,1,1,5,5,6
+"E3","1215","Helpful","No Feedback","Hint",5,5,3,5,5,5
+"E3","1216","Unhelpful","No Feedback","Conversation",5,3,5,3,6,7
+"E3","1217","Helpful","No Feedback","Conversation",5,5,3,4,7,6
+"E3","1218","Unhelpful","Feedback","Conversation",6,6,2,7,6,6
+"E3","1219","Unhelpful","Feedback","Hint",2,4,2,5,5,5
+"E3","1221","Unhelpful","Feedback","Hint",4,3,4,5,5,7
+"E3","1222","Helpful","Feedback","Conversation",3,5,6,1,5,2
+"E3","1223","Helpful","No Feedback","Conversation",3,1,2,5,6,7
+"E3","1224","Unhelpful","No Feedback","Conversation",3,3,3,4,5,5
+"E3","1225","Unhelpful","Feedback","Conversation",6,2,1,4,5,7
+"E3","1226","Unhelpful","No Feedback","Hint",2,3,1,5,3,6
+"E3","1228","Unhelpful","Feedback","Conversation",3,6,1,6,7,3
+"E3","1229","Helpful","No Feedback","Conversation",5,6,5,5,7,7
+"E3","1230","Unhelpful","Feedback","Conversation",6,3,1,6,5,7
+"E3","1233","Helpful","No Feedback","Conversation",3,2,3,5,7,7
+"E3","1234","Helpful","Feedback","Conversation",5,5,3,5,5,5
+"E3","1237","Unhelpful","No Feedback","Conversation",7,7,4,3,3,6
+"E3","1240","Unhelpful","No Feedback","Conversation",6,6,4,5,7,7
+"E3","1241","Unhelpful","No Feedback","Hint",5,4,2,5,5,3
+"E3","1243","Helpful","No Feedback","Conversation",5,5,5,5,4,3
+"E3","1245","Helpful","No Feedback","Conversation",1,1,1,3,5,4
+"E3","1247","Helpful","Feedback","Conversation",6,2,3,2,5,7
+"E3","1248","Unhelpful","No Feedback","Hint",3,4,5,6,5,5
+"E3","1253","Unhelpful","Feedback","Conversation",2,4,1,5,2,4
+"E3","1255","Unhelpful","Feedback","Conversation",2,1,2,7,6,7
+"E3","1256","Helpful","Feedback","Conversation",5,5,6,3,3,3
+"E3","1257","Helpful","Feedback","Hint",5,3,3,2,2,2
+"E3","1258","Unhelpful","Feedback","Conversation",3,5,2,7,6,6
+"E3","1260","Unhelpful","Feedback","Hint",3,5,5,4,5,6
+"E3","1261","Unhelpful","Feedback","Hint",3,1,3,5,6,5
+"E3","1262","Helpful","No Feedback","Conversation",3,5,3,5,5,5
+"E3","1266","Unhelpful","No Feedback","Conversation",3,4,2,7,7,7
+"E3","1270","Helpful","No Feedback","Hint",3,3,2,4,5,3
+"E3","1273","Helpful","No Feedback","Conversation",6,5,3,6,5,6
+"E3","1274","Helpful","No Feedback","Hint",2,1,7,4,7,7
+"E3","1278","Unhelpful","Feedback","Hint",6,2,5,6,3,7
+"E3","1280","Unhelpful","Feedback","Hint",2,2,5,6,6,6
+"E3","1283","Unhelpful","No Feedback","Conversation",5,5,5,2,3,3
+"E3","1286","Unhelpful","Feedback","Conversation",5,3,5,5,4,5
+"E3","1288","Unhelpful","No Feedback","Hint",2,2,2,6,6,7
+"E3","1290","Unhelpful","Feedback","Conversation",6,5,1,6,7,7
+"E3","1292","Unhelpful","Feedback","Conversation",2,1,1,7,6,5
+"E3","1293","Helpful","Feedback","Conversation",3,5,5,5,5,1
+"E3","1294","Unhelpful","No Feedback","Conversation",2,6,3,7,7,7
+"E3","1295","Helpful","Feedback","Conversation",7,5,6,3,5,3
+"E3","1300","Unhelpful","Feedback","Conversation",3,2,2,7,2,7
+"E3","1302","Unhelpful","No Feedback","Conversation",4,5,4,4,5,6
+"E3","1303","Helpful","No Feedback","Hint",6,5,5,5,7,7
+"E3","1305","Helpful","Feedback","Hint",5,5,3,2,3,5
+"E3","1306","Helpful","Feedback","Conversation",5,4,3,3,2,5
+"E3","1307","Unhelpful","No Feedback","Hint",4,4,3,5,5,3
+"E3","1309","Unhelpful","No Feedback","Hint",7,4,5,7,3,3
+"E3","1310","Unhelpful","No Feedback","Hint",1,1,3,7,7,7
+"E3","1312","Helpful","No Feedback","Hint",1,2,3,4,6,6
+"E3","1313","Unhelpful","Feedback","Hint",5,5,2,3,5,3
+"E3","1314","Unhelpful","No Feedback","Hint",3,2,4,5,2,4
+"E3","1315","Helpful","No Feedback","Hint",5,5,3,4,4,4
+"E3","1316","Unhelpful","Feedback","Conversation",7,5,2,5,6,6
+"E3","1318","Unhelpful","No Feedback","Hint",5,2,5,5,6,6
+"E3","1321","Unhelpful","Feedback","Conversation",1,5,1,7,7,7
+"E3","1324","Helpful","Feedback","Hint",3,3,6,1,3,2
+"E3","1325","Helpful","Feedback","Conversation",5,3,2,3,5,2
+"E3","1326","Helpful","No Feedback","Conversation",6,2,1,5,6,5
+"E3","1327","Unhelpful","No Feedback","Conversation",2,3,1,5,4,5
+"E3","1331","Helpful","No Feedback","Hint",7,7,4,2,2,3
+"E3","1332","Unhelpful","No Feedback","Hint",4,5,6,4,3,6
+"E3","1333","Helpful","No Feedback","Hint",3,5,5,3,5,6
+"E3","1334","Helpful","No Feedback","Hint",2,1,3,5,3,5
+"E3","1336","Unhelpful","No Feedback","Conversation",5,5,3,3,5,3
+"E3","1338","Unhelpful","No Feedback","Hint",3,5,5,5,5,5
+"E3","1340","Unhelpful","Feedback","Conversation",2,3,1,7,7,7
+"E3","1343","Unhelpful","Feedback","Hint",1,1,5,7,6,6
+"E3","1344","Unhelpful","Feedback","Conversation",2,3,5,5,7,7
+"E3","1345","Helpful","Feedback","Conversation",5,3,5,3,5,3
+"E3","1350","Helpful","No Feedback","Hint",3,5,3,5,3,5
+"E3","1351","Helpful","Feedback","Hint",5,3,2,3,5,3
+"E3","1352","Helpful","Feedback","Conversation",6,7,2,6,5,7
+"E3","1353","Helpful","No Feedback","Hint",2,7,5,5,3,6
+"E3","1354","Helpful","Feedback","Hint",5,5,5,2,3,5
+"E3","1355","Unhelpful","Feedback","Hint",2,2,1,7,1,7
+"E3","1356","Helpful","No Feedback","Conversation",5,4,2,4,7,6
+"E3","1358","Unhelpful","Feedback","Conversation",5,5,5,5,7,7
+"E3","1360","Unhelpful","No Feedback","Hint",2,4,1,4,4,7
+"E3","1361","Helpful","Feedback","Hint",3,4,3,2,2,5
+"E3","1365","Helpful","No Feedback","Hint",3,3,7,3,5,5
+"E3","1366","Helpful","Feedback","Hint",1,5,1,5,3,3
+"E3","1368","Helpful","Feedback","Conversation",3,5,3,1,5,5
+"E3","1369","Unhelpful","No Feedback","Conversation",2,3,1,3,3,6
+"E3","1370","Helpful","Feedback","Hint",5,5,6,1,1,1
+"E3","1375","Unhelpful","No Feedback","Hint",1,2,1,4,6,7
+"E3","1377","Unhelpful","Feedback","Hint",3,2,5,7,5,6
+"E3","1378","Unhelpful","No Feedback","Conversation",5,5,3,3,3,3
+"E3","1380","Helpful","Feedback","Hint",3,4,6,2,5,3
+"E3","1381","Unhelpful","Feedback","Hint",2,2,1,7,5,7
+"E3","1382","Unhelpful","Feedback","Conversation",2,5,2,5,3,5
+"E3","1383","Unhelpful","Feedback","Hint",2,4,4,7,4,6
+"E3","1385","Helpful","No Feedback","Hint",3,4,2,5,6,5
+"E3","1386","Helpful","No Feedback","Hint",3,4,3,3,2,5
+"E3","1387","Unhelpful","No Feedback","Conversation",2,2,2,5,6,7
+"E3","1389","Unhelpful","No Feedback","Conversation",5,1,2,3,3,3
+"E3","1391","Unhelpful","No Feedback","Conversation",4,3,1,5,5,7
+"E3","1392","Helpful","Feedback","Conversation",5,7,3,3,5,5
+"E3","1393","Helpful","No Feedback","Hint",2,2,5,3,4,2
+"E3","1395","Unhelpful","No Feedback","Hint",7,4,6,6,7,7
+"E3","1396","Helpful","Feedback","Hint",1,4,2,2,3,5
+"E3","1400","Unhelpful","No Feedback","Conversation",3,4,3,5,3,5
+"E3","1401","Unhelpful","Feedback","Conversation",6,3,2,7,7,7
+"E3","1402","Unhelpful","No Feedback","Conversation",3,5,3,3,4,5
+"E3","1405","Unhelpful","Feedback","Conversation",6,6,6,7,3,2
+"E3","1406","Unhelpful","Feedback","Hint",2,2,3,5,3,5
+"E3","1408","Helpful","Feedback","Conversation",3,3,4,3,3,3
+"E3","1409","Helpful","Feedback","Hint",3,4,5,1,7,2
+"E3","1411","Helpful","Feedback","Conversation",6,5,3,3,7,5
+"E3","1414","Helpful","No Feedback","Hint",1,1,2,6,6,7
+"E3","1419","Unhelpful","Feedback","Hint",5,3,1,5,5,7
+"E3","1420","Unhelpful","Feedback","Hint",2,3,3,6,6,3
+"E3","1422","Helpful","Feedback","Conversation",4,4,4,4,4,4
+"E3","1423","Unhelpful","No Feedback","Conversation",3,4,5,3,3,3
+"E3","1425","Unhelpful","No Feedback","Hint",5,5,3,5,6,3
+"E3","1427","Helpful","Feedback","Hint",7,3,5,2,5,7
+"E3","1428","Unhelpful","No Feedback","Conversation",5,5,6,3,3,6
+"E3","1429","Unhelpful","No Feedback","Conversation",6,6,6,6,6,6
+"E3","1430","Helpful","Feedback","Hint",2,5,5,2,5,5
+"E3","1431","Helpful","No Feedback","Hint",7,6,6,3,5,5
+"E3","1434","Unhelpful","Feedback","Conversation",6,5,3,6,7,7
+"E3","1435","Unhelpful","No Feedback","Hint",3,3,1,7,6,7
+"E3","1437","Helpful","Feedback","Hint",5,4,6,2,5,3
+"E3","1439","Helpful","No Feedback","Conversation",5,5,5,5,5,5
+"E3","1443","Helpful","No Feedback","Hint",2,2,2,5,5,5
+"E3","1450","Unhelpful","No Feedback","Hint",3,3,3,5,5,6
+"E3","1451","Helpful","Feedback","Conversation",6,6,2,5,6,7
+"E3","1452","Helpful","Feedback","Conversation",5,5,6,4,3,3
+"E3","1453","Helpful","Feedback","Conversation",5,4,3,5,5,4
+"E3","1462","Helpful","No Feedback","Hint",3,3,5,5,5,3
+"E3","1463","Unhelpful","No Feedback","Hint",3,3,2,5,5,5
+"E3","1465","Unhelpful","Feedback","Hint",2,2,1,6,5,6
+"E3","1466","Helpful","Feedback","Hint",2,3,1,3,6,3
+"E3","1471","Helpful","No Feedback","Conversation",5,3,5,3,5,5
+"E3","1488","Unhelpful","Feedback","Conversation",2,2,1,5,3,3
+"E3","1494","Helpful","Feedback","Hint",5,4,5,3,6,5
+"E3","1497","Unhelpful","No Feedback","Conversation",3,5,2,5,6,6
+"E3","1499","Helpful","Feedback","Conversation",6,6,5,5,5,5
+"E3","1501","Unhelpful","No Feedback","Hint",1,1,1,5,6,5
+"E3","1504","Helpful","Feedback","Conversation",6,6,3,3,5,5
+"E3","1507","Unhelpful","No Feedback","Hint",3,5,2,6,6,7
+"E3","1517","Helpful","No Feedback","Hint",2,5,3,5,3,3
+"E3","1519","Unhelpful","No Feedback","Hint",1,1,3,5,3,2
+"E3","1520","Unhelpful","No Feedback","Conversation",4,3,4,4,5,4
+"E3","1523","Helpful","Feedback","Conversation",5,5,5,3,6,6
+"E3","1526","Unhelpful","Feedback","Hint",3,4,5,6,5,7
+"E3","1531","Unhelpful","No Feedback","Conversation",2,3,2,6,3,5
+"E3","1541","Unhelpful","No Feedback","Hint",5,5,3,5,7,2
+"E3","1542","Unhelpful","No Feedback","Hint",1,3,3,6,2,7
+"E3","1544","Helpful","No Feedback","Hint",7,5,6,3,5,6
+"E3","1553","Helpful","Feedback","Hint",5,4,3,2,5,6
+"E3","1556","Helpful","No Feedback","Conversation",6,6,2,6,7,2
+"E3","1559","Unhelpful","Feedback","Conversation",6,5,6,7,6,6
+"E3","1561","Helpful","No Feedback","Hint",5,5,5,5,2,4
+"E3","1562","Helpful","Feedback","Conversation",6,6,2,3,7,3
+"E3","1567","Unhelpful","No Feedback","Conversation",5,4,2,7,5,6
+"E3","1569","Unhelpful","Feedback","Hint",5,1,2,7,7,7
+"E3","1570","Unhelpful","Feedback","Hint",3,3,3,5,3,5
+"E3","1572","Helpful","No Feedback","Conversation",5,7,4,3,5,3
+"E3","1574","Unhelpful","No Feedback","Conversation",5,5,5,2,3,3
+"E3","1589","Unhelpful","Feedback","Conversation",3,5,3,4,4,5
+"E3","1592","Helpful","No Feedback","Conversation",2,5,5,7,7,7
+"E3","1600","Unhelpful","Feedback","Conversation",4,1,1,7,1,7
+"E3","1601","Unhelpful","No Feedback","Conversation",5,4,5,5,7,7
+"E3","1603","Unhelpful","No Feedback","Hint",2,2,3,6,7,7
+"E3","1610","Unhelpful","No Feedback","Conversation",5,6,3,2,2,5
+"E3","1612","Unhelpful","No Feedback","Conversation",5,5,3,3,5,6
+"E3","1613","Helpful","No Feedback","Hint",2,3,1,7,5,7
+"E3","1614","Helpful","No Feedback","Conversation",3,3,3,5,5,4
+"E3","1617","Helpful","No Feedback","Conversation",6,7,6,3,6,2
+"E3","1619","Helpful","Feedback","Hint",3,5,5,3,5,3
+"E3","1623","Unhelpful","Feedback","Conversation",6,5,2,6,5,7
+"E3","1625","Unhelpful","Feedback","Hint",3,2,5,7,6,7
+"E3","1626","Unhelpful","No Feedback","Conversation",7,6,7,4,5,5
+"E3","1628","Unhelpful","No Feedback","Conversation",7,6,7,5,2,7
+"E3","1633","Unhelpful","Feedback","Conversation",7,4,5,7,7,7
+"E3","1637","Helpful","No Feedback","Hint",2,6,3,5,2,7
+"E3","1641","Helpful","No Feedback","Hint",3,5,2,6,5,6
+"E3","1644","Helpful","No Feedback","Hint",2,4,6,5,2,1
+"E3","1645","Unhelpful","Feedback","Hint",1,3,1,7,7,2
+"E3","1647","Helpful","No Feedback","Conversation",5,5,4,2,5,3
+"E3","1648","Unhelpful","Feedback","Conversation",5,3,1,5,7,6
+"E3","1649","Helpful","Feedback","Hint",3,3,3,3,3,3
+"E3","1650","Unhelpful","No Feedback","Conversation",5,5,3,5,2,6
+"E3","1654","Unhelpful","No Feedback","Hint",2,5,6,5,6,5
+"E3","1656","Unhelpful","No Feedback","Conversation",2,1,1,6,6,5
+"E3","1658","Unhelpful","Feedback","Conversation",6,2,1,6,7,7
+"E3","1660","Helpful","Feedback","Hint",3,4,2,5,6,2
+"E3","1663","Helpful","Feedback","Conversation",2,2,4,5,6,6
+"E3","1668","Unhelpful","No Feedback","Conversation",5,5,3,3,6,5

@@ -1,0 +1,46 @@
+"probe","variant","tag","label","b","se","p"
+"ladder","M1_baseline","persuader_flattery","Flattery",0.437487810018733,0.146617396787268,0.00284624131802684
+"ladder","M2_target_behavior","persuader_flattery","Flattery",0.420437046682468,0.153808952211051,0.00626647821206922
+"ladder","M3_trial_position","persuader_flattery","Flattery",0.469504923820463,0.148882151409423,0.00161306446773114
+"ladder","M4_mundlak","persuader_flattery","Flattery",0.311214219603448,0.183665015321584,0.0901766682128701
+"ladder","M1_baseline","persuader_personal","Personal",0.507145265632768,0.251492534349352,0.0437433278969834
+"ladder","M2_target_behavior","persuader_personal","Personal",0.216474223191471,0.2617721029856,0.408261541924577
+"ladder","M3_trial_position","persuader_personal","Personal",0.504747627388868,0.254743620082279,0.0475470414351003
+"ladder","M4_mundlak","persuader_personal","Personal",0.36713594635011,0.356849368187828,0.303561396296635
+"ladder","M1_baseline","deception_misleading","Misleading statements",0.409082488807932,0.165400353357115,0.0133876706606219
+"ladder","M2_target_behavior","deception_misleading","Misleading statements",0.650798028587856,0.178319602570529,0.000262632884917289
+"ladder","M3_trial_position","deception_misleading","Misleading statements",0.363960849168268,0.168134648309832,0.0304107691955592
+"ladder","M4_mundlak","deception_misleading","Misleading statements",0.691845683256064,0.18343509883698,0.000162197520203008
+"ladder","M1_baseline","persuader_authority","Authority",-0.575366156449018,0.2210940129549,0.00925846800237306
+"ladder","M2_target_behavior","persuader_authority","Authority",-0.311315800106677,0.234538961201186,0.184392212322849
+"ladder","M3_trial_position","persuader_authority","Authority",-0.62772450701672,0.224042567037634,0.00508169312964349
+"ladder","M4_mundlak","persuader_authority","Authority",-0.0865742342414671,0.265451813707908,0.744319062296038
+"ladder","M1_baseline","persuader_acknowledge","Acknowledge",-0.949313990337895,0.145067556767887,5.99171787304682e-11
+"ladder","M2_target_behavior","persuader_acknowledge","Acknowledge",-0.230651848027857,0.163394502720481,0.158060257384767
+"ladder","M3_trial_position","persuader_acknowledge","Acknowledge",-0.947300405025395,0.146455464349788,9.91898565433622e-11
+"ladder","M4_mundlak","persuader_acknowledge","Acknowledge",-0.841404359203897,0.192495824633647,1.2366375616621e-05
+"opening","full","persuader_flattery","Flattery",0.437487810018733,0.146617396787268,0.00284624131802684
+"opening","opening","persuader_flattery","Flattery",0.917126381399347,0.294418646609227,0.0018391886485195
+"opening","full","persuader_personal","Personal",0.507145265632768,0.251492534349352,0.0437433278969834
+"opening","opening","persuader_personal","Personal",0.100594791730214,0.322977515579783,0.755450441660029
+"opening","full","deception_misleading","Misleading statements",0.409082488807932,0.165400353357115,0.0133876706606219
+"opening","opening","deception_misleading","Misleading statements",0.238975303602945,0.157779471325299,0.129869690974649
+"opening","full","persuader_authority","Authority",-0.575366156449018,0.2210940129549,0.00925846800237306
+"opening","opening","persuader_authority","Authority",-0.0706417746107754,0.383845398541374,0.853984389999753
+"opening","full","persuader_acknowledge","Acknowledge",-0.949313990337895,0.145067556767887,5.99171787304682e-11
+"opening","opening","persuader_acknowledge","Acknowledge",-0.140384276453524,0.128129662583741,0.273235348618173
+"loo","loo","persuader_flattery","Flattery",1.58796602180079,0.952214886871447,0.0953842114672955
+"loo","loo","persuader_personal","Personal",-2.60043419480774,2.25402703164048,0.248629878221467
+"loo","loo","deception_misleading","Misleading statements",-0.316064332588089,0.524392922602617,0.546692144470438
+"loo","loo","persuader_authority","Authority",-0.88032834169833,0.940954636904016,0.349494948537976
+"loo","loo","persuader_acknowledge","Acknowledge",-0.107126586944557,0.400560791747916,0.789129235006845
+"loo","loo_any","persuader_flattery","Flattery",0.207135586708803,0.343291348333957,0.546255046508159
+"loo","loo_any","persuader_personal","Personal",-0.426944587737258,0.712208541081272,0.548862380015992
+"loo","loo_any","deception_misleading","Misleading statements",-0.14949384403122,0.230795012668117,0.51715682094802
+"loo","loo_any","persuader_authority","Authority",-0.203119264312198,0.289003648287612,0.482164221791772
+"loo","loo_any","persuader_acknowledge","Acknowledge",-0.187746558239828,0.225253451541544,0.404568287858513
+"opening","opening_ctrl","persuader_flattery","Flattery",0.913430566071255,0.307813999242037,0.00300256005340601
+"opening","opening_ctrl","persuader_personal","Personal",0.0804727423617795,0.335836270754694,0.81062565474007
+"opening","opening_ctrl","deception_misleading","Misleading statements",0.231710259316907,0.167647535737148,0.166932574574218
+"opening","opening_ctrl","persuader_authority","Authority",-0.0280244660849371,0.404506210416184,0.944766202406692
+"opening","opening_ctrl","persuader_acknowledge","Acknowledge",-0.24104984491578,0.161583226632343,0.135751604357759

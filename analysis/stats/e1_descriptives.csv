@@ -1,0 +1,5 @@
+"experiment","intro_condition","persuader_success","confidence_change","n"
+"E1","Helpful",0.95,48.375,40
+"E1","Mixed",0.795454545454545,30.0340909090909,44
+"E1","Unhelpful",0.611111111111111,19.2222222222222,36
+"E1","Overall",0.791666666666667,32.9041666666667,120

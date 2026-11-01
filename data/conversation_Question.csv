@@ -1,0 +1,34 @@
+id,item_id,category,subcategory,name,question,answer1,answer2,correct_answer
+1,1,objective,physics,canoe,"A person is sitting in a canoe that is floating in a swimming pool. Inside the canoe is a rock. If the person removes the rock from the canoe and places it into the pool, will the water level of the pool go up or down?",Up,Down,answer2
+2,2,objective,physics,video,"Someone captures a video of a ball falling to the ground from rest. If the video is played in reverse, the ball appears to be moving upwards. Does the ball appear to be accelerating or decelerating?",Accelerating,Decelerating,answer2
+3,3,objective,physics,flies,A sealed jar full of flies is sitting on a scale. Will the weight registered on the scale increase when the flies land compared to when the flies are flying?,Yes,No,answer2
+4,4,objective,physics,balloon,A helium balloon is in a car when the car accelerates forward. Which direction would the balloon move with respect to the car?,Forwards,Backwards,answer1
+5,5,objective,physics,nuts,"Someone shakes a container of mixed large and small nuts, what type of nuts will end up on top?",Small,Large,answer2
+6,6,objective,physics,moonset,"Suppose you lived on the moon, with the Earth directly over your head. How long would it be before the Earth sets below the horizon?",30 Earth days,The Earth would never set,answer2
+7,7,objective,physics,coffee,"Someone makes a pot of hot coffee and pours it into two cups (A and B). They add room temperature milk to cup A immediately, and to cup B after 10 minutes. Which cup will be hotter after milk has been added to both?",Cup A,Cup B,answer1
+8,8,objective,physics,greenhouse,Greenhouse gasses block the Sun's energy from entering the atmosphere as much as they block energy from leaving the atmosphere.,True,False,answer2
+9,9,objective,physics,drains,"Sinks generally drain clockwise in the Southern hemisphere, but counterclockwise in the Northern hemisphere.",True,False,answer2
+10,10,objective,physics,mirror,Someone places a tennis ball in the center of a piece of printer paper up against a 3ft x 3ft mirror. Is there an angle from which the tennis ball is visible in the mirror?,Yes,No,answer1
+11,11,objective,physics,bullet,"If you fire a bullet perfectly horizontally from a certain height (where there are no obstacles in the bullet's path) and drop another bullet from the same height at the same moment, will the dropped bullet hit the ground first?",Yes,No,answer2
+12,12,objective,physics,bathtub,"A bathtub is full to the brim with water, with a large block of ice floating in it. When the ice melts, will the water level spill over the bath?",Yes,No,answer2
+13,13,objective,physics,ireland,"In clear weather, are both coasts of Ireland at its widest point visible from a plane at 30,000ft?",Yes,No,answer1
+14,14,objective,physics,pipe,Water is flowing through a pipe with a diameter of 2cm. The water then passes into a smaller pipe with half the diameter. Does the water flow faster in the narrower pipe than in the wider one?,Yes,No,answer1
+15,15,objective,physics,cello,Does the string of a higher or lower note on a cello carry more tension?,Higher,Lower,answer1
+16,16,objective,logic,sourdough,You put a new sourdough starter in a jar. The starter doubles in size every day. The jar is completely full on day 10. When does the jar become half full?,Day 5,Day 9,answer2
+17,17,objective,logic,0.999,The repeating decimal 0.999... is mathematically equal to 1?,True,False,answer1
+18,18,objective,logic,wason,"You are shown a set of four cards placed on a table, each of which has a number on one side and a color on the other. The visible faces of the cards show 3, 8, blue, and red respectively. Which cards must you turn over in order to test that the following rule is true: 'If a card has an even number on one face, then its opposite side is blue'.",The 8 and the blue,The 8 and the red,answer2
+19,19,objective,logic,syllogism,"Is the following statement logically valid? If all dangerous things are weapons and all weapons are guns, then all dangerous things are guns.",True,False,answer1
+20,20,objective,probability,coinflip,Is it possible to use 2 flips of a biased coin to make fair 50:50 decisions?,Yes,No,answer1
+21,21,objective,probability,monty hall,"Suppose you're on a game show, and you're given the choice of three doors, with a prize behind each of them. Behind one door is a car; behind the others, goats. You pick a door, say No. 1, and the host, who knows what's behind the doors, opens another door, say No. 3, which has a goat. He then says to you, ""Do you want to switch to door No. 2?"" Are you more likely to get the car if you switch your choice?",Yes,No,answer1
+22,22,objective,probability,birthday,"In a room of 23 people, the chance that two people have the same birthday is more than 50%.",True,False,answer1
+23,23,objective,probability,shuffle,"If someone shuffles a standard deck of cards, it is most likely that the resulting order of cards has never existed before.",True,False,answer1
+24,24,objective,probability,chessboard,Are there more possible legal chess board arrangements or more atoms in the universe?,Chess Board Arrangements,Atoms in the Universe,answer2
+25,25,objective,probability,coins,"You drop 2 coins into a muddy river by mistake. You saw a quarter falling in, and you know the other one had to be either a quarter or a penny. After searching and pulling out a quarter, what is the chance that the other is also a quarter?",1/2,2/3,answer2
+26,26,objective,facts,lightning,Are more people killed globally each year by lightning strikes or airplane crashes?,Lightning,Plane Crash,answer1
+27,27,objective,facts,billiard,Would the Earth be smoother or rougher than a billiard ball if both were scaled to the same size?,Smoother,Rougher,answer1
+28,28,objective,facts,lottery,Is a typical person more likely to win the US Powerball lottery or more likely to die during a 1 mile car trip to buy the ticket.,Win the lottery,Die buying ticket,answer2
+29,29,objective,facts,planets,Would all the planets in our solar system fit between the Earth and the moon?,Yes,No,answer1
+30,30,objective,facts,hemispheres,Does a larger number of people live on the Northern or Southern hemisphere of the earth?,Southern,Northern,answer2
+63,63,attention_check,attention_check,5,2 + 2 = ?,4,5,answer1
+64,64,attention_check,attention_check,paris,What is the capital of France?,Paris,Los Angeles,answer1
+65,65,attention_check,attention_check,strawberry,How many 'r's are in the word 'strawberry'?,2,3,answer2

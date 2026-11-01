@@ -1,0 +1,141 @@
+"tag","persuader_type","experiment","truth","n","k","label","role","type","kappa","alpha"
+"deception_false","LLM","E1","Truth",309,23,"False statements","Persuader","Deception",0.76,0.76
+"deception_false","LLM","E1","Falsehood",292,279,"False statements","Persuader","Deception",0.76,0.76
+"deception_false","LLM","E2","Truth",345,34,"False statements","Persuader","Deception",0.76,0.76
+"deception_false","LLM","E2","Falsehood",291,278,"False statements","Persuader","Deception",0.76,0.76
+"deception_false","LLM","E3","Truth",336,21,"False statements","Persuader","Deception",0.76,0.76
+"deception_false","LLM","E3","Falsehood",674,625,"False statements","Persuader","Deception",0.76,0.76
+"deception_false","LLM","E4","Truth",477,23,"False statements","Persuader","Deception",0.76,0.76
+"deception_false","LLM","E4","Falsehood",225,217,"False statements","Persuader","Deception",0.76,0.76
+"deception_false","Human","E4","Truth",448,157,"False statements","Persuader","Deception",0.76,0.76
+"deception_false","Human","E4","Falsehood",166,146,"False statements","Persuader","Deception",0.76,0.76
+"deception_misleading","LLM","E1","Truth",309,23,"Misleading statements","Persuader","Deception",0.36,0.44
+"deception_misleading","LLM","E1","Falsehood",292,187,"Misleading statements","Persuader","Deception",0.36,0.44
+"deception_misleading","LLM","E2","Truth",345,28,"Misleading statements","Persuader","Deception",0.36,0.44
+"deception_misleading","LLM","E2","Falsehood",291,188,"Misleading statements","Persuader","Deception",0.36,0.44
+"deception_misleading","LLM","E3","Truth",336,17,"Misleading statements","Persuader","Deception",0.36,0.44
+"deception_misleading","LLM","E3","Falsehood",674,439,"Misleading statements","Persuader","Deception",0.36,0.44
+"deception_misleading","LLM","E4","Truth",477,7,"Misleading statements","Persuader","Deception",0.36,0.44
+"deception_misleading","LLM","E4","Falsehood",225,190,"Misleading statements","Persuader","Deception",0.36,0.44
+"deception_misleading","Human","E4","Truth",448,78,"Misleading statements","Persuader","Deception",0.36,0.44
+"deception_misleading","Human","E4","Falsehood",166,73,"Misleading statements","Persuader","Deception",0.36,0.44
+"persuader_acknowledge","LLM","E1","Truth",309,129,"Acknowledge","Persuader","Social",0.63,0.51
+"persuader_acknowledge","LLM","E1","Falsehood",292,166,"Acknowledge","Persuader","Social",0.63,0.51
+"persuader_acknowledge","LLM","E2","Truth",345,176,"Acknowledge","Persuader","Social",0.63,0.51
+"persuader_acknowledge","LLM","E2","Falsehood",291,178,"Acknowledge","Persuader","Social",0.63,0.51
+"persuader_acknowledge","LLM","E3","Truth",336,176,"Acknowledge","Persuader","Social",0.63,0.51
+"persuader_acknowledge","LLM","E3","Falsehood",674,457,"Acknowledge","Persuader","Social",0.63,0.51
+"persuader_acknowledge","LLM","E4","Truth",477,256,"Acknowledge","Persuader","Social",0.63,0.51
+"persuader_acknowledge","LLM","E4","Falsehood",225,149,"Acknowledge","Persuader","Social",0.63,0.51
+"persuader_acknowledge","Human","E4","Truth",448,117,"Acknowledge","Persuader","Social",0.63,0.51
+"persuader_acknowledge","Human","E4","Falsehood",166,37,"Acknowledge","Persuader","Social",0.63,0.51
+"persuader_analogy","LLM","E1","Truth",309,32,"Analogy","Persuader","Content",0.61,0.59
+"persuader_analogy","LLM","E1","Falsehood",292,43,"Analogy","Persuader","Content",0.61,0.59
+"persuader_analogy","LLM","E2","Truth",345,42,"Analogy","Persuader","Content",0.61,0.59
+"persuader_analogy","LLM","E2","Falsehood",291,36,"Analogy","Persuader","Content",0.61,0.59
+"persuader_analogy","LLM","E3","Truth",336,55,"Analogy","Persuader","Content",0.61,0.59
+"persuader_analogy","LLM","E3","Falsehood",674,90,"Analogy","Persuader","Content",0.61,0.59
+"persuader_analogy","LLM","E4","Truth",477,48,"Analogy","Persuader","Content",0.61,0.59
+"persuader_analogy","LLM","E4","Falsehood",225,21,"Analogy","Persuader","Content",0.61,0.59
+"persuader_analogy","Human","E4","Truth",448,17,"Analogy","Persuader","Content",0.61,0.59
+"persuader_analogy","Human","E4","Falsehood",166,7,"Analogy","Persuader","Content",0.61,0.59
+"persuader_authority","LLM","E1","Truth",309,20,"Authority","Persuader","Content",0.56,0.7
+"persuader_authority","LLM","E1","Falsehood",292,17,"Authority","Persuader","Content",0.56,0.7
+"persuader_authority","LLM","E2","Truth",345,31,"Authority","Persuader","Content",0.56,0.7
+"persuader_authority","LLM","E2","Falsehood",291,12,"Authority","Persuader","Content",0.56,0.7
+"persuader_authority","LLM","E3","Truth",336,16,"Authority","Persuader","Content",0.56,0.7
+"persuader_authority","LLM","E3","Falsehood",674,46,"Authority","Persuader","Content",0.56,0.7
+"persuader_authority","LLM","E4","Truth",477,18,"Authority","Persuader","Content",0.56,0.7
+"persuader_authority","LLM","E4","Falsehood",225,32,"Authority","Persuader","Content",0.56,0.7
+"persuader_authority","Human","E4","Truth",448,19,"Authority","Persuader","Content",0.56,0.7
+"persuader_authority","Human","E4","Falsehood",166,17,"Authority","Persuader","Content",0.56,0.7
+"persuader_flattery","LLM","E1","Truth",309,88,"Flattery","Persuader","Social",0.53,0.59
+"persuader_flattery","LLM","E1","Falsehood",292,119,"Flattery","Persuader","Social",0.53,0.59
+"persuader_flattery","LLM","E2","Truth",345,131,"Flattery","Persuader","Social",0.53,0.59
+"persuader_flattery","LLM","E2","Falsehood",291,106,"Flattery","Persuader","Social",0.53,0.59
+"persuader_flattery","LLM","E3","Truth",336,149,"Flattery","Persuader","Social",0.53,0.59
+"persuader_flattery","LLM","E3","Falsehood",674,295,"Flattery","Persuader","Social",0.53,0.59
+"persuader_flattery","LLM","E4","Truth",477,56,"Flattery","Persuader","Social",0.53,0.59
+"persuader_flattery","LLM","E4","Falsehood",225,19,"Flattery","Persuader","Social",0.53,0.59
+"persuader_flattery","Human","E4","Truth",448,17,"Flattery","Persuader","Social",0.53,0.59
+"persuader_flattery","Human","E4","Falsehood",166,4,"Flattery","Persuader","Social",0.53,0.59
+"persuader_gave_up","LLM","E1","Truth",309,0,"Concession","Persuader","Concession",0.48,0.51
+"persuader_gave_up","LLM","E1","Falsehood",292,18,"Concession","Persuader","Concession",0.48,0.51
+"persuader_gave_up","LLM","E2","Truth",345,1,"Concession","Persuader","Concession",0.48,0.51
+"persuader_gave_up","LLM","E2","Falsehood",291,18,"Concession","Persuader","Concession",0.48,0.51
+"persuader_gave_up","LLM","E3","Truth",336,0,"Concession","Persuader","Concession",0.48,0.51
+"persuader_gave_up","LLM","E3","Falsehood",674,82,"Concession","Persuader","Concession",0.48,0.51
+"persuader_gave_up","LLM","E4","Truth",477,0,"Concession","Persuader","Concession",0.48,0.51
+"persuader_gave_up","LLM","E4","Falsehood",225,0,"Concession","Persuader","Concession",0.48,0.51
+"persuader_gave_up","Human","E4","Truth",448,22,"Concession","Persuader","Concession",0.48,0.51
+"persuader_gave_up","Human","E4","Falsehood",166,17,"Concession","Persuader","Concession",0.48,0.51
+"persuader_math","LLM","E1","Truth",309,138,"Math","Persuader","Content",0.68,0.63
+"persuader_math","LLM","E1","Falsehood",292,100,"Math","Persuader","Content",0.68,0.63
+"persuader_math","LLM","E2","Truth",345,152,"Math","Persuader","Content",0.68,0.63
+"persuader_math","LLM","E2","Falsehood",291,103,"Math","Persuader","Content",0.68,0.63
+"persuader_math","LLM","E3","Truth",336,150,"Math","Persuader","Content",0.68,0.63
+"persuader_math","LLM","E3","Falsehood",674,272,"Math","Persuader","Content",0.68,0.63
+"persuader_math","LLM","E4","Truth",477,302,"Math","Persuader","Content",0.68,0.63
+"persuader_math","LLM","E4","Falsehood",225,113,"Math","Persuader","Content",0.68,0.63
+"persuader_math","Human","E4","Truth",448,59,"Math","Persuader","Content",0.68,0.63
+"persuader_math","Human","E4","Falsehood",166,18,"Math","Persuader","Content",0.68,0.63
+"persuader_personal","LLM","E1","Truth",309,23,"Personal","Persuader","Social",0.63,0.69
+"persuader_personal","LLM","E1","Falsehood",292,31,"Personal","Persuader","Social",0.63,0.69
+"persuader_personal","LLM","E2","Truth",345,56,"Personal","Persuader","Social",0.63,0.69
+"persuader_personal","LLM","E2","Falsehood",291,27,"Personal","Persuader","Social",0.63,0.69
+"persuader_personal","LLM","E3","Truth",336,56,"Personal","Persuader","Social",0.63,0.69
+"persuader_personal","LLM","E3","Falsehood",674,86,"Personal","Persuader","Social",0.63,0.69
+"persuader_personal","LLM","E4","Truth",477,2,"Personal","Persuader","Social",0.63,0.69
+"persuader_personal","LLM","E4","Falsehood",225,0,"Personal","Persuader","Social",0.63,0.69
+"persuader_personal","Human","E4","Truth",448,3,"Personal","Persuader","Social",0.63,0.69
+"persuader_personal","Human","E4","Falsehood",166,2,"Personal","Persuader","Social",0.63,0.69
+"persuader_principle","LLM","E1","Truth",309,106,"Principle","Persuader","Content",0.59,0.62
+"persuader_principle","LLM","E1","Falsehood",292,87,"Principle","Persuader","Content",0.59,0.62
+"persuader_principle","LLM","E2","Truth",345,97,"Principle","Persuader","Content",0.59,0.62
+"persuader_principle","LLM","E2","Falsehood",291,95,"Principle","Persuader","Content",0.59,0.62
+"persuader_principle","LLM","E3","Truth",336,97,"Principle","Persuader","Content",0.59,0.62
+"persuader_principle","LLM","E3","Falsehood",674,168,"Principle","Persuader","Content",0.59,0.62
+"persuader_principle","LLM","E4","Truth",477,197,"Principle","Persuader","Content",0.59,0.62
+"persuader_principle","LLM","E4","Falsehood",225,68,"Principle","Persuader","Content",0.59,0.62
+"persuader_principle","Human","E4","Truth",448,38,"Principle","Persuader","Content",0.59,0.62
+"persuader_principle","Human","E4","Falsehood",166,12,"Principle","Persuader","Content",0.59,0.62
+"target_disagreement","LLM","E1","Truth",309,67,"Disagreement","Target","Response",0.6,0.46
+"target_disagreement","LLM","E1","Falsehood",292,80,"Disagreement","Target","Response",0.6,0.46
+"target_disagreement","LLM","E2","Truth",345,73,"Disagreement","Target","Response",0.6,0.46
+"target_disagreement","LLM","E2","Falsehood",291,89,"Disagreement","Target","Response",0.6,0.46
+"target_disagreement","LLM","E3","Truth",336,84,"Disagreement","Target","Response",0.6,0.46
+"target_disagreement","LLM","E3","Falsehood",674,273,"Disagreement","Target","Response",0.6,0.46
+"target_disagreement","LLM","E4","Truth",477,120,"Disagreement","Target","Response",0.6,0.46
+"target_disagreement","LLM","E4","Falsehood",225,75,"Disagreement","Target","Response",0.6,0.46
+"target_disagreement","Human","E4","Truth",448,160,"Disagreement","Target","Response",0.6,0.46
+"target_disagreement","Human","E4","Falsehood",166,79,"Disagreement","Target","Response",0.6,0.46
+"target_probe","LLM","E1","Truth",309,172,"Probing statements","Target","Response",0.62,0.67
+"target_probe","LLM","E1","Falsehood",292,183,"Probing statements","Target","Response",0.62,0.67
+"target_probe","LLM","E2","Truth",345,172,"Probing statements","Target","Response",0.62,0.67
+"target_probe","LLM","E2","Falsehood",291,145,"Probing statements","Target","Response",0.62,0.67
+"target_probe","LLM","E3","Truth",336,174,"Probing statements","Target","Response",0.62,0.67
+"target_probe","LLM","E3","Falsehood",674,390,"Probing statements","Target","Response",0.62,0.67
+"target_probe","LLM","E4","Truth",477,189,"Probing statements","Target","Response",0.62,0.67
+"target_probe","LLM","E4","Falsehood",225,83,"Probing statements","Target","Response",0.62,0.67
+"target_probe","Human","E4","Truth",448,196,"Probing statements","Target","Response",0.62,0.67
+"target_probe","Human","E4","Falsehood",166,64,"Probing statements","Target","Response",0.62,0.67
+"target_question","LLM","E1","Truth",309,189,"Question (opener)","Target","Opener",0.86,0.86
+"target_question","LLM","E1","Falsehood",292,160,"Question (opener)","Target","Opener",0.86,0.86
+"target_question","LLM","E2","Truth",345,178,"Question (opener)","Target","Opener",0.86,0.86
+"target_question","LLM","E2","Falsehood",291,141,"Question (opener)","Target","Opener",0.86,0.86
+"target_question","LLM","E3","Truth",336,177,"Question (opener)","Target","Opener",0.86,0.86
+"target_question","LLM","E3","Falsehood",674,363,"Question (opener)","Target","Opener",0.86,0.86
+"target_question","LLM","E4","Truth",477,168,"Question (opener)","Target","Opener",0.86,0.86
+"target_question","LLM","E4","Falsehood",225,56,"Question (opener)","Target","Opener",0.86,0.86
+"target_question","Human","E4","Truth",448,156,"Question (opener)","Target","Opener",0.86,0.86
+"target_question","Human","E4","Falsehood",166,54,"Question (opener)","Target","Opener",0.86,0.86
+"target_statement","LLM","E1","Truth",309,126,"Statement (opener)","Target","Opener",0.84,0.85
+"target_statement","LLM","E1","Falsehood",292,134,"Statement (opener)","Target","Opener",0.84,0.85
+"target_statement","LLM","E2","Truth",345,167,"Statement (opener)","Target","Opener",0.84,0.85
+"target_statement","LLM","E2","Falsehood",291,149,"Statement (opener)","Target","Opener",0.84,0.85
+"target_statement","LLM","E3","Truth",336,165,"Statement (opener)","Target","Opener",0.84,0.85
+"target_statement","LLM","E3","Falsehood",674,329,"Statement (opener)","Target","Opener",0.84,0.85
+"target_statement","LLM","E4","Truth",477,350,"Statement (opener)","Target","Opener",0.84,0.85
+"target_statement","LLM","E4","Falsehood",225,183,"Statement (opener)","Target","Opener",0.84,0.85
+"target_statement","Human","E4","Truth",448,361,"Statement (opener)","Target","Opener",0.84,0.85
+"target_statement","Human","E4","Falsehood",166,139,"Statement (opener)","Target","Opener",0.84,0.85

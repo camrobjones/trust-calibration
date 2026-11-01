@@ -1,0 +1,6 @@
+"experiment","interaction_type","intro_condition","persuader_success","confidence_change","n"
+"E4","human_ai","Helpful",0.904761904761905,81.6349206349206,63
+"E4","human_ai","Mixed",0.545454545454545,48.2792207792208,77
+"E4","human_human","Helpful",0.514285714285714,43.9071428571429,70
+"E4","human_human","Mixed",0.452830188679245,42.1132075471698,53
+"E4",NA,NA,0.604562737642586,53.8631178707224,263

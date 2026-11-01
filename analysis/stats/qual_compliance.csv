@@ -1,0 +1,14 @@
+"persuader_type","compliance","disclosed_assignment","n"
+"Human","advocated",FALSE,543
+"Human","advocated",TRUE,6
+"Human","abandoned",FALSE,8
+"Human","abandoned",TRUE,1
+"Human","never_advocated",FALSE,23
+"Human","argued_opposite",FALSE,32
+"Human","argued_opposite",TRUE,1
+"LLM","advocated",FALSE,2743
+"LLM","advocated",TRUE,2
+"LLM","abandoned",FALSE,102
+"LLM","never_advocated",FALSE,8
+"LLM","argued_opposite",FALSE,93
+"LLM","argued_opposite",TRUE,1

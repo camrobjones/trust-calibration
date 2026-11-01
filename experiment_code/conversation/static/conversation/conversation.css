@@ -1,0 +1,195 @@
+body {
+    background-color: #ffffff;
+    font-family: sans-serif;
+    text-align: center;
+}
+
+#jspsych-target {
+    /*specify width/height of jsPsych container*/
+    width: calc(min(100%, 800px));
+    height: 100vh;
+    margin: auto;
+    margin-bottom: 40px;
+
+}
+
+p.question {
+    font-size: 1.2em;
+    font-weight: 600;
+}
+
+.a-container {
+    display: flex;
+    justify-content: space-evenly;
+}
+
+.answer-box {
+    display: flex;
+    flex-direction: column;
+    font-size: 1.2em;
+    margin-bottom: 1em;
+    padding: 0 20px;
+}
+
+.c-container {
+    margin-bottom: 1em;
+}
+
+input#confidence {
+    width: 100%;
+}
+
+input#agreement {
+    width: 100%;
+}
+
+
+div.question.demographics {
+    /* display: flex; */
+    text-align: left;
+    color: #000000cc;
+    padding: 5px;
+    margin-bottom: 10px;
+    font-size: 0.8em;
+    line-height: 1.2em;
+}
+
+h3.question-title.demographics {
+    margin-bottom: 0.5em;
+    font-size: 1em;
+    font-weight: 600;
+    color: #000000d1;
+}
+
+div.question.demographics input[type="number"],
+select {
+    width: 135px;
+    padding: 10px 5px;
+    font-size: 1.1em;
+    border-radius: 5px;
+    border: 1px solid #0000003b;
+    margin-top: 5px;
+    text-indent: 5px;
+}
+
+select.demographics {
+    height: 43px;
+}
+
+.form-row.demographics {
+    display: flex;
+    font-size: 0.8em;
+    width: 777px;
+}
+
+.col.demographics {
+    flex: 1;
+}
+
+.radio-option.demographics {
+    display: flex;
+    align-items: center;
+    height: 2em;
+}
+
+input.demographics[type="radio" i] {
+    margin: 3px 7px 3px 3px;
+}
+
+
+textarea.debrief {
+    width: 90%;
+    height: 5em;
+    border-radius: 5px;
+    border: 1px solid #00000054;
+    font-family: 'Open Sans', sans-serif;
+    padding: 10px;
+    text-indent: 5px;
+    resize: none;
+    font-size: 0.8em;
+}
+
+
+
+span.prompt {
+    /*font-family: monospace;
+font-weight: 300;*/
+    font-style: italic;
+    margin-top: 20px;
+}
+
+.jspsych-instructions-nav {
+    margin-top: 20px;
+}
+
+span.jspsych-btn:hover {
+    background-color: white;
+    border-color: #ccc;
+    cursor: inherit;
+}
+
+/*button#jspsych-instructions-back{
+display: none;
+}*/
+span.completion-code {
+    background-color: #D3D3D3;
+    font-weight: bold;
+}
+
+.reversed {
+    flex-direction: row-reverse;
+}
+
+p.instructions {
+    text-align: justify;
+}
+
+
+.likert-scale {
+    width: 80%;
+    margin: auto;
+}
+
+.likert-labels {
+    display: flex;
+    width: 100%;
+    justify-content: space-between;
+}
+
+.likert-range {
+    width: 100%;
+}
+.table {
+    border-collapse: collapse;
+    margin: auto;
+    text-align: left;
+}
+
+.table th,
+td {
+    border: 1px solid #ccc
+}
+
+#jspsych-progressbar-outer {
+    background-color: #eee;
+    width: 50%;
+    margin: auto;
+    height: 14px;
+    display: inline-block;
+    vertical-align: middle;
+    box-shadow: inset 0 1px 2px rgba(0, 0, 0, 0.1);
+    margin-left:20px;
+}
+
+#jspsych-progressbar-container {
+    padding: 8px 0px;
+    width: 100%;
+    line-height: 1em;
+    font-size: 0.8em;
+}
+
+#jspsych-progressbar-inner {
+    background-color: #aaa;
+    width: 0%;
+    height: 100%;
+}

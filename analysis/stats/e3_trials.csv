@@ -1,0 +1,2101 @@
+"experiment","participant_id","question_id","trial_type","trial_index","intro_condition","feedback_condition","hint_condition","interaction_type","persuader_correct","participant_persuader_disagree","persuader_success","confidence_pre","confidence_change","accuracy"
+"E3",1044,1,"intro",2,"Unhelpful","Feedback","Conversation","human_ai",FALSE,FALSE,TRUE,40,4,0
+"E3",1067,1,"intro",1,"Helpful","No Feedback","Conversation","human_ai",TRUE,TRUE,FALSE,95,16,0
+"E3",1088,1,"intro",1,"Helpful","No Feedback","Conversation","human_ai",TRUE,TRUE,TRUE,72,62.5,1
+"E3",1095,1,"intro",2,"Helpful","Feedback","Conversation","human_ai",TRUE,TRUE,FALSE,90,24.5,0
+"E3",1112,1,"intro",2,"Helpful","No Feedback","Hint","human_ai",TRUE,TRUE,FALSE,87,3.5,0
+"E3",1115,1,"intro",0,"Unhelpful","Feedback","Hint","human_ai",FALSE,FALSE,TRUE,95,-42.5,0
+"E3",1119,1,"intro",3,"Unhelpful","Feedback","Hint","human_ai",FALSE,FALSE,TRUE,91,-10,0
+"E3",1146,1,"intro",0,"Helpful","No Feedback","Hint","human_ai",TRUE,TRUE,FALSE,84,12.5,0
+"E3",1153,1,"intro",1,"Unhelpful","Feedback","Conversation","human_ai",FALSE,FALSE,TRUE,96,-4.5,0
+"E3",1200,1,"intro",0,"Unhelpful","Feedback","Conversation","human_ai",FALSE,TRUE,TRUE,62,76.5,0
+"E3",1205,1,"intro",3,"Unhelpful","Feedback","Conversation","human_ai",FALSE,FALSE,FALSE,82,-57,1
+"E3",1215,1,"intro",2,"Helpful","No Feedback","Hint","human_ai",TRUE,TRUE,FALSE,79,-0.5,0
+"E3",1241,1,"intro",1,"Unhelpful","No Feedback","Hint","human_ai",FALSE,FALSE,TRUE,92,-0.5,0
+"E3",1258,1,"intro",3,"Unhelpful","Feedback","Conversation","human_ai",FALSE,FALSE,TRUE,45,5,0
+"E3",1260,1,"intro",3,"Unhelpful","Feedback","Hint","human_ai",FALSE,FALSE,TRUE,98,-4,0
+"E3",1261,1,"intro",0,"Unhelpful","Feedback","Hint","human_ai",FALSE,FALSE,TRUE,90,-7,0
+"E3",1278,1,"intro",3,"Unhelpful","Feedback","Hint","human_ai",FALSE,FALSE,TRUE,96,-18.5,0
+"E3",1314,1,"intro",0,"Unhelpful","No Feedback","Hint","human_ai",FALSE,FALSE,TRUE,72,1.5,0
+"E3",1356,1,"intro",1,"Helpful","No Feedback","Conversation","human_ai",TRUE,TRUE,TRUE,65,80,1
+"E3",1391,1,"intro",1,"Unhelpful","No Feedback","Conversation","human_ai",FALSE,FALSE,TRUE,74,5,0
+"E3",1395,1,"intro",0,"Unhelpful","No Feedback","Hint","human_ai",FALSE,FALSE,TRUE,58,21,0
+"E3",1494,1,"intro",1,"Helpful","Feedback","Hint","human_ai",TRUE,TRUE,TRUE,74,52,1
+"E3",1497,1,"intro",2,"Unhelpful","No Feedback","Conversation","human_ai",FALSE,FALSE,FALSE,74,-71.5,1
+"E3",1531,1,"intro",1,"Unhelpful","No Feedback","Conversation","human_ai",FALSE,FALSE,TRUE,70,-17,0
+"E3",1562,1,"intro",1,"Helpful","Feedback","Conversation","human_ai",TRUE,TRUE,TRUE,95,95,1
+"E3",1567,1,"final",4,"Unhelpful","No Feedback","Conversation","human_ai",FALSE,TRUE,FALSE,91,-2,1
+"E3",1625,1,"intro",1,"Unhelpful","Feedback","Hint","human_ai",FALSE,FALSE,FALSE,75,-70,1
+"E3",1633,1,"intro",1,"Unhelpful","Feedback","Conversation","human_ai",FALSE,FALSE,TRUE,79,5,0
+"E3",1656,1,"intro",0,"Unhelpful","No Feedback","Conversation","human_ai",FALSE,FALSE,TRUE,97,-8.5,0
+"E3",841,1,"intro",1,"Helpful","No Feedback","Conversation","human_ai",TRUE,TRUE,TRUE,74,79.5,1
+"E3",852,1,"intro",2,"Unhelpful","Feedback","Conversation","human_ai",FALSE,FALSE,TRUE,55,4.5,0
+"E3",913,1,"final",4,"Helpful","Feedback","Hint","human_ai",FALSE,TRUE,FALSE,100,23,1
+"E3",928,1,"intro",0,"Helpful","No Feedback","Conversation","human_ai",TRUE,TRUE,TRUE,90,80,1
+"E3",959,1,"intro",1,"Unhelpful","Feedback","Conversation","human_ai",FALSE,FALSE,TRUE,70,-2,0
+"E3",962,1,"intro",0,"Helpful","No Feedback","Hint","human_ai",TRUE,TRUE,FALSE,76,-2,0
+"E3",967,1,"intro",0,"Unhelpful","Feedback","Conversation","human_ai",FALSE,FALSE,TRUE,97,-10,0
+"E3",972,1,"intro",1,"Unhelpful","No Feedback","Hint","human_ai",FALSE,FALSE,TRUE,80,-8.5,0
+"E3",989,1,"intro",0,"Unhelpful","No Feedback","Hint","human_ai",FALSE,TRUE,FALSE,64,2.5,1
+"E3",1011,10,"final",4,"Helpful","No Feedback","Hint","human_ai",FALSE,TRUE,FALSE,100,11.5,1
+"E3",1013,10,"intro",0,"Unhelpful","No Feedback","Conversation","human_ai",FALSE,TRUE,FALSE,100,0,1
+"E3",1014,10,"intro",0,"Unhelpful","No Feedback","Hint","human_ai",FALSE,TRUE,TRUE,100,100,0
+"E3",1015,10,"final",4,"Helpful","No Feedback","Hint","human_ai",FALSE,TRUE,FALSE,100,0,1
+"E3",1021,10,"final",4,"Helpful","Feedback","Conversation","human_ai",FALSE,TRUE,TRUE,100,75.5,0
+"E3",1028,10,"final",4,"Helpful","Feedback","Hint","human_ai",FALSE,TRUE,TRUE,100,99.5,0
+"E3",1035,10,"final",4,"Unhelpful","No Feedback","Hint","human_ai",FALSE,TRUE,FALSE,100,29.5,1
+"E3",1036,10,"intro",1,"Unhelpful","Feedback","Conversation","human_ai",FALSE,TRUE,FALSE,98,12.5,1
+"E3",1044,10,"final",4,"Unhelpful","Feedback","Conversation","human_ai",FALSE,TRUE,FALSE,100,34.5,1
+"E3",1062,10,"final",4,"Unhelpful","No Feedback","Hint","human_ai",FALSE,TRUE,FALSE,100,5,1
+"E3",1077,10,"final",4,"Unhelpful","Feedback","Hint","human_ai",FALSE,TRUE,FALSE,100,0,1
+"E3",1086,10,"intro",0,"Helpful","Feedback","Hint","human_ai",TRUE,FALSE,TRUE,100,0,1
+"E3",1099,10,"intro",1,"Unhelpful","Feedback","Hint","human_ai",FALSE,FALSE,FALSE,71,-63.5,1
+"E3",1100,10,"intro",0,"Helpful","No Feedback","Hint","human_ai",TRUE,FALSE,TRUE,100,0,1
+"E3",1126,10,"final",4,"Unhelpful","Feedback","Conversation","human_ai",FALSE,TRUE,FALSE,100,0,1
+"E3",1136,10,"intro",0,"Unhelpful","No Feedback","Hint","human_ai",FALSE,TRUE,FALSE,100,11,1
+"E3",1152,10,"intro",3,"Helpful","Feedback","Hint","human_ai",TRUE,FALSE,TRUE,88,0.5,1
+"E3",1157,10,"intro",1,"Helpful","No Feedback","Conversation","human_ai",TRUE,FALSE,TRUE,88,6,1
+"E3",1161,10,"intro",1,"Unhelpful","No Feedback","Conversation","human_ai",FALSE,TRUE,FALSE,100,40,1
+"E3",1177,10,"final",4,"Helpful","Feedback","Hint","human_ai",FALSE,TRUE,TRUE,94,97,0
+"E3",1187,10,"intro",0,"Unhelpful","Feedback","Hint","human_ai",FALSE,TRUE,FALSE,85,7.5,1
+"E3",1188,10,"final",4,"Unhelpful","No Feedback","Hint","human_ai",FALSE,TRUE,FALSE,100,1.5,1
+"E3",1190,10,"final",4,"Helpful","Feedback","Hint","human_ai",FALSE,TRUE,FALSE,100,0,1
+"E3",1199,10,"intro",2,"Unhelpful","Feedback","Conversation","human_ai",FALSE,TRUE,FALSE,91,2.5,1
+"E3",1211,10,"final",4,"Unhelpful","Feedback","Conversation","human_ai",FALSE,TRUE,TRUE,100,82.5,0
+"E3",1212,10,"intro",2,"Unhelpful","No Feedback","Hint","human_ai",FALSE,FALSE,TRUE,71,-0.5,0
+"E3",1217,10,"intro",1,"Helpful","No Feedback","Conversation","human_ai",TRUE,FALSE,TRUE,90,-4.5,1
+"E3",1225,10,"intro",3,"Unhelpful","Feedback","Conversation","human_ai",FALSE,TRUE,FALSE,90,12.5,1
+"E3",1233,10,"final",4,"Helpful","No Feedback","Conversation","human_ai",FALSE,TRUE,FALSE,100,0,1
+"E3",1234,10,"intro",0,"Helpful","Feedback","Conversation","human_ai",TRUE,FALSE,TRUE,100,0,1
+"E3",1240,10,"intro",1,"Unhelpful","No Feedback","Conversation","human_ai",FALSE,TRUE,TRUE,98,67,0
+"E3",1270,10,"final",4,"Helpful","No Feedback","Hint","human_ai",FALSE,TRUE,FALSE,100,14,1
+"E3",1288,10,"intro",0,"Unhelpful","No Feedback","Hint","human_ai",FALSE,TRUE,FALSE,98,3.5,1
+"E3",1306,10,"intro",0,"Helpful","Feedback","Conversation","human_ai",TRUE,FALSE,TRUE,100,0,1
+"E3",1314,10,"final",4,"Unhelpful","No Feedback","Hint","human_ai",FALSE,TRUE,FALSE,78,7,1
+"E3",1315,10,"intro",1,"Helpful","No Feedback","Hint","human_ai",TRUE,FALSE,TRUE,80,-2.5,1
+"E3",1332,10,"intro",3,"Unhelpful","No Feedback","Hint","human_ai",FALSE,TRUE,TRUE,87,77,0
+"E3",1343,10,"final",4,"Unhelpful","Feedback","Hint","human_ai",FALSE,TRUE,FALSE,100,0,1
+"E3",1345,10,"intro",2,"Helpful","Feedback","Conversation","human_ai",TRUE,FALSE,TRUE,100,-1.5,1
+"E3",1351,10,"intro",3,"Helpful","Feedback","Hint","human_ai",TRUE,FALSE,TRUE,76,-2.5,1
+"E3",1354,10,"final",4,"Helpful","Feedback","Hint","human_ai",FALSE,TRUE,FALSE,100,0,1
+"E3",1355,10,"final",4,"Unhelpful","Feedback","Hint","human_ai",FALSE,TRUE,FALSE,100,0,1
+"E3",1366,10,"intro",2,"Helpful","Feedback","Hint","human_ai",TRUE,FALSE,TRUE,100,0,1
+"E3",1370,10,"intro",3,"Helpful","Feedback","Hint","human_ai",TRUE,TRUE,TRUE,100,85.5,1
+"E3",1375,10,"intro",3,"Unhelpful","No Feedback","Hint","human_ai",FALSE,TRUE,FALSE,100,0,1
+"E3",1400,10,"final",4,"Unhelpful","No Feedback","Conversation","human_ai",FALSE,TRUE,FALSE,78,7,1
+"E3",1402,10,"final",4,"Unhelpful","No Feedback","Conversation","human_ai",FALSE,TRUE,TRUE,100,75,0
+"E3",1411,10,"intro",0,"Helpful","Feedback","Conversation","human_ai",TRUE,FALSE,TRUE,99,-2.5,1
+"E3",1414,10,"intro",2,"Helpful","No Feedback","Hint","human_ai",TRUE,FALSE,TRUE,100,0,1
+"E3",1428,10,"intro",0,"Unhelpful","No Feedback","Conversation","human_ai",FALSE,TRUE,FALSE,68,-8.5,1
+"E3",1437,10,"intro",2,"Helpful","Feedback","Hint","human_ai",TRUE,FALSE,TRUE,100,0,1
+"E3",1452,10,"intro",2,"Helpful","Feedback","Conversation","human_ai",TRUE,FALSE,TRUE,80,10,1
+"E3",1507,10,"intro",3,"Unhelpful","No Feedback","Hint","human_ai",FALSE,TRUE,FALSE,75,5,1
+"E3",1517,10,"intro",3,"Helpful","No Feedback","Hint","human_ai",TRUE,FALSE,TRUE,90,2.5,1
+"E3",1526,10,"final",4,"Unhelpful","Feedback","Hint","human_ai",FALSE,TRUE,FALSE,100,0,1
+"E3",1542,10,"final",4,"Unhelpful","No Feedback","Hint","human_ai",FALSE,TRUE,FALSE,100,0,1
+"E3",1556,10,"final",4,"Helpful","No Feedback","Conversation","human_ai",FALSE,TRUE,FALSE,100,0,1
+"E3",1569,10,"intro",3,"Unhelpful","Feedback","Hint","human_ai",FALSE,TRUE,FALSE,100,11.5,1
+"E3",1612,10,"intro",2,"Unhelpful","No Feedback","Conversation","human_ai",FALSE,TRUE,TRUE,85,54,0
+"E3",1613,10,"intro",2,"Helpful","No Feedback","Hint","human_ai",TRUE,FALSE,TRUE,100,0,1
+"E3",1625,10,"final",4,"Unhelpful","Feedback","Hint","human_ai",FALSE,TRUE,FALSE,100,0,1
+"E3",1641,10,"final",4,"Helpful","No Feedback","Hint","human_ai",FALSE,TRUE,FALSE,100,0,1
+"E3",1658,10,"final",4,"Unhelpful","Feedback","Conversation","human_ai",FALSE,TRUE,FALSE,100,0,1
+"E3",1660,10,"intro",0,"Helpful","Feedback","Hint","human_ai",TRUE,FALSE,TRUE,85,-1,1
+"E3",844,10,"final",4,"Helpful","No Feedback","Hint","human_ai",FALSE,TRUE,FALSE,100,5,1
+"E3",850,10,"intro",0,"Helpful","Feedback","Conversation","human_ai",TRUE,FALSE,TRUE,60,17.5,1
+"E3",866,10,"intro",3,"Unhelpful","Feedback","Conversation","human_ai",FALSE,TRUE,FALSE,100,0,1
+"E3",867,10,"intro",0,"Unhelpful","Feedback","Hint","human_ai",FALSE,TRUE,FALSE,100,14,1
+"E3",875,10,"final",4,"Unhelpful","Feedback","Hint","human_ai",FALSE,TRUE,FALSE,90,-5,1
+"E3",883,10,"intro",0,"Helpful","Feedback","Hint","human_ai",TRUE,FALSE,TRUE,83,8.5,1
+"E3",888,10,"intro",0,"Unhelpful","No Feedback","Conversation","human_ai",FALSE,TRUE,TRUE,93,73.5,0
+"E3",896,10,"intro",1,"Helpful","Feedback","Hint","human_ai",TRUE,FALSE,TRUE,75,2.5,1
+"E3",900,10,"intro",3,"Helpful","No Feedback","Hint","human_ai",TRUE,FALSE,TRUE,70,7,1
+"E3",910,10,"intro",3,"Unhelpful","Feedback","Conversation","human_ai",FALSE,TRUE,FALSE,75,2.5,1
+"E3",913,10,"intro",2,"Helpful","Feedback","Hint","human_ai",TRUE,TRUE,FALSE,100,0,0
+"E3",925,10,"final",4,"Helpful","No Feedback","Conversation","human_ai",FALSE,TRUE,TRUE,65,82,0
+"E3",927,10,"intro",0,"Helpful","Feedback","Hint","human_ai",TRUE,TRUE,TRUE,76,74.5,1
+"E3",928,10,"intro",3,"Helpful","No Feedback","Conversation","human_ai",TRUE,FALSE,TRUE,98,1,1
+"E3",929,10,"intro",0,"Unhelpful","No Feedback","Conversation","human_ai",FALSE,TRUE,FALSE,80,4.5,1
+"E3",940,10,"intro",2,"Helpful","Feedback","Conversation","human_ai",TRUE,FALSE,TRUE,100,0,1
+"E3",942,10,"intro",1,"Helpful","Feedback","Hint","human_ai",TRUE,FALSE,TRUE,80,5,1
+"E3",954,10,"final",4,"Unhelpful","Feedback","Conversation","human_ai",FALSE,TRUE,FALSE,100,13.5,1
+"E3",958,10,"final",4,"Unhelpful","No Feedback","Hint","human_ai",FALSE,TRUE,FALSE,100,0,1
+"E3",970,10,"final",4,"Unhelpful","No Feedback","Hint","human_ai",FALSE,TRUE,FALSE,100,0,1
+"E3",974,10,"intro",1,"Helpful","Feedback","Hint","human_ai",TRUE,FALSE,TRUE,75,-10,1
+"E3",981,10,"intro",1,"Helpful","Feedback","Hint","human_ai",TRUE,FALSE,TRUE,100,-2,1
+"E3",987,10,"intro",1,"Helpful","Feedback","Hint","human_ai",TRUE,FALSE,TRUE,95,0,1
+"E3",994,10,"intro",2,"Helpful","No Feedback","Conversation","human_ai",TRUE,FALSE,TRUE,100,-11,1
+"E3",1001,11,"intro",2,"Helpful","Feedback","Hint","human_ai",TRUE,FALSE,TRUE,77,-4,1
+"E3",1003,11,"intro",2,"Unhelpful","No Feedback","Conversation","human_ai",FALSE,TRUE,TRUE,99,98.5,0
+"E3",1009,11,"final",4,"Unhelpful","No Feedback","Conversation","human_ai",FALSE,TRUE,TRUE,100,85,0
+"E3",1014,11,"intro",3,"Unhelpful","No Feedback","Hint","human_ai",FALSE,FALSE,TRUE,95,2.5,0
+"E3",1031,11,"final",4,"Helpful","Feedback","Hint","human_ai",FALSE,TRUE,TRUE,96,97.5,0
+"E3",1035,11,"intro",0,"Unhelpful","No Feedback","Hint","human_ai",FALSE,TRUE,TRUE,100,83,0
+"E3",1037,11,"intro",2,"Unhelpful","Feedback","Hint","human_ai",FALSE,TRUE,FALSE,60,0,1
+"E3",1043,11,"final",4,"Unhelpful","No Feedback","Conversation","human_ai",FALSE,TRUE,FALSE,100,0,1
+"E3",1050,11,"intro",3,"Unhelpful","Feedback","Conversation","human_ai",FALSE,TRUE,TRUE,75,62.5,0
+"E3",1059,11,"intro",0,"Unhelpful","No Feedback","Hint","human_ai",FALSE,FALSE,TRUE,85,2.5,0
+"E3",1061,11,"intro",0,"Unhelpful","Feedback","Hint","human_ai",FALSE,TRUE,FALSE,65,2.5,1
+"E3",1062,11,"intro",1,"Unhelpful","No Feedback","Hint","human_ai",FALSE,FALSE,TRUE,75,0,0
+"E3",1079,11,"intro",1,"Helpful","No Feedback","Conversation","human_ai",TRUE,FALSE,TRUE,100,-10.5,1
+"E3",1081,11,"intro",1,"Unhelpful","Feedback","Conversation","human_ai",FALSE,TRUE,TRUE,100,83.5,0
+"E3",1125,11,"intro",1,"Helpful","No Feedback","Conversation","human_ai",TRUE,FALSE,TRUE,94,3,1
+"E3",1129,11,"intro",2,"Helpful","Feedback","Hint","human_ai",TRUE,TRUE,FALSE,94,5,0
+"E3",1137,11,"final",4,"Helpful","No Feedback","Conversation","human_ai",FALSE,TRUE,TRUE,100,94.5,0
+"E3",1149,11,"final",4,"Unhelpful","No Feedback","Conversation","human_ai",FALSE,TRUE,TRUE,100,70,0
+"E3",1169,11,"intro",2,"Unhelpful","No Feedback","Hint","human_ai",FALSE,FALSE,TRUE,69,1,0
+"E3",1170,11,"final",4,"Helpful","No Feedback","Conversation","human_ai",FALSE,TRUE,FALSE,99,35,1
+"E3",1188,11,"intro",3,"Unhelpful","No Feedback","Hint","human_ai",FALSE,TRUE,FALSE,100,0,1
+"E3",1202,11,"intro",0,"Unhelpful","Feedback","Hint","human_ai",FALSE,FALSE,TRUE,100,0,0
+"E3",1208,11,"final",4,"Unhelpful","Feedback","Conversation","human_ai",FALSE,TRUE,TRUE,100,82.5,0
+"E3",1212,11,"intro",0,"Unhelpful","No Feedback","Hint","human_ai",FALSE,TRUE,TRUE,90,76,0
+"E3",1218,11,"intro",1,"Unhelpful","Feedback","Conversation","human_ai",FALSE,TRUE,TRUE,87,66,0
+"E3",1221,11,"intro",3,"Unhelpful","Feedback","Hint","human_ai",FALSE,FALSE,TRUE,99,-11.5,0
+"E3",1222,11,"intro",2,"Helpful","Feedback","Conversation","human_ai",TRUE,TRUE,TRUE,89,94.5,1
+"E3",1248,11,"intro",3,"Unhelpful","No Feedback","Hint","human_ai",FALSE,TRUE,FALSE,90,14.5,1
+"E3",1260,11,"intro",0,"Unhelpful","Feedback","Hint","human_ai",FALSE,TRUE,FALSE,92,2.5,1
+"E3",1288,11,"final",4,"Unhelpful","No Feedback","Hint","human_ai",FALSE,TRUE,FALSE,100,7,1
+"E3",1294,11,"intro",2,"Unhelpful","No Feedback","Conversation","human_ai",FALSE,TRUE,FALSE,93,3,1
+"E3",1300,11,"intro",3,"Unhelpful","Feedback","Conversation","human_ai",FALSE,TRUE,FALSE,58,8.5,1
+"E3",1303,11,"intro",2,"Helpful","No Feedback","Hint","human_ai",TRUE,FALSE,TRUE,80,-5,1
+"E3",1324,11,"intro",3,"Helpful","Feedback","Hint","human_ai",TRUE,TRUE,FALSE,80,25,0
+"E3",1338,11,"intro",3,"Unhelpful","No Feedback","Hint","human_ai",FALSE,TRUE,TRUE,93,79,0
+"E3",1344,11,"final",4,"Unhelpful","Feedback","Conversation","human_ai",FALSE,TRUE,FALSE,100,1,1
+"E3",1350,11,"final",4,"Helpful","No Feedback","Hint","human_ai",FALSE,TRUE,FALSE,100,3,1
+"E3",1365,11,"intro",2,"Helpful","No Feedback","Hint","human_ai",TRUE,TRUE,TRUE,67,33.5,1
+"E3",1366,11,"intro",1,"Helpful","Feedback","Hint","human_ai",TRUE,TRUE,FALSE,100,0,0
+"E3",1377,11,"final",4,"Unhelpful","Feedback","Hint","human_ai",FALSE,TRUE,FALSE,100,0,1
+"E3",1395,11,"final",4,"Unhelpful","No Feedback","Hint","human_ai",FALSE,TRUE,TRUE,71,74,0
+"E3",1406,11,"intro",0,"Unhelpful","Feedback","Hint","human_ai",FALSE,TRUE,FALSE,95,0,1
+"E3",1409,11,"intro",0,"Helpful","Feedback","Hint","human_ai",TRUE,TRUE,FALSE,100,0,0
+"E3",1423,11,"intro",3,"Unhelpful","No Feedback","Conversation","human_ai",FALSE,TRUE,TRUE,74,77,0
+"E3",1429,11,"intro",1,"Unhelpful","No Feedback","Conversation","human_ai",FALSE,TRUE,TRUE,70,66.5,0
+"E3",1430,11,"intro",0,"Helpful","Feedback","Hint","human_ai",TRUE,TRUE,FALSE,77,4.5,0
+"E3",1431,11,"intro",2,"Helpful","No Feedback","Hint","human_ai",TRUE,TRUE,TRUE,76,86,1
+"E3",1437,11,"intro",1,"Helpful","Feedback","Hint","human_ai",TRUE,TRUE,TRUE,100,80,1
+"E3",1465,11,"intro",0,"Unhelpful","Feedback","Hint","human_ai",FALSE,TRUE,TRUE,70,69.5,0
+"E3",1526,11,"intro",0,"Unhelpful","Feedback","Hint","human_ai",FALSE,TRUE,FALSE,100,11.5,1
+"E3",1531,11,"final",4,"Unhelpful","No Feedback","Conversation","human_ai",FALSE,TRUE,TRUE,100,100,0
+"E3",1556,11,"intro",3,"Helpful","No Feedback","Conversation","human_ai",TRUE,FALSE,FALSE,100,-100,0
+"E3",1570,11,"intro",3,"Unhelpful","Feedback","Hint","human_ai",FALSE,TRUE,TRUE,100,86.5,0
+"E3",1610,11,"intro",3,"Unhelpful","No Feedback","Conversation","human_ai",FALSE,FALSE,TRUE,100,0,0
+"E3",1612,11,"intro",1,"Unhelpful","No Feedback","Conversation","human_ai",FALSE,FALSE,FALSE,91,-57,1
+"E3",1647,11,"intro",2,"Helpful","No Feedback","Conversation","human_ai",TRUE,TRUE,TRUE,100,100,1
+"E3",1649,11,"intro",1,"Helpful","Feedback","Hint","human_ai",TRUE,FALSE,TRUE,60,-0.5,1
+"E3",1656,11,"intro",2,"Unhelpful","No Feedback","Conversation","human_ai",FALSE,TRUE,TRUE,80,70,0
+"E3",852,11,"final",4,"Unhelpful","Feedback","Conversation","human_ai",FALSE,TRUE,FALSE,57,0,1
+"E3",853,11,"intro",2,"Helpful","Feedback","Hint","human_ai",TRUE,TRUE,FALSE,88,31.5,0
+"E3",868,11,"intro",2,"Helpful","No Feedback","Hint","human_ai",TRUE,FALSE,TRUE,65,12.5,1
+"E3",881,11,"final",4,"Helpful","No Feedback","Conversation","human_ai",FALSE,TRUE,TRUE,100,80.5,0
+"E3",916,11,"intro",2,"Unhelpful","Feedback","Conversation","human_ai",FALSE,TRUE,FALSE,100,9.5,1
+"E3",952,11,"intro",0,"Helpful","Feedback","Hint","human_ai",TRUE,FALSE,TRUE,70,-5,1
+"E3",983,11,"intro",0,"Helpful","Feedback","Conversation","human_ai",TRUE,FALSE,FALSE,80,-73.5,0
+"E3",984,11,"intro",0,"Helpful","No Feedback","Hint","human_ai",TRUE,FALSE,TRUE,100,0,1
+"E3",1001,12,"intro",0,"Helpful","Feedback","Hint","human_ai",TRUE,TRUE,TRUE,81,71.5,1
+"E3",1009,12,"intro",3,"Unhelpful","No Feedback","Conversation","human_ai",FALSE,TRUE,FALSE,100,4.5,1
+"E3",1010,12,"intro",3,"Helpful","Feedback","Hint","human_ai",TRUE,TRUE,FALSE,100,12,0
+"E3",1011,12,"intro",1,"Helpful","No Feedback","Hint","human_ai",TRUE,FALSE,TRUE,100,0,1
+"E3",1016,12,"intro",1,"Unhelpful","No Feedback","Conversation","human_ai",FALSE,TRUE,FALSE,100,0,1
+"E3",1021,12,"intro",0,"Helpful","Feedback","Conversation","human_ai",TRUE,FALSE,TRUE,100,0,1
+"E3",1028,12,"intro",1,"Helpful","Feedback","Hint","human_ai",TRUE,TRUE,FALSE,100,19.5,0
+"E3",1030,12,"final",4,"Helpful","Feedback","Hint","human_ai",FALSE,TRUE,TRUE,99,99.5,0
+"E3",1031,12,"intro",2,"Helpful","Feedback","Hint","human_ai",TRUE,FALSE,TRUE,90,5,1
+"E3",1039,12,"final",4,"Unhelpful","No Feedback","Hint","human_ai",FALSE,TRUE,FALSE,100,50,1
+"E3",1062,12,"intro",3,"Unhelpful","No Feedback","Hint","human_ai",FALSE,TRUE,TRUE,95,87.5,0
+"E3",1063,12,"intro",1,"Unhelpful","No Feedback","Hint","human_ai",FALSE,FALSE,TRUE,75,-0.5,0
+"E3",1070,12,"intro",3,"Unhelpful","No Feedback","Conversation","human_ai",FALSE,TRUE,FALSE,96,-2,1
+"E3",1083,12,"intro",0,"Helpful","Feedback","Conversation","human_ai",TRUE,FALSE,TRUE,93,3.5,1
+"E3",1108,12,"intro",1,"Unhelpful","No Feedback","Conversation","human_ai",FALSE,FALSE,TRUE,100,0,0
+"E3",1111,12,"intro",0,"Unhelpful","No Feedback","Hint","human_ai",FALSE,TRUE,TRUE,80,70,0
+"E3",1124,12,"final",4,"Helpful","No Feedback","Conversation","human_ai",FALSE,TRUE,FALSE,100,12.5,1
+"E3",1126,12,"intro",1,"Unhelpful","Feedback","Conversation","human_ai",FALSE,FALSE,TRUE,91,4.5,0
+"E3",1127,12,"intro",2,"Unhelpful","No Feedback","Conversation","human_ai",FALSE,FALSE,TRUE,80,10,0
+"E3",1137,12,"intro",2,"Helpful","No Feedback","Conversation","human_ai",TRUE,TRUE,TRUE,77,83.5,1
+"E3",1138,12,"intro",3,"Unhelpful","Feedback","Hint","human_ai",FALSE,TRUE,FALSE,74,-5,1
+"E3",1140,12,"intro",1,"Helpful","Feedback","Hint","human_ai",TRUE,TRUE,FALSE,95,6,0
+"E3",1142,12,"intro",1,"Helpful","No Feedback","Hint","human_ai",TRUE,FALSE,TRUE,100,0,1
+"E3",1149,12,"intro",1,"Unhelpful","No Feedback","Conversation","human_ai",FALSE,TRUE,TRUE,100,92.5,0
+"E3",1152,12,"intro",2,"Helpful","Feedback","Hint","human_ai",TRUE,FALSE,TRUE,90,-9,1
+"E3",1153,12,"final",4,"Unhelpful","Feedback","Conversation","human_ai",FALSE,TRUE,FALSE,100,0,1
+"E3",1157,12,"final",4,"Helpful","No Feedback","Conversation","human_ai",FALSE,TRUE,TRUE,100,87,0
+"E3",1159,12,"intro",3,"Helpful","Feedback","Conversation","human_ai",TRUE,FALSE,TRUE,90,-5,1
+"E3",1163,12,"intro",1,"Unhelpful","Feedback","Conversation","human_ai",FALSE,FALSE,TRUE,79,1,0
+"E3",1184,12,"intro",2,"Helpful","No Feedback","Hint","human_ai",TRUE,TRUE,FALSE,89,5,0
+"E3",1185,12,"intro",2,"Unhelpful","Feedback","Hint","human_ai",FALSE,FALSE,TRUE,68,1.5,0
+"E3",1188,12,"intro",0,"Unhelpful","No Feedback","Hint","human_ai",FALSE,TRUE,FALSE,100,0,1
+"E3",1189,12,"intro",2,"Helpful","Feedback","Hint","human_ai",TRUE,TRUE,TRUE,94,79,1
+"E3",1193,12,"intro",0,"Unhelpful","No Feedback","Hint","human_ai",FALSE,FALSE,TRUE,100,-5,0
+"E3",1200,12,"intro",2,"Unhelpful","Feedback","Conversation","human_ai",FALSE,FALSE,TRUE,98,1,0
+"E3",1202,12,"intro",2,"Unhelpful","Feedback","Hint","human_ai",FALSE,TRUE,FALSE,100,25,1
+"E3",1205,12,"intro",2,"Unhelpful","Feedback","Conversation","human_ai",FALSE,TRUE,TRUE,87,75,0
+"E3",1207,12,"intro",1,"Helpful","No Feedback","Hint","human_ai",TRUE,FALSE,TRUE,85,-1.5,1
+"E3",1217,12,"intro",0,"Helpful","No Feedback","Conversation","human_ai",TRUE,TRUE,FALSE,75,15.5,0
+"E3",1237,12,"intro",2,"Unhelpful","No Feedback","Conversation","human_ai",FALSE,FALSE,TRUE,84,-27.5,0
+"E3",1243,12,"intro",3,"Helpful","No Feedback","Conversation","human_ai",TRUE,FALSE,TRUE,73,2.5,1
+"E3",1255,12,"final",4,"Unhelpful","Feedback","Conversation","human_ai",FALSE,TRUE,FALSE,100,0,1
+"E3",1261,12,"intro",2,"Unhelpful","Feedback","Hint","human_ai",FALSE,TRUE,FALSE,81,10.5,1
+"E3",1262,12,"intro",0,"Helpful","No Feedback","Conversation","human_ai",TRUE,FALSE,TRUE,99,0.5,1
+"E3",1274,12,"intro",0,"Helpful","No Feedback","Hint","human_ai",TRUE,FALSE,TRUE,100,0,1
+"E3",1286,12,"intro",0,"Unhelpful","Feedback","Conversation","human_ai",FALSE,FALSE,TRUE,97,-4.5,0
+"E3",1292,12,"final",4,"Unhelpful","Feedback","Conversation","human_ai",FALSE,TRUE,FALSE,89,34,1
+"E3",1295,12,"intro",0,"Helpful","Feedback","Conversation","human_ai",TRUE,FALSE,FALSE,100,-100,0
+"E3",1302,12,"intro",0,"Unhelpful","No Feedback","Conversation","human_ai",FALSE,TRUE,FALSE,100,5.5,1
+"E3",1315,12,"intro",2,"Helpful","No Feedback","Hint","human_ai",TRUE,TRUE,FALSE,80,-2.5,0
+"E3",1321,12,"final",4,"Unhelpful","Feedback","Conversation","human_ai",FALSE,TRUE,FALSE,68,8,1
+"E3",1332,12,"intro",0,"Unhelpful","No Feedback","Hint","human_ai",FALSE,FALSE,TRUE,83,-7.5,0
+"E3",1333,12,"final",4,"Helpful","No Feedback","Hint","human_ai",FALSE,TRUE,FALSE,100,15.5,1
+"E3",1334,12,"intro",0,"Helpful","No Feedback","Hint","human_ai",TRUE,TRUE,FALSE,94,4,0
+"E3",1344,12,"intro",1,"Unhelpful","Feedback","Conversation","human_ai",FALSE,TRUE,FALSE,100,0,1
+"E3",1351,12,"final",4,"Helpful","Feedback","Hint","human_ai",FALSE,TRUE,FALSE,82,10,1
+"E3",1353,12,"intro",1,"Helpful","No Feedback","Hint","human_ai",TRUE,TRUE,FALSE,100,0,0
+"E3",1354,12,"intro",3,"Helpful","Feedback","Hint","human_ai",TRUE,FALSE,TRUE,100,0,1
+"E3",1358,12,"intro",1,"Unhelpful","Feedback","Conversation","human_ai",FALSE,TRUE,TRUE,100,91,0
+"E3",1368,12,"intro",0,"Helpful","Feedback","Conversation","human_ai",TRUE,FALSE,TRUE,100,0,1
+"E3",1369,12,"final",4,"Unhelpful","No Feedback","Conversation","human_ai",FALSE,TRUE,TRUE,100,85,0
+"E3",1381,12,"intro",1,"Unhelpful","Feedback","Hint","human_ai",FALSE,FALSE,TRUE,100,-6.5,0
+"E3",1400,12,"intro",1,"Unhelpful","No Feedback","Conversation","human_ai",FALSE,FALSE,TRUE,66,6.5,0
+"E3",1401,12,"intro",0,"Unhelpful","Feedback","Conversation","human_ai",FALSE,FALSE,TRUE,80,10,0
+"E3",1402,12,"intro",3,"Unhelpful","No Feedback","Conversation","human_ai",FALSE,TRUE,FALSE,100,27.5,1
+"E3",1409,12,"intro",1,"Helpful","Feedback","Hint","human_ai",TRUE,FALSE,TRUE,100,0,1
+"E3",1411,12,"final",4,"Helpful","Feedback","Conversation","human_ai",FALSE,TRUE,TRUE,100,92.5,0
+"E3",1420,12,"intro",1,"Unhelpful","Feedback","Hint","human_ai",FALSE,FALSE,TRUE,100,0,0
+"E3",1423,12,"final",4,"Unhelpful","No Feedback","Conversation","human_ai",FALSE,TRUE,TRUE,83,86.5,0
+"E3",1427,12,"intro",2,"Helpful","Feedback","Hint","human_ai",TRUE,TRUE,TRUE,100,100,1
+"E3",1428,12,"final",4,"Unhelpful","No Feedback","Conversation","human_ai",FALSE,TRUE,TRUE,74,85.5,0
+"E3",1431,12,"intro",0,"Helpful","No Feedback","Hint","human_ai",TRUE,TRUE,TRUE,75,76.5,1
+"E3",1437,12,"intro",0,"Helpful","Feedback","Hint","human_ai",TRUE,FALSE,TRUE,100,0,1
+"E3",1450,12,"final",4,"Unhelpful","No Feedback","Hint","human_ai",FALSE,TRUE,FALSE,74,19.5,1
+"E3",1471,12,"final",4,"Helpful","No Feedback","Conversation","human_ai",FALSE,TRUE,FALSE,100,0,1
+"E3",1497,12,"intro",1,"Unhelpful","No Feedback","Conversation","human_ai",FALSE,TRUE,FALSE,90,-5,1
+"E3",1501,12,"final",4,"Unhelpful","No Feedback","Hint","human_ai",FALSE,TRUE,FALSE,100,12.5,1
+"E3",1541,12,"intro",3,"Unhelpful","No Feedback","Hint","human_ai",FALSE,TRUE,FALSE,57,-9.5,1
+"E3",1542,12,"intro",2,"Unhelpful","No Feedback","Hint","human_ai",FALSE,FALSE,TRUE,100,-3,0
+"E3",1553,12,"intro",0,"Helpful","Feedback","Hint","human_ai",TRUE,FALSE,TRUE,80,2.5,1
+"E3",1574,12,"intro",2,"Unhelpful","No Feedback","Conversation","human_ai",FALSE,FALSE,TRUE,80,10,0
+"E3",1612,12,"intro",3,"Unhelpful","No Feedback","Conversation","human_ai",FALSE,TRUE,FALSE,81,-3.5,1
+"E3",1619,12,"intro",2,"Helpful","Feedback","Hint","human_ai",TRUE,FALSE,TRUE,76,-5.5,1
+"E3",1628,12,"intro",1,"Unhelpful","No Feedback","Conversation","human_ai",FALSE,FALSE,TRUE,74,-16,0
+"E3",1633,12,"intro",2,"Unhelpful","Feedback","Conversation","human_ai",FALSE,TRUE,TRUE,92,86,0
+"E3",1647,12,"intro",1,"Helpful","No Feedback","Conversation","human_ai",TRUE,TRUE,TRUE,100,100,1
+"E3",1656,12,"intro",3,"Unhelpful","No Feedback","Conversation","human_ai",FALSE,FALSE,TRUE,76,-8,0
+"E3",1660,12,"intro",3,"Helpful","Feedback","Hint","human_ai",TRUE,FALSE,TRUE,78,-6,1
+"E3",841,12,"intro",3,"Helpful","No Feedback","Conversation","human_ai",TRUE,TRUE,TRUE,76,80.5,1
+"E3",847,12,"intro",0,"Unhelpful","No Feedback","Conversation","human_ai",FALSE,TRUE,TRUE,100,100,0
+"E3",859,12,"final",4,"Unhelpful","No Feedback","Conversation","human_ai",FALSE,TRUE,FALSE,100,0,1
+"E3",866,12,"intro",0,"Unhelpful","Feedback","Conversation","human_ai",FALSE,TRUE,FALSE,100,0,1
+"E3",867,12,"intro",2,"Unhelpful","Feedback","Hint","human_ai",FALSE,FALSE,TRUE,100,0,0
+"E3",878,12,"final",4,"Helpful","No Feedback","Conversation","human_ai",FALSE,TRUE,FALSE,100,9.5,1
+"E3",887,12,"intro",3,"Unhelpful","No Feedback","Hint","human_ai",FALSE,TRUE,FALSE,79,8.5,1
+"E3",888,12,"intro",1,"Unhelpful","No Feedback","Conversation","human_ai",FALSE,FALSE,TRUE,79,5.5,0
+"E3",900,12,"intro",0,"Helpful","No Feedback","Hint","human_ai",TRUE,FALSE,TRUE,80,-9.5,1
+"E3",909,12,"final",4,"Unhelpful","No Feedback","Conversation","human_ai",FALSE,TRUE,TRUE,100,100,0
+"E3",919,12,"intro",2,"Helpful","Feedback","Hint","human_ai",TRUE,FALSE,TRUE,81,-11,1
+"E3",924,12,"final",4,"Helpful","Feedback","Conversation","human_ai",FALSE,TRUE,FALSE,100,12.5,1
+"E3",925,12,"intro",3,"Helpful","No Feedback","Conversation","human_ai",TRUE,FALSE,TRUE,63,18,1
+"E3",935,12,"intro",0,"Helpful","Feedback","Hint","human_ai",TRUE,FALSE,TRUE,80,1,1
+"E3",936,12,"intro",3,"Unhelpful","No Feedback","Conversation","human_ai",FALSE,FALSE,TRUE,63,2,0
+"E3",937,12,"final",4,"Unhelpful","No Feedback","Conversation","human_ai",FALSE,TRUE,TRUE,100,85.5,0
+"E3",939,12,"final",4,"Helpful","No Feedback","Hint","human_ai",FALSE,TRUE,FALSE,98,22,1
+"E3",940,12,"intro",3,"Helpful","Feedback","Conversation","human_ai",TRUE,FALSE,TRUE,100,0,1
+"E3",943,12,"final",4,"Helpful","Feedback","Conversation","human_ai",FALSE,TRUE,TRUE,100,91,0
+"E3",946,12,"intro",1,"Unhelpful","Feedback","Conversation","human_ai",FALSE,FALSE,TRUE,82,-6.5,0
+"E3",952,12,"intro",1,"Helpful","Feedback","Hint","human_ai",TRUE,TRUE,TRUE,70,55,1
+"E3",953,12,"intro",1,"Helpful","Feedback","Conversation","human_ai",TRUE,TRUE,TRUE,84,73,1
+"E3",957,12,"intro",3,"Unhelpful","No Feedback","Hint","human_ai",FALSE,FALSE,TRUE,98,-0.5,0
+"E3",958,12,"intro",1,"Unhelpful","No Feedback","Hint","human_ai",FALSE,TRUE,TRUE,100,100,0
+"E3",962,12,"final",4,"Helpful","No Feedback","Hint","human_ai",FALSE,TRUE,FALSE,100,1,1
+"E3",966,12,"intro",3,"Helpful","No Feedback","Hint","human_ai",TRUE,TRUE,FALSE,100,0,0
+"E3",968,12,"intro",1,"Helpful","No Feedback","Hint","human_ai",TRUE,TRUE,FALSE,61,10,0
+"E3",972,12,"final",4,"Unhelpful","No Feedback","Hint","human_ai",FALSE,TRUE,TRUE,71,80,0
+"E3",976,12,"intro",2,"Unhelpful","No Feedback","Hint","human_ai",FALSE,FALSE,TRUE,100,0,0
+"E3",981,12,"intro",3,"Helpful","Feedback","Hint","human_ai",TRUE,FALSE,TRUE,100,0,1
+"E3",984,12,"intro",3,"Helpful","No Feedback","Hint","human_ai",TRUE,FALSE,TRUE,100,-3.5,1
+"E3",988,12,"intro",3,"Unhelpful","Feedback","Conversation","human_ai",FALSE,FALSE,FALSE,80,-74.5,1
+"E3",996,12,"intro",0,"Helpful","Feedback","Hint","human_ai",TRUE,FALSE,TRUE,100,0,1
+"E3",1094,13,"intro",1,"Helpful","Feedback","Hint","human_ai",TRUE,TRUE,FALSE,75,7.5,0
+"E3",1116,13,"intro",2,"Helpful","No Feedback","Hint","human_ai",TRUE,FALSE,TRUE,100,-3.5,1
+"E3",1228,13,"intro",2,"Unhelpful","Feedback","Conversation","human_ai",FALSE,TRUE,TRUE,83,53.5,0
+"E3",1247,13,"intro",3,"Helpful","Feedback","Conversation","human_ai",TRUE,FALSE,TRUE,71,14.5,1
+"E3",1257,13,"intro",3,"Helpful","Feedback","Hint","human_ai",TRUE,TRUE,TRUE,74,47.5,1
+"E3",1273,13,"intro",2,"Helpful","No Feedback","Conversation","human_ai",TRUE,FALSE,TRUE,79,-4.5,1
+"E3",1300,13,"intro",1,"Unhelpful","Feedback","Conversation","human_ai",FALSE,FALSE,TRUE,59,-15.5,0
+"E3",1309,13,"final",4,"Unhelpful","No Feedback","Hint","human_ai",FALSE,TRUE,TRUE,74,87,0
+"E3",1405,13,"intro",3,"Unhelpful","Feedback","Conversation","human_ai",FALSE,TRUE,FALSE,60,-20,1
+"E3",1439,13,"intro",1,"Helpful","No Feedback","Conversation","human_ai",TRUE,TRUE,TRUE,57,78.5,1
+"E3",1504,13,"intro",3,"Helpful","Feedback","Conversation","human_ai",TRUE,TRUE,TRUE,56,67,1
+"E3",1519,13,"intro",0,"Unhelpful","No Feedback","Hint","human_ai",FALSE,FALSE,TRUE,88,-36,0
+"E3",953,13,"intro",2,"Helpful","Feedback","Conversation","human_ai",TRUE,FALSE,TRUE,67,4,1
+"E3",972,13,"intro",3,"Unhelpful","No Feedback","Hint","human_ai",FALSE,TRUE,TRUE,66,61.5,0
+"E3",987,13,"intro",0,"Helpful","Feedback","Hint","human_ai",TRUE,FALSE,TRUE,94,2,1
+"E3",1010,14,"intro",0,"Helpful","Feedback","Hint","human_ai",TRUE,FALSE,TRUE,91,4.5,1
+"E3",1029,14,"intro",0,"Unhelpful","Feedback","Hint","human_ai",FALSE,FALSE,TRUE,100,-13,0
+"E3",1031,14,"intro",3,"Helpful","Feedback","Hint","human_ai",TRUE,FALSE,TRUE,89,5.5,1
+"E3",1059,14,"intro",3,"Unhelpful","No Feedback","Hint","human_ai",FALSE,FALSE,TRUE,81,-22,0
+"E3",1062,14,"intro",2,"Unhelpful","No Feedback","Hint","human_ai",FALSE,FALSE,TRUE,90,-7.5,0
+"E3",1069,14,"final",4,"Unhelpful","Feedback","Conversation","human_ai",FALSE,TRUE,TRUE,100,77.5,0
+"E3",1077,14,"intro",1,"Unhelpful","Feedback","Hint","human_ai",FALSE,TRUE,FALSE,82,21,1
+"E3",1082,14,"final",4,"Unhelpful","Feedback","Conversation","human_ai",FALSE,TRUE,FALSE,86,8.5,1
+"E3",1095,14,"final",4,"Helpful","Feedback","Conversation","human_ai",FALSE,TRUE,TRUE,95,85,0
+"E3",1101,14,"final",4,"Helpful","Feedback","Conversation","human_ai",FALSE,TRUE,TRUE,100,96,0
+"E3",1106,14,"intro",0,"Helpful","No Feedback","Hint","human_ai",TRUE,FALSE,TRUE,82,9,1
+"E3",1108,14,"intro",2,"Unhelpful","No Feedback","Conversation","human_ai",FALSE,TRUE,FALSE,87,11.5,1
+"E3",1119,14,"intro",0,"Unhelpful","Feedback","Hint","human_ai",FALSE,FALSE,TRUE,93,-0.5,0
+"E3",1123,14,"intro",0,"Unhelpful","No Feedback","Conversation","human_ai",FALSE,TRUE,TRUE,92,93.5,0
+"E3",1135,14,"intro",3,"Helpful","No Feedback","Hint","human_ai",TRUE,TRUE,FALSE,80,5,0
+"E3",1141,14,"intro",0,"Helpful","No Feedback","Hint","human_ai",TRUE,FALSE,FALSE,79,-76.5,0
+"E3",1144,14,"intro",1,"Helpful","No Feedback","Hint","human_ai",TRUE,TRUE,FALSE,76,1.5,0
+"E3",1149,14,"intro",3,"Unhelpful","No Feedback","Conversation","human_ai",FALSE,FALSE,TRUE,96,2,0
+"E3",1157,14,"intro",2,"Helpful","No Feedback","Conversation","human_ai",TRUE,FALSE,TRUE,80,10,1
+"E3",1164,14,"intro",3,"Helpful","No Feedback","Hint","human_ai",TRUE,TRUE,TRUE,60,46,1
+"E3",1189,14,"intro",1,"Helpful","Feedback","Hint","human_ai",TRUE,FALSE,TRUE,100,-0.5,1
+"E3",1203,14,"intro",3,"Helpful","No Feedback","Conversation","human_ai",TRUE,TRUE,TRUE,100,100,1
+"E3",1204,14,"intro",3,"Helpful","No Feedback","Hint","human_ai",TRUE,FALSE,TRUE,83,2.5,1
+"E3",1215,14,"intro",3,"Helpful","No Feedback","Hint","human_ai",TRUE,FALSE,TRUE,73,-7,1
+"E3",1221,14,"intro",2,"Unhelpful","Feedback","Hint","human_ai",FALSE,FALSE,TRUE,100,0,0
+"E3",1241,14,"intro",2,"Unhelpful","No Feedback","Hint","human_ai",FALSE,TRUE,TRUE,83,54.5,0
+"E3",1261,14,"intro",3,"Unhelpful","Feedback","Hint","human_ai",FALSE,FALSE,TRUE,96,-8,0
+"E3",1324,14,"intro",2,"Helpful","Feedback","Hint","human_ai",TRUE,FALSE,TRUE,90,-9,1
+"E3",1333,14,"intro",2,"Helpful","No Feedback","Hint","human_ai",TRUE,TRUE,FALSE,95,18.5,0
+"E3",1338,14,"intro",2,"Unhelpful","No Feedback","Hint","human_ai",FALSE,FALSE,TRUE,66,7,0
+"E3",1352,14,"intro",2,"Helpful","Feedback","Conversation","human_ai",TRUE,TRUE,FALSE,100,20,0
+"E3",1358,14,"intro",2,"Unhelpful","Feedback","Conversation","human_ai",FALSE,FALSE,TRUE,100,-4,0
+"E3",1361,14,"intro",3,"Helpful","Feedback","Hint","human_ai",TRUE,FALSE,TRUE,100,0,1
+"E3",1365,14,"intro",1,"Helpful","No Feedback","Hint","human_ai",TRUE,FALSE,TRUE,76,3,1
+"E3",1370,14,"intro",2,"Helpful","Feedback","Hint","human_ai",TRUE,FALSE,FALSE,100,-83,0
+"E3",1382,14,"intro",2,"Unhelpful","Feedback","Conversation","human_ai",FALSE,FALSE,FALSE,82,-77,1
+"E3",1383,14,"final",4,"Unhelpful","Feedback","Hint","human_ai",FALSE,TRUE,FALSE,100,0,1
+"E3",1386,14,"intro",2,"Helpful","No Feedback","Hint","human_ai",TRUE,FALSE,TRUE,100,0,1
+"E3",1405,14,"final",4,"Unhelpful","Feedback","Conversation","human_ai",FALSE,TRUE,TRUE,92,96,0
+"E3",1411,14,"intro",2,"Helpful","Feedback","Conversation","human_ai",TRUE,TRUE,TRUE,100,100,1
+"E3",1428,14,"intro",1,"Unhelpful","No Feedback","Conversation","human_ai",FALSE,TRUE,TRUE,68,69.5,0
+"E3",1463,14,"intro",3,"Unhelpful","No Feedback","Hint","human_ai",FALSE,FALSE,TRUE,81,3.5,0
+"E3",1504,14,"intro",1,"Helpful","Feedback","Conversation","human_ai",TRUE,TRUE,TRUE,58,70,1
+"E3",1507,14,"final",4,"Unhelpful","No Feedback","Hint","human_ai",FALSE,TRUE,FALSE,80,5,1
+"E3",1523,14,"final",4,"Helpful","Feedback","Conversation","human_ai",FALSE,TRUE,TRUE,92,90,0
+"E3",1542,14,"intro",3,"Unhelpful","No Feedback","Hint","human_ai",FALSE,TRUE,FALSE,100,5,1
+"E3",1569,14,"intro",2,"Unhelpful","Feedback","Hint","human_ai",FALSE,TRUE,FALSE,100,12,1
+"E3",1572,14,"intro",1,"Helpful","No Feedback","Conversation","human_ai",TRUE,FALSE,TRUE,100,0,1
+"E3",1574,14,"intro",0,"Unhelpful","No Feedback","Conversation","human_ai",FALSE,TRUE,TRUE,80,90,0
+"E3",1601,14,"final",4,"Unhelpful","No Feedback","Conversation","human_ai",FALSE,TRUE,FALSE,100,1,1
+"E3",1613,14,"intro",3,"Helpful","No Feedback","Hint","human_ai",TRUE,TRUE,FALSE,100,0,0
+"E3",1614,14,"intro",2,"Helpful","No Feedback","Conversation","human_ai",TRUE,FALSE,TRUE,97,0,1
+"E3",1628,14,"intro",2,"Unhelpful","No Feedback","Conversation","human_ai",FALSE,TRUE,TRUE,69,73.5,0
+"E3",1637,14,"intro",1,"Helpful","No Feedback","Hint","human_ai",TRUE,TRUE,FALSE,100,7,0
+"E3",853,14,"intro",1,"Helpful","Feedback","Hint","human_ai",TRUE,FALSE,TRUE,97,-11,1
+"E3",896,14,"intro",0,"Helpful","Feedback","Hint","human_ai",TRUE,TRUE,TRUE,70,45,1
+"E3",897,14,"intro",0,"Unhelpful","Feedback","Hint","human_ai",FALSE,TRUE,FALSE,100,0,1
+"E3",926,14,"intro",0,"Helpful","No Feedback","Conversation","human_ai",TRUE,FALSE,TRUE,80,10,1
+"E3",940,14,"intro",0,"Helpful","Feedback","Conversation","human_ai",TRUE,TRUE,TRUE,100,100,1
+"E3",966,14,"intro",1,"Helpful","No Feedback","Hint","human_ai",TRUE,FALSE,TRUE,68,11,1
+"E3",970,14,"intro",3,"Unhelpful","No Feedback","Hint","human_ai",FALSE,TRUE,FALSE,100,0,1
+"E3",1005,15,"final",4,"Helpful","Feedback","Conversation","human_ai",FALSE,TRUE,FALSE,100,17.5,1
+"E3",1027,15,"final",4,"Unhelpful","No Feedback","Hint","human_ai",FALSE,TRUE,FALSE,100,9,1
+"E3",1028,15,"intro",2,"Helpful","Feedback","Hint","human_ai",TRUE,FALSE,TRUE,94,-17,1
+"E3",1037,15,"intro",1,"Unhelpful","Feedback","Hint","human_ai",FALSE,TRUE,FALSE,70,7,1
+"E3",1043,15,"intro",2,"Unhelpful","No Feedback","Conversation","human_ai",FALSE,TRUE,TRUE,100,96,0
+"E3",1044,15,"intro",1,"Unhelpful","Feedback","Conversation","human_ai",FALSE,TRUE,FALSE,76,-12,1
+"E3",1059,15,"final",4,"Unhelpful","No Feedback","Hint","human_ai",FALSE,TRUE,FALSE,100,1,1
+"E3",1060,15,"final",4,"Unhelpful","Feedback","Hint","human_ai",FALSE,TRUE,FALSE,96,48,1
+"E3",1069,15,"intro",0,"Unhelpful","Feedback","Conversation","human_ai",FALSE,TRUE,TRUE,100,100,0
+"E3",1081,15,"intro",0,"Unhelpful","Feedback","Conversation","human_ai",FALSE,TRUE,TRUE,100,100,0
+"E3",1084,15,"final",4,"Helpful","Feedback","Hint","human_ai",FALSE,TRUE,FALSE,97,2,1
+"E3",1097,15,"intro",2,"Unhelpful","No Feedback","Hint","human_ai",FALSE,TRUE,TRUE,78,57,0
+"E3",1101,15,"intro",3,"Helpful","Feedback","Conversation","human_ai",TRUE,FALSE,TRUE,100,0,1
+"E3",1110,15,"intro",1,"Helpful","No Feedback","Conversation","human_ai",TRUE,FALSE,TRUE,80,10,1
+"E3",1112,15,"final",4,"Helpful","No Feedback","Hint","human_ai",FALSE,TRUE,FALSE,91,3,1
+"E3",1125,15,"intro",3,"Helpful","No Feedback","Conversation","human_ai",TRUE,TRUE,TRUE,100,100,1
+"E3",1135,15,"intro",0,"Helpful","No Feedback","Hint","human_ai",TRUE,FALSE,TRUE,70,5,1
+"E3",1149,15,"intro",0,"Unhelpful","No Feedback","Conversation","human_ai",FALSE,TRUE,TRUE,100,100,0
+"E3",1160,15,"final",4,"Helpful","Feedback","Hint","human_ai",FALSE,TRUE,TRUE,90,64.5,0
+"E3",1161,15,"intro",3,"Unhelpful","No Feedback","Conversation","human_ai",FALSE,TRUE,FALSE,100,15,1
+"E3",1164,15,"intro",1,"Helpful","No Feedback","Hint","human_ai",TRUE,FALSE,TRUE,75,8,1
+"E3",1183,15,"intro",0,"Unhelpful","No Feedback","Hint","human_ai",FALSE,TRUE,TRUE,47,41.5,0
+"E3",1187,15,"intro",2,"Unhelpful","Feedback","Hint","human_ai",FALSE,FALSE,TRUE,80,-5,0
+"E3",1190,15,"intro",1,"Helpful","Feedback","Hint","human_ai",TRUE,FALSE,TRUE,100,0,1
+"E3",1213,15,"final",4,"Unhelpful","Feedback","Hint","human_ai",FALSE,TRUE,FALSE,92,13,1
+"E3",1218,15,"final",4,"Unhelpful","Feedback","Conversation","human_ai",FALSE,TRUE,FALSE,95,7.5,1
+"E3",1219,15,"intro",0,"Unhelpful","Feedback","Hint","human_ai",FALSE,TRUE,FALSE,83,41.5,1
+"E3",1223,15,"final",4,"Helpful","No Feedback","Conversation","human_ai",FALSE,TRUE,FALSE,100,12.5,1
+"E3",1224,15,"intro",0,"Unhelpful","No Feedback","Conversation","human_ai",FALSE,TRUE,TRUE,64,49.5,0
+"E3",1225,15,"final",4,"Unhelpful","Feedback","Conversation","human_ai",FALSE,TRUE,TRUE,95,92.5,0
+"E3",1233,15,"intro",3,"Helpful","No Feedback","Conversation","human_ai",TRUE,FALSE,TRUE,100,0,1
+"E3",1240,15,"intro",0,"Unhelpful","No Feedback","Conversation","human_ai",FALSE,TRUE,TRUE,96,84,0
+"E3",1245,15,"final",4,"Helpful","No Feedback","Conversation","human_ai",FALSE,TRUE,TRUE,100,61.5,0
+"E3",1256,15,"intro",2,"Helpful","Feedback","Conversation","human_ai",TRUE,FALSE,TRUE,76,4,1
+"E3",1266,15,"final",4,"Unhelpful","No Feedback","Conversation","human_ai",FALSE,TRUE,FALSE,100,0,1
+"E3",1292,15,"intro",0,"Unhelpful","Feedback","Conversation","human_ai",FALSE,TRUE,TRUE,77,60,0
+"E3",1305,15,"intro",0,"Helpful","Feedback","Hint","human_ai",TRUE,FALSE,TRUE,83,1.5,1
+"E3",1306,15,"intro",3,"Helpful","Feedback","Conversation","human_ai",TRUE,FALSE,TRUE,100,0,1
+"E3",1326,15,"intro",2,"Helpful","No Feedback","Conversation","human_ai",TRUE,FALSE,TRUE,100,0,1
+"E3",1345,15,"intro",1,"Helpful","Feedback","Conversation","human_ai",TRUE,FALSE,TRUE,100,-2.5,1
+"E3",1361,15,"intro",2,"Helpful","Feedback","Hint","human_ai",TRUE,TRUE,FALSE,89,-2.5,0
+"E3",1370,15,"intro",1,"Helpful","Feedback","Hint","human_ai",TRUE,FALSE,TRUE,100,0,1
+"E3",1375,15,"intro",0,"Unhelpful","No Feedback","Hint","human_ai",FALSE,TRUE,FALSE,100,0,1
+"E3",1377,15,"intro",2,"Unhelpful","Feedback","Hint","human_ai",FALSE,TRUE,FALSE,100,0.5,1
+"E3",1381,15,"intro",2,"Unhelpful","Feedback","Hint","human_ai",FALSE,TRUE,FALSE,100,0,1
+"E3",1386,15,"intro",0,"Helpful","No Feedback","Hint","human_ai",TRUE,FALSE,TRUE,100,0,1
+"E3",1387,15,"intro",0,"Unhelpful","No Feedback","Conversation","human_ai",FALSE,FALSE,FALSE,79,-51,1
+"E3",1391,15,"intro",0,"Unhelpful","No Feedback","Conversation","human_ai",FALSE,TRUE,FALSE,95,15,1
+"E3",1392,15,"intro",3,"Helpful","Feedback","Conversation","human_ai",TRUE,FALSE,TRUE,79,-4.5,1
+"E3",1409,15,"intro",3,"Helpful","Feedback","Hint","human_ai",TRUE,FALSE,TRUE,100,-5,1
+"E3",1419,15,"final",4,"Unhelpful","Feedback","Hint","human_ai",FALSE,TRUE,FALSE,100,0,1
+"E3",1429,15,"intro",0,"Unhelpful","No Feedback","Conversation","human_ai",FALSE,FALSE,TRUE,72,-3.5,0
+"E3",1434,15,"intro",3,"Unhelpful","Feedback","Conversation","human_ai",FALSE,TRUE,FALSE,92,8.5,1
+"E3",1450,15,"intro",0,"Unhelpful","No Feedback","Hint","human_ai",FALSE,FALSE,TRUE,75,12.5,0
+"E3",1451,15,"intro",1,"Helpful","Feedback","Conversation","human_ai",TRUE,FALSE,TRUE,100,0,1
+"E3",1466,15,"intro",2,"Helpful","Feedback","Hint","human_ai",TRUE,FALSE,TRUE,74,-0.5,1
+"E3",1520,15,"intro",3,"Unhelpful","No Feedback","Conversation","human_ai",FALSE,FALSE,TRUE,99,0.5,0
+"E3",1523,15,"intro",2,"Helpful","Feedback","Conversation","human_ai",TRUE,FALSE,TRUE,91,4.5,1
+"E3",1531,15,"intro",3,"Unhelpful","No Feedback","Conversation","human_ai",FALSE,TRUE,FALSE,80,0,1
+"E3",1553,15,"final",4,"Helpful","Feedback","Hint","human_ai",FALSE,TRUE,FALSE,91,3.5,1
+"E3",1556,15,"intro",1,"Helpful","No Feedback","Conversation","human_ai",TRUE,FALSE,TRUE,100,0,1
+"E3",1567,15,"intro",0,"Unhelpful","No Feedback","Conversation","human_ai",FALSE,TRUE,TRUE,91,84.5,0
+"E3",1572,15,"intro",0,"Helpful","No Feedback","Conversation","human_ai",TRUE,FALSE,TRUE,100,0,1
+"E3",1589,15,"intro",0,"Unhelpful","Feedback","Conversation","human_ai",FALSE,TRUE,FALSE,90,3,1
+"E3",1603,15,"final",4,"Unhelpful","No Feedback","Hint","human_ai",FALSE,TRUE,FALSE,100,0,1
+"E3",1610,15,"final",4,"Unhelpful","No Feedback","Conversation","human_ai",FALSE,TRUE,FALSE,100,0,1
+"E3",1619,15,"intro",0,"Helpful","Feedback","Hint","human_ai",TRUE,FALSE,TRUE,77,3,1
+"E3",1648,15,"final",4,"Unhelpful","Feedback","Conversation","human_ai",FALSE,TRUE,TRUE,100,87.5,0
+"E3",847,15,"intro",3,"Unhelpful","No Feedback","Conversation","human_ai",FALSE,TRUE,TRUE,83,91.5,0
+"E3",852,15,"intro",3,"Unhelpful","Feedback","Conversation","human_ai",FALSE,TRUE,TRUE,57,46.5,0
+"E3",855,15,"intro",3,"Unhelpful","Feedback","Hint","human_ai",FALSE,TRUE,FALSE,85,7.5,1
+"E3",860,15,"intro",2,"Unhelpful","No Feedback","Hint","human_ai",FALSE,TRUE,FALSE,100,0,1
+"E3",881,15,"intro",3,"Helpful","No Feedback","Conversation","human_ai",TRUE,TRUE,TRUE,78,85,1
+"E3",884,15,"final",4,"Helpful","Feedback","Conversation","human_ai",FALSE,TRUE,TRUE,100,100,0
+"E3",897,15,"intro",1,"Unhelpful","Feedback","Hint","human_ai",FALSE,TRUE,FALSE,100,0,1
+"E3",899,15,"final",4,"Unhelpful","Feedback","Hint","human_ai",FALSE,TRUE,FALSE,100,0,1
+"E3",900,15,"final",4,"Helpful","No Feedback","Hint","human_ai",FALSE,TRUE,FALSE,93,6,1
+"E3",919,15,"intro",3,"Helpful","Feedback","Hint","human_ai",TRUE,FALSE,TRUE,81,-11.5,1
+"E3",923,15,"final",4,"Unhelpful","Feedback","Conversation","human_ai",FALSE,TRUE,TRUE,93,81.5,0
+"E3",927,15,"intro",2,"Helpful","Feedback","Hint","human_ai",TRUE,FALSE,TRUE,64,11.5,1
+"E3",928,15,"intro",1,"Helpful","No Feedback","Conversation","human_ai",TRUE,FALSE,TRUE,100,0,1
+"E3",933,15,"intro",1,"Helpful","Feedback","Hint","human_ai",TRUE,FALSE,TRUE,78,5,1
+"E3",937,15,"intro",0,"Unhelpful","No Feedback","Conversation","human_ai",FALSE,TRUE,TRUE,100,100,0
+"E3",943,15,"intro",0,"Helpful","Feedback","Conversation","human_ai",TRUE,FALSE,TRUE,100,0,1
+"E3",944,15,"intro",1,"Unhelpful","Feedback","Hint","human_ai",FALSE,FALSE,TRUE,100,-2.5,0
+"E3",952,15,"intro",3,"Helpful","Feedback","Hint","human_ai",TRUE,FALSE,TRUE,68,9,1
+"E3",982,15,"intro",2,"Unhelpful","Feedback","Hint","human_ai",FALSE,TRUE,FALSE,66,0.5,1
+"E3",985,15,"intro",3,"Unhelpful","Feedback","Hint","human_ai",FALSE,TRUE,FALSE,92,7.5,1
+"E3",997,15,"final",4,"Unhelpful","Feedback","Hint","human_ai",FALSE,TRUE,FALSE,100,0,1
+"E3",1008,16,"final",4,"Helpful","Feedback","Hint","human_ai",FALSE,TRUE,FALSE,79,-8.5,1
+"E3",1009,16,"intro",2,"Unhelpful","No Feedback","Conversation","human_ai",FALSE,TRUE,FALSE,100,0,1
+"E3",1010,16,"intro",2,"Helpful","Feedback","Hint","human_ai",TRUE,FALSE,TRUE,92,4,1
+"E3",1011,16,"intro",3,"Helpful","No Feedback","Hint","human_ai",TRUE,FALSE,TRUE,100,0,1
+"E3",1015,16,"intro",3,"Helpful","No Feedback","Hint","human_ai",TRUE,FALSE,TRUE,100,0,1
+"E3",1020,16,"intro",1,"Unhelpful","Feedback","Conversation","human_ai",FALSE,FALSE,FALSE,100,-88.5,1
+"E3",1021,16,"intro",2,"Helpful","Feedback","Conversation","human_ai",TRUE,FALSE,TRUE,100,0,1
+"E3",1028,16,"intro",0,"Helpful","Feedback","Hint","human_ai",TRUE,TRUE,TRUE,100,83.5,1
+"E3",1029,16,"final",4,"Unhelpful","Feedback","Hint","human_ai",FALSE,TRUE,FALSE,100,0,1
+"E3",1031,16,"intro",0,"Helpful","Feedback","Hint","human_ai",TRUE,TRUE,TRUE,84,92,1
+"E3",1033,16,"final",4,"Helpful","No Feedback","Hint","human_ai",FALSE,TRUE,FALSE,100,0,1
+"E3",1035,16,"intro",3,"Unhelpful","No Feedback","Hint","human_ai",FALSE,TRUE,FALSE,92,7.5,1
+"E3",1036,16,"final",4,"Unhelpful","Feedback","Conversation","human_ai",FALSE,TRUE,FALSE,100,0,1
+"E3",1038,16,"intro",3,"Unhelpful","Feedback","Conversation","human_ai",FALSE,TRUE,FALSE,95,-2.5,1
+"E3",1039,16,"intro",1,"Unhelpful","No Feedback","Hint","human_ai",FALSE,TRUE,FALSE,100,0,1
+"E3",1043,16,"intro",1,"Unhelpful","No Feedback","Conversation","human_ai",FALSE,FALSE,TRUE,100,0,0
+"E3",1044,16,"intro",0,"Unhelpful","Feedback","Conversation","human_ai",FALSE,TRUE,FALSE,100,0,1
+"E3",1050,16,"intro",0,"Unhelpful","Feedback","Conversation","human_ai",FALSE,FALSE,TRUE,85,7.5,0
+"E3",1060,16,"intro",0,"Unhelpful","Feedback","Hint","human_ai",FALSE,TRUE,FALSE,90,-5,1
+"E3",1062,16,"intro",0,"Unhelpful","No Feedback","Hint","human_ai",FALSE,TRUE,FALSE,95,-2.5,1
+"E3",1066,16,"intro",2,"Helpful","Feedback","Hint","human_ai",TRUE,FALSE,TRUE,99,-1.5,1
+"E3",1070,16,"intro",0,"Unhelpful","No Feedback","Conversation","human_ai",FALSE,TRUE,FALSE,97,-1.5,1
+"E3",1080,16,"intro",3,"Helpful","No Feedback","Hint","human_ai",TRUE,TRUE,FALSE,86,7,0
+"E3",1084,16,"intro",2,"Helpful","Feedback","Hint","human_ai",TRUE,FALSE,TRUE,76,10.5,1
+"E3",1086,16,"intro",3,"Helpful","Feedback","Hint","human_ai",TRUE,FALSE,TRUE,100,0,1
+"E3",1091,16,"final",4,"Helpful","Feedback","Hint","human_ai",FALSE,TRUE,FALSE,100,0,1
+"E3",1095,16,"intro",0,"Helpful","Feedback","Conversation","human_ai",TRUE,FALSE,FALSE,79,-85,0
+"E3",1099,16,"final",4,"Unhelpful","Feedback","Hint","human_ai",FALSE,TRUE,FALSE,76,-12,1
+"E3",1101,16,"intro",2,"Helpful","Feedback","Conversation","human_ai",TRUE,TRUE,TRUE,100,93,1
+"E3",1105,16,"final",4,"Helpful","Feedback","Conversation","human_ai",FALSE,TRUE,FALSE,95,-2.5,1
+"E3",1108,16,"final",4,"Unhelpful","No Feedback","Conversation","human_ai",FALSE,TRUE,FALSE,100,0,1
+"E3",1124,16,"intro",0,"Helpful","No Feedback","Conversation","human_ai",TRUE,FALSE,TRUE,100,0,1
+"E3",1125,16,"final",4,"Helpful","No Feedback","Conversation","human_ai",FALSE,TRUE,FALSE,100,0,1
+"E3",1129,16,"intro",0,"Helpful","Feedback","Hint","human_ai",TRUE,FALSE,TRUE,99,0.5,1
+"E3",1146,16,"intro",1,"Helpful","No Feedback","Hint","human_ai",TRUE,TRUE,FALSE,80,-7.5,0
+"E3",1153,16,"intro",2,"Unhelpful","Feedback","Conversation","human_ai",FALSE,TRUE,FALSE,100,5,1
+"E3",1154,16,"intro",3,"Helpful","Feedback","Conversation","human_ai",TRUE,FALSE,TRUE,100,0,1
+"E3",1160,16,"intro",2,"Helpful","Feedback","Hint","human_ai",TRUE,FALSE,TRUE,88,-3.5,1
+"E3",1166,16,"final",4,"Unhelpful","No Feedback","Hint","human_ai",FALSE,TRUE,FALSE,100,11,1
+"E3",1170,16,"intro",1,"Helpful","No Feedback","Conversation","human_ai",TRUE,FALSE,TRUE,90,5,1
+"E3",1177,16,"intro",3,"Helpful","Feedback","Hint","human_ai",TRUE,FALSE,TRUE,77,11.5,1
+"E3",1183,16,"final",4,"Unhelpful","No Feedback","Hint","human_ai",FALSE,TRUE,FALSE,88,11,1
+"E3",1184,16,"intro",0,"Helpful","No Feedback","Hint","human_ai",TRUE,FALSE,TRUE,91,-1.5,1
+"E3",1185,16,"final",4,"Unhelpful","Feedback","Hint","human_ai",FALSE,TRUE,FALSE,84,-4,1
+"E3",1187,16,"final",4,"Unhelpful","Feedback","Hint","human_ai",FALSE,TRUE,FALSE,100,5,1
+"E3",1189,16,"intro",3,"Helpful","Feedback","Hint","human_ai",TRUE,FALSE,TRUE,100,0,1
+"E3",1193,16,"intro",3,"Unhelpful","No Feedback","Hint","human_ai",FALSE,TRUE,FALSE,95,-2.5,1
+"E3",1194,16,"intro",3,"Unhelpful","No Feedback","Conversation","human_ai",FALSE,TRUE,FALSE,81,0.5,1
+"E3",1196,16,"intro",3,"Unhelpful","No Feedback","Conversation","human_ai",FALSE,TRUE,FALSE,100,0,1
+"E3",1200,16,"intro",3,"Unhelpful","Feedback","Conversation","human_ai",FALSE,FALSE,TRUE,100,0,0
+"E3",1203,16,"intro",0,"Helpful","No Feedback","Conversation","human_ai",TRUE,TRUE,TRUE,100,100,1
+"E3",1207,16,"final",4,"Helpful","No Feedback","Hint","human_ai",FALSE,TRUE,FALSE,100,5.5,1
+"E3",1209,16,"intro",3,"Helpful","No Feedback","Conversation","human_ai",TRUE,TRUE,TRUE,97,48.5,1
+"E3",1211,16,"intro",2,"Unhelpful","Feedback","Conversation","human_ai",FALSE,TRUE,FALSE,100,7.5,1
+"E3",1219,16,"intro",3,"Unhelpful","Feedback","Hint","human_ai",FALSE,TRUE,FALSE,87,-6.5,1
+"E3",1223,16,"intro",0,"Helpful","No Feedback","Conversation","human_ai",TRUE,FALSE,TRUE,100,0,1
+"E3",1224,16,"final",4,"Unhelpful","No Feedback","Conversation","human_ai",FALSE,TRUE,FALSE,100,0,1
+"E3",1229,16,"final",4,"Helpful","No Feedback","Conversation","human_ai",FALSE,TRUE,FALSE,100,0,1
+"E3",1233,16,"intro",2,"Helpful","No Feedback","Conversation","human_ai",TRUE,FALSE,TRUE,100,0,1
+"E3",1234,16,"intro",2,"Helpful","Feedback","Conversation","human_ai",TRUE,FALSE,TRUE,100,0,1
+"E3",1245,16,"intro",1,"Helpful","No Feedback","Conversation","human_ai",TRUE,FALSE,TRUE,100,0,1
+"E3",1253,16,"intro",1,"Unhelpful","Feedback","Conversation","human_ai",FALSE,TRUE,FALSE,89,-5.5,1
+"E3",1255,16,"intro",3,"Unhelpful","Feedback","Conversation","human_ai",FALSE,TRUE,FALSE,100,0,1
+"E3",1257,16,"intro",0,"Helpful","Feedback","Hint","human_ai",TRUE,TRUE,FALSE,75,9,0
+"E3",1273,16,"final",4,"Helpful","No Feedback","Conversation","human_ai",FALSE,TRUE,FALSE,100,0,1
+"E3",1278,16,"intro",2,"Unhelpful","Feedback","Hint","human_ai",FALSE,TRUE,FALSE,100,0,1
+"E3",1280,16,"final",4,"Unhelpful","Feedback","Hint","human_ai",FALSE,TRUE,FALSE,80,0,1
+"E3",1283,16,"final",4,"Unhelpful","No Feedback","Conversation","human_ai",FALSE,TRUE,FALSE,100,0,1
+"E3",1286,16,"intro",3,"Unhelpful","Feedback","Conversation","human_ai",FALSE,TRUE,FALSE,91,-4.5,1
+"E3",1290,16,"intro",1,"Unhelpful","Feedback","Conversation","human_ai",FALSE,FALSE,TRUE,88,6,0
+"E3",1292,16,"intro",2,"Unhelpful","Feedback","Conversation","human_ai",FALSE,TRUE,FALSE,85,42.5,1
+"E3",1293,16,"intro",1,"Helpful","Feedback","Conversation","human_ai",TRUE,FALSE,TRUE,100,0,1
+"E3",1294,16,"intro",0,"Unhelpful","No Feedback","Conversation","human_ai",FALSE,TRUE,FALSE,95,-2.5,1
+"E3",1302,16,"intro",3,"Unhelpful","No Feedback","Conversation","human_ai",FALSE,TRUE,FALSE,100,0,1
+"E3",1310,16,"final",4,"Unhelpful","No Feedback","Hint","human_ai",FALSE,TRUE,FALSE,93,1.5,1
+"E3",1312,16,"intro",1,"Helpful","No Feedback","Hint","human_ai",TRUE,FALSE,TRUE,98,0.5,1
+"E3",1321,16,"intro",2,"Unhelpful","Feedback","Conversation","human_ai",FALSE,FALSE,TRUE,59,-29.5,0
+"E3",1327,16,"final",4,"Unhelpful","No Feedback","Conversation","human_ai",FALSE,TRUE,FALSE,100,0,1
+"E3",1331,16,"intro",2,"Helpful","No Feedback","Hint","human_ai",TRUE,TRUE,TRUE,69,84.5,1
+"E3",1332,16,"intro",2,"Unhelpful","No Feedback","Hint","human_ai",FALSE,FALSE,TRUE,83,-5,0
+"E3",1336,16,"intro",1,"Unhelpful","No Feedback","Conversation","human_ai",FALSE,TRUE,TRUE,90,94.5,0
+"E3",1340,16,"final",4,"Unhelpful","Feedback","Conversation","human_ai",FALSE,TRUE,FALSE,100,0,1
+"E3",1344,16,"intro",3,"Unhelpful","Feedback","Conversation","human_ai",FALSE,TRUE,FALSE,100,0,1
+"E3",1351,16,"intro",1,"Helpful","Feedback","Hint","human_ai",TRUE,TRUE,FALSE,48,2.5,0
+"E3",1354,16,"intro",0,"Helpful","Feedback","Hint","human_ai",TRUE,TRUE,FALSE,97,-1.5,0
+"E3",1355,16,"intro",3,"Unhelpful","Feedback","Hint","human_ai",FALSE,TRUE,FALSE,100,0,1
+"E3",1356,16,"final",4,"Helpful","No Feedback","Conversation","human_ai",FALSE,TRUE,FALSE,100,5,1
+"E3",1368,16,"intro",1,"Helpful","Feedback","Conversation","human_ai",TRUE,FALSE,TRUE,100,0,1
+"E3",1377,16,"intro",1,"Unhelpful","Feedback","Hint","human_ai",FALSE,TRUE,FALSE,100,1,1
+"E3",1378,16,"intro",2,"Unhelpful","No Feedback","Conversation","human_ai",FALSE,FALSE,TRUE,76,10,0
+"E3",1380,16,"final",4,"Helpful","Feedback","Hint","human_ai",FALSE,TRUE,FALSE,98,14,1
+"E3",1381,16,"intro",3,"Unhelpful","Feedback","Hint","human_ai",FALSE,TRUE,FALSE,100,0,1
+"E3",1382,16,"final",4,"Unhelpful","Feedback","Conversation","human_ai",FALSE,TRUE,FALSE,100,10,1
+"E3",1383,16,"intro",1,"Unhelpful","Feedback","Hint","human_ai",FALSE,TRUE,FALSE,100,0,1
+"E3",1385,16,"final",4,"Helpful","No Feedback","Hint","human_ai",FALSE,TRUE,FALSE,100,0,1
+"E3",1387,16,"final",4,"Unhelpful","No Feedback","Conversation","human_ai",FALSE,TRUE,FALSE,90,-1.5,1
+"E3",1389,16,"intro",1,"Unhelpful","No Feedback","Conversation","human_ai",FALSE,TRUE,FALSE,100,0,1
+"E3",1391,16,"intro",2,"Unhelpful","No Feedback","Conversation","human_ai",FALSE,TRUE,FALSE,92,5.5,1
+"E3",1392,16,"final",4,"Helpful","Feedback","Conversation","human_ai",FALSE,TRUE,FALSE,100,7.5,1
+"E3",1396,16,"final",4,"Helpful","Feedback","Hint","human_ai",FALSE,TRUE,FALSE,100,0,1
+"E3",1401,16,"intro",1,"Unhelpful","Feedback","Conversation","human_ai",FALSE,TRUE,FALSE,100,0,1
+"E3",1408,16,"intro",3,"Helpful","Feedback","Conversation","human_ai",TRUE,FALSE,TRUE,90,5,1
+"E3",1414,16,"intro",3,"Helpful","No Feedback","Hint","human_ai",TRUE,FALSE,TRUE,100,0,1
+"E3",1443,16,"intro",1,"Helpful","No Feedback","Hint","human_ai",TRUE,TRUE,FALSE,100,0,0
+"E3",1450,16,"intro",3,"Unhelpful","No Feedback","Hint","human_ai",FALSE,TRUE,FALSE,72,-14,1
+"E3",1453,16,"final",4,"Helpful","Feedback","Conversation","human_ai",FALSE,TRUE,FALSE,100,0,1
+"E3",1465,16,"intro",1,"Unhelpful","Feedback","Hint","human_ai",FALSE,FALSE,TRUE,88,1,0
+"E3",1471,16,"intro",3,"Helpful","No Feedback","Conversation","human_ai",TRUE,FALSE,TRUE,100,0,1
+"E3",1488,16,"intro",0,"Unhelpful","Feedback","Conversation","human_ai",FALSE,FALSE,TRUE,71,2.5,0
+"E3",1494,16,"final",4,"Helpful","Feedback","Hint","human_ai",FALSE,TRUE,FALSE,100,0,1
+"E3",1497,16,"final",4,"Unhelpful","No Feedback","Conversation","human_ai",FALSE,TRUE,FALSE,100,0,1
+"E3",1501,16,"intro",1,"Unhelpful","No Feedback","Hint","human_ai",FALSE,TRUE,FALSE,85,7.5,1
+"E3",1520,16,"intro",1,"Unhelpful","No Feedback","Conversation","human_ai",FALSE,TRUE,FALSE,100,0,1
+"E3",1542,16,"intro",0,"Unhelpful","No Feedback","Hint","human_ai",FALSE,TRUE,FALSE,100,0,1
+"E3",1559,16,"final",4,"Unhelpful","Feedback","Conversation","human_ai",FALSE,TRUE,FALSE,97,14,1
+"E3",1562,16,"intro",3,"Helpful","Feedback","Conversation","human_ai",TRUE,FALSE,TRUE,95,2.5,1
+"E3",1567,16,"intro",1,"Unhelpful","No Feedback","Conversation","human_ai",FALSE,TRUE,FALSE,91,4,1
+"E3",1574,16,"intro",1,"Unhelpful","No Feedback","Conversation","human_ai",FALSE,FALSE,TRUE,80,10,0
+"E3",1589,16,"final",4,"Unhelpful","Feedback","Conversation","human_ai",FALSE,TRUE,FALSE,93,14,1
+"E3",1601,16,"intro",0,"Unhelpful","No Feedback","Conversation","human_ai",FALSE,TRUE,FALSE,100,0,1
+"E3",1603,16,"intro",3,"Unhelpful","No Feedback","Hint","human_ai",FALSE,TRUE,FALSE,100,0,1
+"E3",1613,16,"intro",0,"Helpful","No Feedback","Hint","human_ai",TRUE,FALSE,TRUE,100,0,1
+"E3",1614,16,"intro",3,"Helpful","No Feedback","Conversation","human_ai",TRUE,TRUE,TRUE,87,81.5,1
+"E3",1617,16,"final",4,"Helpful","No Feedback","Conversation","human_ai",FALSE,TRUE,FALSE,100,0,1
+"E3",1623,16,"intro",2,"Unhelpful","Feedback","Conversation","human_ai",FALSE,FALSE,TRUE,89,5.5,0
+"E3",1625,16,"intro",2,"Unhelpful","Feedback","Hint","human_ai",FALSE,TRUE,FALSE,100,0,1
+"E3",1641,16,"intro",0,"Helpful","No Feedback","Hint","human_ai",TRUE,FALSE,TRUE,100,-15,1
+"E3",1647,16,"intro",0,"Helpful","No Feedback","Conversation","human_ai",TRUE,FALSE,TRUE,100,0,1
+"E3",1648,16,"intro",2,"Unhelpful","Feedback","Conversation","human_ai",FALSE,TRUE,FALSE,100,0,1
+"E3",1650,16,"final",4,"Unhelpful","No Feedback","Conversation","human_ai",FALSE,TRUE,FALSE,98,-1,1
+"E3",1656,16,"final",4,"Unhelpful","No Feedback","Conversation","human_ai",FALSE,TRUE,FALSE,100,0,1
+"E3",1658,16,"intro",2,"Unhelpful","Feedback","Conversation","human_ai",FALSE,TRUE,FALSE,95,9.5,1
+"E3",1660,16,"final",4,"Helpful","Feedback","Hint","human_ai",FALSE,TRUE,FALSE,87,7,1
+"E3",1663,16,"intro",1,"Helpful","Feedback","Conversation","human_ai",TRUE,FALSE,TRUE,94,2.5,1
+"E3",844,16,"intro",0,"Helpful","No Feedback","Hint","human_ai",TRUE,FALSE,TRUE,100,-3.5,1
+"E3",845,16,"final",4,"Helpful","Feedback","Conversation","human_ai",FALSE,TRUE,FALSE,100,0,1
+"E3",854,16,"final",4,"Helpful","Feedback","Conversation","human_ai",FALSE,TRUE,FALSE,90,2.5,1
+"E3",865,16,"intro",3,"Unhelpful","No Feedback","Hint","human_ai",FALSE,TRUE,FALSE,65,-12.5,1
+"E3",868,16,"intro",0,"Helpful","No Feedback","Hint","human_ai",TRUE,TRUE,TRUE,80,72.5,1
+"E3",880,16,"intro",1,"Helpful","Feedback","Conversation","human_ai",TRUE,FALSE,TRUE,90,3,1
+"E3",881,16,"intro",0,"Helpful","No Feedback","Conversation","human_ai",TRUE,FALSE,TRUE,100,-10,1
+"E3",883,16,"final",4,"Helpful","Feedback","Hint","human_ai",FALSE,TRUE,FALSE,97,-1.5,1
+"E3",888,16,"intro",2,"Unhelpful","No Feedback","Conversation","human_ai",FALSE,TRUE,FALSE,94,1.5,1
+"E3",892,16,"final",4,"Helpful","Feedback","Hint","human_ai",FALSE,TRUE,FALSE,100,0,1
+"E3",893,16,"intro",3,"Helpful","Feedback","Conversation","human_ai",TRUE,FALSE,TRUE,76,12,1
+"E3",902,16,"intro",3,"Unhelpful","Feedback","Conversation","human_ai",FALSE,TRUE,FALSE,99,7,1
+"E3",923,16,"intro",2,"Unhelpful","Feedback","Conversation","human_ai",FALSE,TRUE,FALSE,81,-2,1
+"E3",926,16,"final",4,"Helpful","No Feedback","Conversation","human_ai",FALSE,TRUE,FALSE,89,-3.5,1
+"E3",927,16,"intro",1,"Helpful","Feedback","Hint","human_ai",TRUE,TRUE,TRUE,73,76.5,1
+"E3",937,16,"intro",1,"Unhelpful","No Feedback","Conversation","human_ai",FALSE,FALSE,TRUE,94,3,0
+"E3",938,16,"final",4,"Unhelpful","Feedback","Conversation","human_ai",FALSE,TRUE,FALSE,100,0,1
+"E3",943,16,"intro",2,"Helpful","Feedback","Conversation","human_ai",TRUE,FALSE,TRUE,100,0,1
+"E3",952,16,"intro",2,"Helpful","Feedback","Hint","human_ai",TRUE,TRUE,TRUE,67,64.5,1
+"E3",956,16,"intro",3,"Helpful","No Feedback","Hint","human_ai",TRUE,FALSE,TRUE,90,5,1
+"E3",958,16,"intro",3,"Unhelpful","No Feedback","Hint","human_ai",FALSE,TRUE,FALSE,100,0,1
+"E3",961,16,"final",4,"Unhelpful","No Feedback","Hint","human_ai",FALSE,TRUE,FALSE,100,2.5,1
+"E3",962,16,"intro",1,"Helpful","No Feedback","Hint","human_ai",TRUE,FALSE,TRUE,100,0,1
+"E3",963,16,"final",4,"Unhelpful","Feedback","Hint","human_ai",FALSE,TRUE,TRUE,99,96,0
+"E3",966,16,"intro",0,"Helpful","No Feedback","Hint","human_ai",TRUE,TRUE,TRUE,100,72.5,1
+"E3",967,16,"final",4,"Unhelpful","Feedback","Conversation","human_ai",FALSE,TRUE,FALSE,91,-4.5,1
+"E3",968,16,"intro",0,"Helpful","No Feedback","Hint","human_ai",TRUE,FALSE,TRUE,68,16,1
+"E3",969,16,"intro",1,"Helpful","No Feedback","Conversation","human_ai",TRUE,FALSE,TRUE,97,1,1
+"E3",970,16,"intro",0,"Unhelpful","No Feedback","Hint","human_ai",FALSE,TRUE,FALSE,100,0,1
+"E3",975,16,"intro",3,"Unhelpful","No Feedback","Conversation","human_ai",FALSE,TRUE,FALSE,65,-17.5,1
+"E3",984,16,"intro",1,"Helpful","No Feedback","Hint","human_ai",TRUE,TRUE,TRUE,100,100,1
+"E3",994,16,"intro",0,"Helpful","No Feedback","Conversation","human_ai",TRUE,FALSE,TRUE,94,3,1
+"E3",1001,17,"intro",3,"Helpful","Feedback","Hint","human_ai",TRUE,FALSE,FALSE,77,-71.5,0
+"E3",1021,17,"intro",1,"Helpful","Feedback","Conversation","human_ai",TRUE,TRUE,FALSE,100,0,0
+"E3",1027,17,"intro",2,"Unhelpful","No Feedback","Hint","human_ai",FALSE,FALSE,TRUE,100,0,0
+"E3",1035,17,"intro",1,"Unhelpful","No Feedback","Hint","human_ai",FALSE,FALSE,TRUE,100,0,0
+"E3",1038,17,"intro",1,"Unhelpful","Feedback","Conversation","human_ai",FALSE,FALSE,FALSE,100,-100,1
+"E3",1039,17,"intro",0,"Unhelpful","No Feedback","Hint","human_ai",FALSE,TRUE,FALSE,100,0,1
+"E3",1059,17,"intro",2,"Unhelpful","No Feedback","Hint","human_ai",FALSE,TRUE,FALSE,100,1,1
+"E3",1060,17,"intro",2,"Unhelpful","Feedback","Hint","human_ai",FALSE,FALSE,FALSE,93,-46.5,1
+"E3",1069,17,"intro",2,"Unhelpful","Feedback","Conversation","human_ai",FALSE,FALSE,TRUE,100,0,0
+"E3",1079,17,"intro",0,"Helpful","No Feedback","Conversation","human_ai",TRUE,TRUE,TRUE,100,85,1
+"E3",1083,17,"intro",3,"Helpful","Feedback","Conversation","human_ai",TRUE,TRUE,TRUE,95,77.5,1
+"E3",1088,17,"intro",0,"Helpful","No Feedback","Conversation","human_ai",TRUE,FALSE,TRUE,77,6.5,1
+"E3",1103,17,"intro",0,"Unhelpful","No Feedback","Conversation","human_ai",FALSE,FALSE,TRUE,65,9.5,0
+"E3",1127,17,"intro",0,"Unhelpful","No Feedback","Conversation","human_ai",FALSE,TRUE,TRUE,99,74.5,0
+"E3",1132,17,"final",4,"Unhelpful","Feedback","Conversation","human_ai",FALSE,TRUE,TRUE,100,100,0
+"E3",1138,17,"intro",2,"Unhelpful","Feedback","Hint","human_ai",FALSE,FALSE,TRUE,62,-3.5,0
+"E3",1141,17,"intro",2,"Helpful","No Feedback","Hint","human_ai",TRUE,TRUE,FALSE,92,6.5,0
+"E3",1160,17,"intro",1,"Helpful","Feedback","Hint","human_ai",TRUE,TRUE,FALSE,66,18.5,0
+"E3",1162,17,"intro",1,"Helpful","Feedback","Hint","human_ai",TRUE,FALSE,TRUE,100,0,1
+"E3",1169,17,"intro",1,"Unhelpful","No Feedback","Hint","human_ai",FALSE,TRUE,FALSE,82,1.5,1
+"E3",1196,17,"intro",2,"Unhelpful","No Feedback","Conversation","human_ai",FALSE,FALSE,TRUE,73,13.5,0
+"E3",1199,17,"final",4,"Unhelpful","Feedback","Conversation","human_ai",FALSE,TRUE,FALSE,100,8.5,1
+"E3",1203,17,"intro",1,"Helpful","No Feedback","Conversation","human_ai",TRUE,FALSE,TRUE,100,0,1
+"E3",1204,17,"intro",0,"Helpful","No Feedback","Hint","human_ai",TRUE,TRUE,FALSE,98,12.5,0
+"E3",1208,17,"intro",2,"Unhelpful","Feedback","Conversation","human_ai",FALSE,TRUE,FALSE,100,20,1
+"E3",1210,17,"intro",2,"Unhelpful","No Feedback","Hint","human_ai",FALSE,FALSE,TRUE,76,12,0
+"E3",1212,17,"intro",3,"Unhelpful","No Feedback","Hint","human_ai",FALSE,TRUE,FALSE,87,7,1
+"E3",1216,17,"intro",3,"Unhelpful","No Feedback","Conversation","human_ai",FALSE,FALSE,TRUE,100,0,0
+"E3",1226,17,"intro",1,"Unhelpful","No Feedback","Hint","human_ai",FALSE,FALSE,TRUE,90,1.5,0
+"E3",1230,17,"intro",1,"Unhelpful","Feedback","Conversation","human_ai",FALSE,TRUE,FALSE,83,2.5,1
+"E3",1247,17,"intro",2,"Helpful","Feedback","Conversation","human_ai",TRUE,FALSE,TRUE,80,10,1
+"E3",1248,17,"intro",1,"Unhelpful","No Feedback","Hint","human_ai",FALSE,FALSE,TRUE,83,-1.5,0
+"E3",1253,17,"intro",2,"Unhelpful","Feedback","Conversation","human_ai",FALSE,FALSE,TRUE,100,0,0
+"E3",1257,17,"intro",1,"Helpful","Feedback","Hint","human_ai",TRUE,FALSE,TRUE,76,11,1
+"E3",1266,17,"intro",0,"Unhelpful","No Feedback","Conversation","human_ai",FALSE,FALSE,TRUE,83,8.5,0
+"E3",1283,17,"intro",1,"Unhelpful","No Feedback","Conversation","human_ai",FALSE,FALSE,TRUE,75,2.5,0
+"E3",1286,17,"intro",1,"Unhelpful","Feedback","Conversation","human_ai",FALSE,TRUE,TRUE,100,100,0
+"E3",1293,17,"intro",3,"Helpful","Feedback","Conversation","human_ai",TRUE,FALSE,TRUE,100,0,1
+"E3",1294,17,"final",4,"Unhelpful","No Feedback","Conversation","human_ai",FALSE,TRUE,FALSE,100,5.5,1
+"E3",1295,17,"intro",3,"Helpful","Feedback","Conversation","human_ai",TRUE,FALSE,TRUE,100,0,1
+"E3",1310,17,"intro",1,"Unhelpful","No Feedback","Hint","human_ai",FALSE,TRUE,FALSE,67,-16.5,1
+"E3",1312,17,"intro",2,"Helpful","No Feedback","Hint","human_ai",TRUE,FALSE,TRUE,96,0.5,1
+"E3",1318,17,"intro",2,"Unhelpful","No Feedback","Hint","human_ai",FALSE,TRUE,TRUE,96,50.5,0
+"E3",1325,17,"final",4,"Helpful","Feedback","Conversation","human_ai",FALSE,TRUE,TRUE,100,87,0
+"E3",1336,17,"intro",3,"Unhelpful","No Feedback","Conversation","human_ai",FALSE,TRUE,TRUE,88,86,0
+"E3",1338,17,"final",4,"Unhelpful","No Feedback","Hint","human_ai",FALSE,TRUE,FALSE,100,4.5,1
+"E3",1350,17,"intro",2,"Helpful","No Feedback","Hint","human_ai",TRUE,FALSE,TRUE,67,-1,1
+"E3",1365,17,"final",4,"Helpful","No Feedback","Hint","human_ai",FALSE,TRUE,FALSE,77,10,1
+"E3",1366,17,"intro",3,"Helpful","Feedback","Hint","human_ai",TRUE,FALSE,TRUE,100,0,1
+"E3",1369,17,"intro",2,"Unhelpful","No Feedback","Conversation","human_ai",FALSE,TRUE,FALSE,99,4.5,1
+"E3",1378,17,"intro",0,"Unhelpful","No Feedback","Conversation","human_ai",FALSE,TRUE,TRUE,80,78.5,0
+"E3",1380,17,"intro",1,"Helpful","Feedback","Hint","human_ai",TRUE,FALSE,TRUE,98,0.5,1
+"E3",1383,17,"intro",3,"Unhelpful","Feedback","Hint","human_ai",FALSE,TRUE,FALSE,100,0,1
+"E3",1387,17,"intro",2,"Unhelpful","No Feedback","Conversation","human_ai",FALSE,TRUE,FALSE,76,-2,1
+"E3",1396,17,"intro",2,"Helpful","Feedback","Hint","human_ai",TRUE,TRUE,FALSE,100,0,0
+"E3",1401,17,"intro",3,"Unhelpful","Feedback","Conversation","human_ai",FALSE,TRUE,TRUE,100,82.5,0
+"E3",1406,17,"intro",2,"Unhelpful","Feedback","Hint","human_ai",FALSE,TRUE,FALSE,96,0,1
+"E3",1411,17,"intro",1,"Helpful","Feedback","Conversation","human_ai",TRUE,TRUE,TRUE,100,100,1
+"E3",1451,17,"intro",2,"Helpful","Feedback","Conversation","human_ai",TRUE,FALSE,TRUE,100,0,1
+"E3",1452,17,"final",4,"Helpful","Feedback","Conversation","human_ai",FALSE,TRUE,TRUE,100,100,0
+"E3",1465,17,"final",4,"Unhelpful","Feedback","Hint","human_ai",FALSE,TRUE,TRUE,84,84.5,0
+"E3",1471,17,"intro",0,"Helpful","No Feedback","Conversation","human_ai",TRUE,FALSE,TRUE,100,0,1
+"E3",1499,17,"intro",1,"Helpful","Feedback","Conversation","human_ai",TRUE,TRUE,TRUE,100,100,1
+"E3",1541,17,"intro",0,"Unhelpful","No Feedback","Hint","human_ai",FALSE,FALSE,TRUE,100,0,0
+"E3",1542,17,"intro",1,"Unhelpful","No Feedback","Hint","human_ai",FALSE,FALSE,TRUE,100,-4,0
+"E3",1544,17,"intro",3,"Helpful","No Feedback","Hint","human_ai",TRUE,TRUE,FALSE,100,2,0
+"E3",1559,17,"intro",2,"Unhelpful","Feedback","Conversation","human_ai",FALSE,TRUE,TRUE,81,87,0
+"E3",1574,17,"final",4,"Unhelpful","No Feedback","Conversation","human_ai",FALSE,TRUE,TRUE,82,91,0
+"E3",1601,17,"intro",3,"Unhelpful","No Feedback","Conversation","human_ai",FALSE,TRUE,FALSE,100,9,1
+"E3",1637,17,"intro",3,"Helpful","No Feedback","Hint","human_ai",TRUE,FALSE,FALSE,99,-99,0
+"E3",1641,17,"intro",1,"Helpful","No Feedback","Hint","human_ai",TRUE,FALSE,FALSE,100,-100,0
+"E3",1644,17,"final",4,"Helpful","No Feedback","Hint","human_ai",FALSE,TRUE,FALSE,100,0,1
+"E3",1645,17,"intro",2,"Unhelpful","Feedback","Hint","human_ai",FALSE,TRUE,TRUE,61,79.5,0
+"E3",1649,17,"intro",3,"Helpful","Feedback","Hint","human_ai",TRUE,FALSE,TRUE,61,-0.5,1
+"E3",1660,17,"intro",1,"Helpful","Feedback","Hint","human_ai",TRUE,TRUE,FALSE,77,18,0
+"E3",855,17,"intro",0,"Unhelpful","Feedback","Hint","human_ai",FALSE,FALSE,TRUE,85,0,0
+"E3",865,17,"intro",2,"Unhelpful","No Feedback","Hint","human_ai",FALSE,FALSE,TRUE,73,-1.5,0
+"E3",878,17,"intro",2,"Helpful","No Feedback","Conversation","human_ai",TRUE,FALSE,TRUE,100,0,1
+"E3",887,17,"intro",1,"Unhelpful","No Feedback","Hint","human_ai",FALSE,FALSE,TRUE,84,8,0
+"E3",895,17,"final",4,"Helpful","Feedback","Conversation","human_ai",FALSE,TRUE,TRUE,100,71.5,0
+"E3",911,17,"intro",2,"Unhelpful","No Feedback","Conversation","human_ai",FALSE,TRUE,TRUE,56,61,0
+"E3",916,17,"intro",3,"Unhelpful","Feedback","Conversation","human_ai",FALSE,FALSE,TRUE,100,0,0
+"E3",919,17,"intro",0,"Helpful","Feedback","Hint","human_ai",TRUE,TRUE,FALSE,73,3.5,0
+"E3",923,17,"intro",1,"Unhelpful","Feedback","Conversation","human_ai",FALSE,FALSE,TRUE,70,15,0
+"E3",924,17,"intro",3,"Helpful","Feedback","Conversation","human_ai",TRUE,FALSE,TRUE,100,-21,1
+"E3",933,17,"intro",2,"Helpful","Feedback","Hint","human_ai",TRUE,TRUE,FALSE,86,-4,0
+"E3",938,17,"intro",3,"Unhelpful","Feedback","Conversation","human_ai",FALSE,FALSE,FALSE,100,-100,1
+"E3",944,17,"intro",0,"Unhelpful","Feedback","Hint","human_ai",FALSE,TRUE,FALSE,100,0,1
+"E3",946,17,"intro",0,"Unhelpful","Feedback","Conversation","human_ai",FALSE,TRUE,TRUE,80,90,0
+"E3",948,17,"intro",2,"Unhelpful","No Feedback","Hint","human_ai",FALSE,FALSE,FALSE,100,-91.5,1
+"E3",953,17,"intro",0,"Helpful","Feedback","Conversation","human_ai",TRUE,FALSE,TRUE,71,3,1
+"E3",954,17,"intro",2,"Unhelpful","Feedback","Conversation","human_ai",FALSE,TRUE,TRUE,81,83,0
+"E3",962,17,"intro",2,"Helpful","No Feedback","Hint","human_ai",TRUE,FALSE,TRUE,100,-2.5,1
+"E3",969,17,"final",4,"Helpful","No Feedback","Conversation","human_ai",FALSE,TRUE,TRUE,100,91.5,0
+"E3",983,17,"intro",1,"Helpful","Feedback","Conversation","human_ai",TRUE,TRUE,TRUE,100,100,1
+"E3",985,17,"intro",0,"Unhelpful","Feedback","Hint","human_ai",FALSE,FALSE,TRUE,100,0,0
+"E3",1011,18,"intro",0,"Helpful","No Feedback","Hint","human_ai",TRUE,TRUE,FALSE,100,10.5,0
+"E3",1013,18,"intro",2,"Unhelpful","No Feedback","Conversation","human_ai",FALSE,FALSE,FALSE,100,-100,1
+"E3",1015,18,"intro",2,"Helpful","No Feedback","Hint","human_ai",TRUE,TRUE,TRUE,96,86,1
+"E3",1029,18,"intro",2,"Unhelpful","Feedback","Hint","human_ai",FALSE,FALSE,TRUE,100,0,0
+"E3",1033,18,"intro",1,"Helpful","No Feedback","Hint","human_ai",TRUE,TRUE,FALSE,99,2.5,0
+"E3",1036,18,"intro",2,"Unhelpful","Feedback","Conversation","human_ai",FALSE,TRUE,TRUE,98,76.5,0
+"E3",1059,18,"intro",1,"Unhelpful","No Feedback","Hint","human_ai",FALSE,TRUE,FALSE,94,-3,1
+"E3",1079,18,"intro",3,"Helpful","No Feedback","Conversation","human_ai",TRUE,TRUE,TRUE,100,100,1
+"E3",1080,18,"intro",0,"Helpful","No Feedback","Hint","human_ai",TRUE,TRUE,FALSE,81,-9.5,0
+"E3",1094,18,"intro",3,"Helpful","Feedback","Hint","human_ai",TRUE,FALSE,TRUE,71,-8,1
+"E3",1107,18,"intro",0,"Helpful","No Feedback","Hint","human_ai",TRUE,TRUE,TRUE,68,45,1
+"E3",1111,18,"intro",1,"Unhelpful","No Feedback","Hint","human_ai",FALSE,FALSE,TRUE,80,2.5,0
+"E3",1112,18,"intro",0,"Helpful","No Feedback","Hint","human_ai",TRUE,FALSE,TRUE,87,6.5,1
+"E3",1118,18,"intro",3,"Helpful","Feedback","Hint","human_ai",TRUE,TRUE,FALSE,93,-3.5,0
+"E3",1123,18,"intro",1,"Unhelpful","No Feedback","Conversation","human_ai",FALSE,FALSE,TRUE,68,16,0
+"E3",1129,18,"final",4,"Helpful","Feedback","Hint","human_ai",FALSE,TRUE,FALSE,100,1.5,1
+"E3",1152,18,"intro",1,"Helpful","Feedback","Hint","human_ai",TRUE,TRUE,TRUE,92,88,1
+"E3",1168,18,"final",4,"Unhelpful","Feedback","Hint","human_ai",FALSE,TRUE,FALSE,100,15.5,1
+"E3",1185,18,"intro",1,"Unhelpful","Feedback","Hint","human_ai",FALSE,TRUE,FALSE,63,14.5,1
+"E3",1187,18,"intro",3,"Unhelpful","Feedback","Hint","human_ai",FALSE,TRUE,FALSE,85,5,1
+"E3",1207,18,"intro",2,"Helpful","No Feedback","Hint","human_ai",TRUE,TRUE,FALSE,86,10.5,0
+"E3",1216,18,"final",4,"Unhelpful","No Feedback","Conversation","human_ai",FALSE,TRUE,TRUE,100,88.5,0
+"E3",1234,18,"intro",3,"Helpful","Feedback","Conversation","human_ai",TRUE,TRUE,TRUE,100,76,1
+"E3",1240,18,"intro",3,"Unhelpful","No Feedback","Conversation","human_ai",FALSE,FALSE,TRUE,99,0,0
+"E3",1245,18,"intro",0,"Helpful","No Feedback","Conversation","human_ai",TRUE,FALSE,TRUE,100,0,1
+"E3",1248,18,"intro",2,"Unhelpful","No Feedback","Hint","human_ai",FALSE,FALSE,TRUE,81,9.5,0
+"E3",1262,18,"final",4,"Helpful","No Feedback","Conversation","human_ai",FALSE,TRUE,FALSE,100,21,1
+"E3",1270,18,"intro",2,"Helpful","No Feedback","Hint","human_ai",TRUE,FALSE,FALSE,100,-80.5,0
+"E3",1273,18,"intro",1,"Helpful","No Feedback","Conversation","human_ai",TRUE,TRUE,TRUE,91,90.5,1
+"E3",1303,18,"intro",1,"Helpful","No Feedback","Hint","human_ai",TRUE,FALSE,FALSE,83,-41.5,0
+"E3",1309,18,"intro",1,"Unhelpful","No Feedback","Hint","human_ai",FALSE,TRUE,TRUE,68,84,0
+"E3",1344,18,"intro",2,"Unhelpful","Feedback","Conversation","human_ai",FALSE,FALSE,TRUE,100,-14,0
+"E3",1352,18,"intro",1,"Helpful","Feedback","Conversation","human_ai",TRUE,FALSE,TRUE,100,-14.5,1
+"E3",1353,18,"intro",2,"Helpful","No Feedback","Hint","human_ai",TRUE,TRUE,TRUE,100,100,1
+"E3",1356,18,"intro",0,"Helpful","No Feedback","Conversation","human_ai",TRUE,FALSE,TRUE,100,0,1
+"E3",1368,18,"intro",3,"Helpful","Feedback","Conversation","human_ai",TRUE,TRUE,TRUE,100,100,1
+"E3",1383,18,"intro",0,"Unhelpful","Feedback","Hint","human_ai",FALSE,FALSE,TRUE,100,0,0
+"E3",1385,18,"intro",2,"Helpful","No Feedback","Hint","human_ai",TRUE,FALSE,TRUE,100,0,1
+"E3",1386,18,"intro",1,"Helpful","No Feedback","Hint","human_ai",TRUE,TRUE,FALSE,95,7.5,0
+"E3",1402,18,"intro",2,"Unhelpful","No Feedback","Conversation","human_ai",FALSE,FALSE,TRUE,94,3,0
+"E3",1423,18,"intro",1,"Unhelpful","No Feedback","Conversation","human_ai",FALSE,TRUE,FALSE,81,-9.5,1
+"E3",1443,18,"intro",2,"Helpful","No Feedback","Hint","human_ai",TRUE,TRUE,FALSE,100,0,0
+"E3",1451,18,"intro",3,"Helpful","Feedback","Conversation","human_ai",TRUE,TRUE,TRUE,100,100,1
+"E3",1494,18,"intro",3,"Helpful","Feedback","Hint","human_ai",TRUE,FALSE,TRUE,100,0,1
+"E3",1519,18,"intro",3,"Unhelpful","No Feedback","Hint","human_ai",FALSE,TRUE,TRUE,81,42,0
+"E3",1541,18,"intro",2,"Unhelpful","No Feedback","Hint","human_ai",FALSE,TRUE,TRUE,58,79,0
+"E3",1612,18,"intro",0,"Unhelpful","No Feedback","Conversation","human_ai",FALSE,FALSE,FALSE,92,-77.5,1
+"E3",1617,18,"intro",1,"Helpful","No Feedback","Conversation","human_ai",TRUE,TRUE,FALSE,90,-5,0
+"E3",1623,18,"intro",0,"Unhelpful","Feedback","Conversation","human_ai",FALSE,FALSE,TRUE,98,1,0
+"E3",1645,18,"intro",1,"Unhelpful","Feedback","Hint","human_ai",FALSE,TRUE,TRUE,70,56,0
+"E3",1648,18,"intro",3,"Unhelpful","Feedback","Conversation","human_ai",FALSE,FALSE,TRUE,100,0,0
+"E3",1649,18,"intro",2,"Helpful","Feedback","Hint","human_ai",TRUE,TRUE,TRUE,61,61.5,1
+"E3",841,18,"intro",2,"Helpful","No Feedback","Conversation","human_ai",TRUE,FALSE,TRUE,69,15.5,1
+"E3",854,18,"intro",0,"Helpful","Feedback","Conversation","human_ai",TRUE,TRUE,TRUE,90,82.5,1
+"E3",887,18,"intro",0,"Unhelpful","No Feedback","Hint","human_ai",FALSE,FALSE,TRUE,92,4,0
+"E3",895,18,"intro",3,"Helpful","Feedback","Conversation","human_ai",TRUE,FALSE,TRUE,89,5.5,1
+"E3",896,18,"intro",3,"Helpful","Feedback","Hint","human_ai",TRUE,TRUE,TRUE,90,57.5,1
+"E3",897,18,"intro",2,"Unhelpful","Feedback","Hint","human_ai",FALSE,FALSE,TRUE,100,0,0
+"E3",899,18,"intro",1,"Unhelpful","Feedback","Hint","human_ai",FALSE,TRUE,TRUE,100,71,0
+"E3",902,18,"intro",1,"Unhelpful","Feedback","Conversation","human_ai",FALSE,FALSE,TRUE,94,-1,0
+"E3",909,18,"intro",2,"Unhelpful","No Feedback","Conversation","human_ai",FALSE,TRUE,FALSE,100,0,1
+"E3",910,18,"intro",0,"Unhelpful","Feedback","Conversation","human_ai",FALSE,FALSE,TRUE,80,-2.5,0
+"E3",924,18,"intro",1,"Helpful","Feedback","Conversation","human_ai",TRUE,TRUE,TRUE,100,85,1
+"E3",925,18,"intro",0,"Helpful","No Feedback","Conversation","human_ai",TRUE,TRUE,FALSE,64,-10.5,0
+"E3",929,18,"intro",1,"Unhelpful","No Feedback","Conversation","human_ai",FALSE,FALSE,TRUE,87,-1.5,0
+"E3",936,18,"final",4,"Unhelpful","No Feedback","Conversation","human_ai",FALSE,TRUE,FALSE,100,0,1
+"E3",951,18,"final",4,"Helpful","No Feedback","Conversation","human_ai",FALSE,TRUE,FALSE,100,0,1
+"E3",956,18,"intro",0,"Helpful","No Feedback","Hint","human_ai",TRUE,FALSE,TRUE,80,5,1
+"E3",958,18,"intro",0,"Unhelpful","No Feedback","Hint","human_ai",FALSE,FALSE,FALSE,100,-90,1
+"E3",974,18,"intro",0,"Helpful","Feedback","Hint","human_ai",TRUE,TRUE,FALSE,75,7.5,0
+"E3",981,18,"intro",2,"Helpful","Feedback","Hint","human_ai",TRUE,TRUE,FALSE,93,18,0
+"E3",985,18,"intro",2,"Unhelpful","Feedback","Hint","human_ai",FALSE,FALSE,TRUE,100,-1,0
+"E3",987,18,"final",4,"Helpful","Feedback","Hint","human_ai",FALSE,TRUE,FALSE,96,-1,1
+"E3",1008,19,"intro",2,"Helpful","Feedback","Hint","human_ai",TRUE,TRUE,FALSE,60,-2.5,0
+"E3",1011,19,"intro",2,"Helpful","No Feedback","Hint","human_ai",TRUE,TRUE,FALSE,100,24,0
+"E3",1020,19,"intro",2,"Unhelpful","Feedback","Conversation","human_ai",FALSE,FALSE,FALSE,91,-91,1
+"E3",1027,19,"intro",0,"Unhelpful","No Feedback","Hint","human_ai",FALSE,TRUE,TRUE,100,100,0
+"E3",1030,19,"intro",2,"Helpful","Feedback","Hint","human_ai",TRUE,TRUE,TRUE,95,97.5,1
+"E3",1033,19,"intro",2,"Helpful","No Feedback","Hint","human_ai",TRUE,FALSE,TRUE,97,1.5,1
+"E3",1043,19,"intro",0,"Unhelpful","No Feedback","Conversation","human_ai",FALSE,TRUE,TRUE,97,91,0
+"E3",1063,19,"intro",2,"Unhelpful","No Feedback","Hint","human_ai",FALSE,FALSE,TRUE,77,3.5,0
+"E3",1066,19,"final",4,"Helpful","Feedback","Hint","human_ai",FALSE,TRUE,FALSE,100,0,1
+"E3",1067,19,"intro",0,"Helpful","No Feedback","Conversation","human_ai",TRUE,TRUE,TRUE,88,85.5,1
+"E3",1069,19,"intro",1,"Unhelpful","Feedback","Conversation","human_ai",FALSE,FALSE,FALSE,100,-100,1
+"E3",1077,19,"intro",2,"Unhelpful","Feedback","Hint","human_ai",FALSE,FALSE,TRUE,70,5,0
+"E3",1083,19,"final",4,"Helpful","Feedback","Conversation","human_ai",FALSE,TRUE,FALSE,97,3,1
+"E3",1088,19,"intro",2,"Helpful","No Feedback","Conversation","human_ai",TRUE,FALSE,TRUE,67,16.5,1
+"E3",1094,19,"intro",0,"Helpful","Feedback","Hint","human_ai",TRUE,FALSE,TRUE,65,0,1
+"E3",1101,19,"intro",0,"Helpful","Feedback","Conversation","human_ai",TRUE,FALSE,TRUE,100,0,1
+"E3",1103,19,"intro",3,"Unhelpful","No Feedback","Conversation","human_ai",FALSE,FALSE,TRUE,65,15,0
+"E3",1105,19,"intro",3,"Helpful","Feedback","Conversation","human_ai",TRUE,TRUE,TRUE,100,100,1
+"E3",1106,19,"intro",1,"Helpful","No Feedback","Hint","human_ai",TRUE,TRUE,FALSE,93,-3.5,0
+"E3",1110,19,"intro",3,"Helpful","No Feedback","Conversation","human_ai",TRUE,FALSE,TRUE,84,8,1
+"E3",1111,19,"intro",3,"Unhelpful","No Feedback","Hint","human_ai",FALSE,TRUE,FALSE,80,2.5,1
+"E3",1118,19,"final",4,"Helpful","Feedback","Hint","human_ai",FALSE,TRUE,FALSE,100,19,1
+"E3",1120,19,"intro",3,"Helpful","No Feedback","Hint","human_ai",TRUE,TRUE,TRUE,76,67.5,1
+"E3",1126,19,"intro",2,"Unhelpful","Feedback","Conversation","human_ai",FALSE,TRUE,FALSE,100,0,1
+"E3",1132,19,"intro",0,"Unhelpful","Feedback","Conversation","human_ai",FALSE,TRUE,TRUE,100,100,0
+"E3",1137,19,"intro",1,"Helpful","No Feedback","Conversation","human_ai",TRUE,TRUE,TRUE,89,89,1
+"E3",1154,19,"intro",2,"Helpful","Feedback","Conversation","human_ai",TRUE,TRUE,TRUE,83,81,1
+"E3",1159,19,"intro",2,"Helpful","Feedback","Conversation","human_ai",TRUE,FALSE,TRUE,84,-11.5,1
+"E3",1162,19,"intro",3,"Helpful","Feedback","Hint","human_ai",TRUE,FALSE,TRUE,100,-18,1
+"E3",1164,19,"intro",0,"Helpful","No Feedback","Hint","human_ai",TRUE,FALSE,FALSE,83,-74.5,0
+"E3",1166,19,"intro",3,"Unhelpful","No Feedback","Hint","human_ai",FALSE,FALSE,FALSE,85,-74,1
+"E3",1170,19,"intro",3,"Helpful","No Feedback","Conversation","human_ai",TRUE,TRUE,TRUE,85,75,1
+"E3",1171,19,"intro",1,"Unhelpful","Feedback","Conversation","human_ai",FALSE,TRUE,FALSE,64,2,1
+"E3",1185,19,"intro",0,"Unhelpful","Feedback","Hint","human_ai",FALSE,FALSE,TRUE,73,6,0
+"E3",1194,19,"final",4,"Unhelpful","No Feedback","Conversation","human_ai",FALSE,TRUE,TRUE,85,66.5,0
+"E3",1196,19,"intro",0,"Unhelpful","No Feedback","Conversation","human_ai",FALSE,FALSE,TRUE,48,26,0
+"E3",1198,19,"intro",2,"Unhelpful","Feedback","Conversation","human_ai",FALSE,TRUE,TRUE,43,39.5,0
+"E3",1203,19,"intro",2,"Helpful","No Feedback","Conversation","human_ai",TRUE,FALSE,TRUE,100,0,1
+"E3",1206,19,"intro",3,"Helpful","Feedback","Hint","human_ai",TRUE,FALSE,TRUE,90,-1.5,1
+"E3",1210,19,"final",4,"Unhelpful","No Feedback","Hint","human_ai",FALSE,TRUE,TRUE,100,100,0
+"E3",1213,19,"intro",1,"Unhelpful","Feedback","Hint","human_ai",FALSE,TRUE,FALSE,75,1.5,1
+"E3",1216,19,"intro",2,"Unhelpful","No Feedback","Conversation","human_ai",FALSE,TRUE,FALSE,100,0,1
+"E3",1217,19,"intro",3,"Helpful","No Feedback","Conversation","human_ai",TRUE,TRUE,TRUE,70,76,1
+"E3",1219,19,"final",4,"Unhelpful","Feedback","Hint","human_ai",FALSE,TRUE,FALSE,100,0,1
+"E3",1222,19,"intro",1,"Helpful","Feedback","Conversation","human_ai",TRUE,TRUE,TRUE,100,100,1
+"E3",1223,19,"intro",1,"Helpful","No Feedback","Conversation","human_ai",TRUE,TRUE,FALSE,100,0,0
+"E3",1229,19,"intro",0,"Helpful","No Feedback","Conversation","human_ai",TRUE,TRUE,TRUE,96,98,1
+"E3",1240,19,"final",4,"Unhelpful","No Feedback","Conversation","human_ai",FALSE,TRUE,FALSE,100,5,1
+"E3",1241,19,"intro",0,"Unhelpful","No Feedback","Hint","human_ai",FALSE,FALSE,TRUE,100,0,0
+"E3",1256,19,"intro",1,"Helpful","Feedback","Conversation","human_ai",TRUE,FALSE,FALSE,66,-71.5,0
+"E3",1257,19,"final",4,"Helpful","Feedback","Hint","human_ai",FALSE,TRUE,TRUE,100,69,0
+"E3",1266,19,"intro",3,"Unhelpful","No Feedback","Conversation","human_ai",FALSE,FALSE,FALSE,90,-85,1
+"E3",1270,19,"intro",0,"Helpful","No Feedback","Hint","human_ai",TRUE,TRUE,TRUE,75,75.5,1
+"E3",1274,19,"intro",1,"Helpful","No Feedback","Hint","human_ai",TRUE,TRUE,FALSE,100,0,0
+"E3",1290,19,"intro",2,"Unhelpful","Feedback","Conversation","human_ai",FALSE,TRUE,TRUE,85,92.5,0
+"E3",1295,19,"intro",2,"Helpful","Feedback","Conversation","human_ai",TRUE,TRUE,TRUE,100,100,1
+"E3",1306,19,"intro",2,"Helpful","Feedback","Conversation","human_ai",TRUE,TRUE,FALSE,100,0,0
+"E3",1315,19,"intro",3,"Helpful","No Feedback","Hint","human_ai",TRUE,FALSE,TRUE,80,10,1
+"E3",1327,19,"intro",2,"Unhelpful","No Feedback","Conversation","human_ai",FALSE,TRUE,FALSE,100,0,1
+"E3",1333,19,"intro",0,"Helpful","No Feedback","Hint","human_ai",TRUE,FALSE,TRUE,74,-2.5,1
+"E3",1338,19,"intro",0,"Unhelpful","No Feedback","Hint","human_ai",FALSE,TRUE,FALSE,100,21.5,1
+"E3",1343,19,"intro",3,"Unhelpful","Feedback","Hint","human_ai",FALSE,TRUE,FALSE,87,27.5,1
+"E3",1355,19,"intro",2,"Unhelpful","Feedback","Hint","human_ai",FALSE,TRUE,FALSE,100,0,1
+"E3",1378,19,"final",4,"Unhelpful","No Feedback","Conversation","human_ai",FALSE,TRUE,FALSE,82,0,1
+"E3",1382,19,"intro",1,"Unhelpful","Feedback","Conversation","human_ai",FALSE,TRUE,TRUE,100,87,0
+"E3",1385,19,"intro",3,"Helpful","No Feedback","Hint","human_ai",TRUE,FALSE,TRUE,100,0,1
+"E3",1405,19,"intro",1,"Unhelpful","Feedback","Conversation","human_ai",FALSE,FALSE,TRUE,90,5,0
+"E3",1419,19,"intro",0,"Unhelpful","Feedback","Hint","human_ai",FALSE,FALSE,TRUE,100,-15.5,0
+"E3",1423,19,"intro",2,"Unhelpful","No Feedback","Conversation","human_ai",FALSE,FALSE,FALSE,100,-89.5,1
+"E3",1425,19,"intro",1,"Unhelpful","No Feedback","Hint","human_ai",FALSE,TRUE,FALSE,95,-2.5,1
+"E3",1435,19,"final",4,"Unhelpful","No Feedback","Hint","human_ai",FALSE,TRUE,FALSE,100,0,1
+"E3",1453,19,"intro",1,"Helpful","Feedback","Conversation","human_ai",TRUE,FALSE,TRUE,100,0,1
+"E3",1462,19,"intro",0,"Helpful","No Feedback","Hint","human_ai",TRUE,TRUE,FALSE,100,13,0
+"E3",1494,19,"intro",0,"Helpful","Feedback","Hint","human_ai",TRUE,FALSE,TRUE,96,-5.5,1
+"E3",1499,19,"intro",2,"Helpful","Feedback","Conversation","human_ai",TRUE,FALSE,TRUE,100,0,1
+"E3",1501,19,"intro",2,"Unhelpful","No Feedback","Hint","human_ai",FALSE,FALSE,TRUE,79,-1.5,0
+"E3",1517,19,"intro",0,"Helpful","No Feedback","Hint","human_ai",TRUE,TRUE,FALSE,83,-1,0
+"E3",1519,19,"final",4,"Unhelpful","No Feedback","Hint","human_ai",FALSE,TRUE,FALSE,100,6.5,1
+"E3",1520,19,"intro",2,"Unhelpful","No Feedback","Conversation","human_ai",FALSE,FALSE,TRUE,90,5,0
+"E3",1526,19,"intro",3,"Unhelpful","Feedback","Hint","human_ai",FALSE,TRUE,FALSE,100,0,1
+"E3",1541,19,"final",4,"Unhelpful","No Feedback","Hint","human_ai",FALSE,TRUE,TRUE,100,100,0
+"E3",1561,19,"intro",0,"Helpful","No Feedback","Hint","human_ai",TRUE,FALSE,TRUE,72,14,1
+"E3",1600,19,"intro",1,"Unhelpful","Feedback","Conversation","human_ai",FALSE,FALSE,TRUE,100,0,0
+"E3",1617,19,"intro",0,"Helpful","No Feedback","Conversation","human_ai",TRUE,FALSE,TRUE,100,0,1
+"E3",1626,19,"final",4,"Unhelpful","No Feedback","Conversation","human_ai",FALSE,TRUE,TRUE,100,100,0
+"E3",1637,19,"final",4,"Helpful","No Feedback","Hint","human_ai",FALSE,TRUE,TRUE,100,99.5,0
+"E3",1645,19,"intro",3,"Unhelpful","Feedback","Hint","human_ai",FALSE,FALSE,FALSE,81,-71,1
+"E3",1647,19,"intro",3,"Helpful","No Feedback","Conversation","human_ai",TRUE,FALSE,TRUE,100,0,1
+"E3",1656,19,"intro",1,"Unhelpful","No Feedback","Conversation","human_ai",FALSE,TRUE,FALSE,98,-1,1
+"E3",1658,19,"intro",0,"Unhelpful","Feedback","Conversation","human_ai",FALSE,TRUE,TRUE,94,97,0
+"E3",1663,19,"final",4,"Helpful","Feedback","Conversation","human_ai",FALSE,TRUE,FALSE,100,9,1
+"E3",843,19,"intro",0,"Unhelpful","Feedback","Conversation","human_ai",FALSE,TRUE,TRUE,82,91,0
+"E3",845,19,"intro",3,"Helpful","Feedback","Conversation","human_ai",TRUE,FALSE,TRUE,99,0,1
+"E3",847,19,"intro",1,"Unhelpful","No Feedback","Conversation","human_ai",FALSE,FALSE,TRUE,99,-49.5,0
+"E3",850,19,"final",4,"Helpful","Feedback","Conversation","human_ai",FALSE,TRUE,TRUE,63,68,0
+"E3",859,19,"intro",2,"Unhelpful","No Feedback","Conversation","human_ai",FALSE,FALSE,TRUE,91,4.5,0
+"E3",860,19,"intro",3,"Unhelpful","No Feedback","Hint","human_ai",FALSE,TRUE,FALSE,100,13.5,1
+"E3",883,19,"intro",1,"Helpful","Feedback","Hint","human_ai",TRUE,TRUE,TRUE,86,81,1
+"E3",884,19,"intro",2,"Helpful","Feedback","Conversation","human_ai",TRUE,TRUE,TRUE,80,90,1
+"E3",896,19,"intro",2,"Helpful","Feedback","Hint","human_ai",TRUE,FALSE,TRUE,80,5,1
+"E3",897,19,"intro",3,"Unhelpful","Feedback","Hint","human_ai",FALSE,FALSE,TRUE,100,0,0
+"E3",911,19,"intro",0,"Unhelpful","No Feedback","Conversation","human_ai",FALSE,FALSE,TRUE,53,15,0
+"E3",916,19,"intro",0,"Unhelpful","Feedback","Conversation","human_ai",FALSE,FALSE,TRUE,100,0,0
+"E3",924,19,"intro",2,"Helpful","Feedback","Conversation","human_ai",TRUE,FALSE,TRUE,95,-2.5,1
+"E3",933,19,"intro",3,"Helpful","Feedback","Hint","human_ai",TRUE,TRUE,FALSE,86,30.5,0
+"E3",936,19,"intro",2,"Unhelpful","No Feedback","Conversation","human_ai",FALSE,TRUE,FALSE,100,0,1
+"E3",938,19,"intro",2,"Unhelpful","Feedback","Conversation","human_ai",FALSE,TRUE,FALSE,100,0,1
+"E3",939,19,"intro",2,"Helpful","No Feedback","Hint","human_ai",TRUE,TRUE,FALSE,97,2,0
+"E3",942,19,"intro",0,"Helpful","Feedback","Hint","human_ai",TRUE,TRUE,TRUE,72,78,1
+"E3",943,19,"intro",1,"Helpful","Feedback","Conversation","human_ai",TRUE,TRUE,TRUE,98,99,1
+"E3",944,19,"intro",2,"Unhelpful","Feedback","Hint","human_ai",FALSE,FALSE,TRUE,100,0,0
+"E3",945,19,"intro",0,"Unhelpful","Feedback","Hint","human_ai",FALSE,FALSE,TRUE,100,0,0
+"E3",949,19,"intro",1,"Unhelpful","Feedback","Conversation","human_ai",FALSE,TRUE,FALSE,98,9.5,1
+"E3",954,19,"intro",3,"Unhelpful","Feedback","Conversation","human_ai",FALSE,TRUE,TRUE,76,45,0
+"E3",957,19,"intro",2,"Unhelpful","No Feedback","Hint","human_ai",FALSE,TRUE,FALSE,99,21.5,1
+"E3",966,19,"final",4,"Helpful","No Feedback","Hint","human_ai",FALSE,TRUE,FALSE,100,27.5,1
+"E3",973,19,"intro",0,"Unhelpful","No Feedback","Hint","human_ai",FALSE,FALSE,TRUE,74,1.5,0
+"E3",984,19,"intro",2,"Helpful","No Feedback","Hint","human_ai",TRUE,TRUE,TRUE,100,100,1
+"E3",1014,2,"final",4,"Unhelpful","No Feedback","Hint","human_ai",FALSE,TRUE,TRUE,100,100,0
+"E3",1038,2,"final",4,"Unhelpful","Feedback","Conversation","human_ai",FALSE,TRUE,FALSE,100,1.5,1
+"E3",1067,2,"intro",3,"Helpful","No Feedback","Conversation","human_ai",TRUE,FALSE,TRUE,95,2.5,1
+"E3",1086,2,"final",4,"Helpful","Feedback","Hint","human_ai",FALSE,TRUE,FALSE,100,12.5,1
+"E3",1100,2,"final",4,"Helpful","No Feedback","Hint","human_ai",FALSE,TRUE,FALSE,100,0,1
+"E3",1105,2,"intro",0,"Helpful","Feedback","Conversation","human_ai",TRUE,FALSE,TRUE,90,5,1
+"E3",1110,2,"final",4,"Helpful","No Feedback","Conversation","human_ai",FALSE,TRUE,FALSE,86,0,1
+"E3",1115,2,"intro",1,"Unhelpful","Feedback","Hint","human_ai",FALSE,TRUE,FALSE,59,2,1
+"E3",1136,2,"final",4,"Unhelpful","No Feedback","Hint","human_ai",FALSE,TRUE,FALSE,100,0,1
+"E3",1140,2,"intro",3,"Helpful","Feedback","Hint","human_ai",TRUE,TRUE,FALSE,88,10.5,0
+"E3",1168,2,"intro",0,"Unhelpful","Feedback","Hint","human_ai",FALSE,FALSE,FALSE,60,-67.5,1
+"E3",1180,2,"final",4,"Helpful","Feedback","Conversation","human_ai",FALSE,TRUE,FALSE,100,0,1
+"E3",1183,2,"intro",3,"Unhelpful","No Feedback","Hint","human_ai",FALSE,FALSE,TRUE,59,5.5,0
+"E3",1184,2,"intro",3,"Helpful","No Feedback","Hint","human_ai",TRUE,FALSE,TRUE,85,3.5,1
+"E3",1190,2,"intro",0,"Helpful","Feedback","Hint","human_ai",TRUE,FALSE,TRUE,87,-4.5,1
+"E3",1199,2,"intro",3,"Unhelpful","Feedback","Conversation","human_ai",FALSE,FALSE,FALSE,76,-77,1
+"E3",1205,2,"intro",0,"Unhelpful","Feedback","Conversation","human_ai",FALSE,TRUE,TRUE,87,74,0
+"E3",1224,2,"intro",2,"Unhelpful","No Feedback","Conversation","human_ai",FALSE,TRUE,TRUE,53,37.5,0
+"E3",1226,2,"intro",3,"Unhelpful","No Feedback","Hint","human_ai",FALSE,TRUE,FALSE,81,3,1
+"E3",1230,2,"intro",0,"Unhelpful","Feedback","Conversation","human_ai",FALSE,TRUE,TRUE,81,90.5,0
+"E3",1233,2,"intro",1,"Helpful","No Feedback","Conversation","human_ai",TRUE,TRUE,TRUE,100,100,1
+"E3",1237,2,"intro",3,"Unhelpful","No Feedback","Conversation","human_ai",FALSE,TRUE,TRUE,80,89.5,0
+"E3",1270,2,"intro",3,"Helpful","No Feedback","Hint","human_ai",TRUE,FALSE,TRUE,78,-5,1
+"E3",1302,2,"final",4,"Unhelpful","No Feedback","Conversation","human_ai",FALSE,TRUE,FALSE,100,0,1
+"E3",1340,2,"intro",0,"Unhelpful","Feedback","Conversation","human_ai",FALSE,TRUE,FALSE,95,-2.5,1
+"E3",1345,2,"intro",3,"Helpful","Feedback","Conversation","human_ai",TRUE,TRUE,TRUE,100,96.5,1
+"E3",1352,2,"final",4,"Helpful","Feedback","Conversation","human_ai",FALSE,TRUE,TRUE,100,70,0
+"E3",1353,2,"final",4,"Helpful","No Feedback","Hint","human_ai",FALSE,TRUE,FALSE,100,0,1
+"E3",1360,2,"final",4,"Unhelpful","No Feedback","Hint","human_ai",FALSE,TRUE,FALSE,100,0,1
+"E3",1361,2,"final",4,"Helpful","Feedback","Hint","human_ai",FALSE,TRUE,FALSE,100,0,1
+"E3",1368,2,"final",4,"Helpful","Feedback","Conversation","human_ai",FALSE,TRUE,TRUE,100,100,0
+"E3",1370,2,"final",4,"Helpful","Feedback","Hint","human_ai",FALSE,TRUE,FALSE,100,0,1
+"E3",1375,2,"final",4,"Unhelpful","No Feedback","Hint","human_ai",FALSE,TRUE,FALSE,100,0,1
+"E3",1382,2,"intro",3,"Unhelpful","Feedback","Conversation","human_ai",FALSE,FALSE,TRUE,80,2.5,0
+"E3",1386,2,"final",4,"Helpful","No Feedback","Hint","human_ai",FALSE,TRUE,TRUE,100,90,0
+"E3",1396,2,"intro",0,"Helpful","Feedback","Hint","human_ai",TRUE,FALSE,TRUE,95,2.5,1
+"E3",1406,2,"final",4,"Unhelpful","Feedback","Hint","human_ai",FALSE,TRUE,FALSE,96,4,1
+"E3",1409,2,"final",4,"Helpful","Feedback","Hint","human_ai",FALSE,TRUE,FALSE,100,0,1
+"E3",1420,2,"intro",3,"Unhelpful","Feedback","Hint","human_ai",FALSE,FALSE,TRUE,100,0,0
+"E3",1437,2,"final",4,"Helpful","Feedback","Hint","human_ai",FALSE,TRUE,FALSE,100,5,1
+"E3",1504,2,"intro",2,"Helpful","Feedback","Conversation","human_ai",TRUE,FALSE,TRUE,67,4,1
+"E3",1520,2,"final",4,"Unhelpful","No Feedback","Conversation","human_ai",FALSE,TRUE,TRUE,100,88,0
+"E3",1523,2,"intro",0,"Helpful","Feedback","Conversation","human_ai",TRUE,FALSE,TRUE,81,0,1
+"E3",1561,2,"final",4,"Helpful","No Feedback","Hint","human_ai",FALSE,TRUE,FALSE,92,19,1
+"E3",1562,2,"intro",0,"Helpful","Feedback","Conversation","human_ai",TRUE,FALSE,TRUE,90,5,1
+"E3",1567,2,"intro",3,"Unhelpful","No Feedback","Conversation","human_ai",FALSE,FALSE,TRUE,80,-2,0
+"E3",1572,2,"final",4,"Helpful","No Feedback","Conversation","human_ai",FALSE,TRUE,TRUE,100,70,0
+"E3",1592,2,"final",4,"Helpful","No Feedback","Conversation","human_ai",FALSE,TRUE,FALSE,100,0,1
+"E3",1603,2,"intro",1,"Unhelpful","No Feedback","Hint","human_ai",FALSE,FALSE,FALSE,96,-84,1
+"E3",1613,2,"final",4,"Helpful","No Feedback","Hint","human_ai",FALSE,TRUE,FALSE,100,0,1
+"E3",1644,2,"intro",1,"Helpful","No Feedback","Hint","human_ai",TRUE,TRUE,FALSE,90,0,0
+"E3",1645,2,"intro",0,"Unhelpful","Feedback","Hint","human_ai",FALSE,FALSE,TRUE,74,11.5,0
+"E3",1649,2,"intro",0,"Helpful","Feedback","Hint","human_ai",TRUE,TRUE,FALSE,59,1,0
+"E3",1650,2,"intro",2,"Unhelpful","No Feedback","Conversation","human_ai",FALSE,FALSE,TRUE,82,8.5,0
+"E3",866,2,"final",4,"Unhelpful","Feedback","Conversation","human_ai",FALSE,TRUE,FALSE,100,0,1
+"E3",873,2,"final",4,"Helpful","No Feedback","Conversation","human_ai",FALSE,TRUE,TRUE,100,100,0
+"E3",881,2,"intro",2,"Helpful","No Feedback","Conversation","human_ai",TRUE,FALSE,TRUE,96,2,1
+"E3",882,2,"final",4,"Helpful","No Feedback","Hint","human_ai",FALSE,TRUE,TRUE,100,100,0
+"E3",887,2,"intro",2,"Unhelpful","No Feedback","Hint","human_ai",FALSE,TRUE,FALSE,87,4.5,1
+"E3",913,2,"intro",1,"Helpful","Feedback","Hint","human_ai",TRUE,FALSE,TRUE,100,0,1
+"E3",933,2,"final",4,"Helpful","Feedback","Hint","human_ai",FALSE,TRUE,FALSE,100,7.5,1
+"E3",940,2,"intro",1,"Helpful","Feedback","Conversation","human_ai",TRUE,TRUE,TRUE,100,100,1
+"E3",967,2,"intro",2,"Unhelpful","Feedback","Conversation","human_ai",FALSE,TRUE,TRUE,87,73.5,0
+"E3",976,2,"final",4,"Unhelpful","No Feedback","Hint","human_ai",FALSE,TRUE,FALSE,100,0,1
+"E3",989,2,"final",4,"Unhelpful","No Feedback","Hint","human_ai",FALSE,TRUE,TRUE,66,74.5,0
+"E3",994,2,"final",4,"Helpful","No Feedback","Conversation","human_ai",FALSE,TRUE,FALSE,100,0,1
+"E3",998,2,"final",4,"Helpful","No Feedback","Hint","human_ai",FALSE,TRUE,FALSE,100,0,1
+"E3",1021,20,"intro",3,"Helpful","Feedback","Conversation","human_ai",TRUE,TRUE,FALSE,100,10,0
+"E3",1033,20,"intro",3,"Helpful","No Feedback","Hint","human_ai",TRUE,TRUE,FALSE,93,27,0
+"E3",1082,20,"intro",2,"Unhelpful","Feedback","Conversation","human_ai",FALSE,FALSE,TRUE,78,11,0
+"E3",1089,20,"intro",0,"Helpful","No Feedback","Hint","human_ai",TRUE,FALSE,TRUE,69,2,1
+"E3",1091,20,"intro",2,"Helpful","Feedback","Hint","human_ai",TRUE,TRUE,FALSE,71,-4.5,0
+"E3",1095,20,"intro",1,"Helpful","Feedback","Conversation","human_ai",TRUE,FALSE,TRUE,82,-7,1
+"E3",1106,20,"intro",3,"Helpful","No Feedback","Hint","human_ai",TRUE,TRUE,FALSE,80,-0.5,0
+"E3",1107,20,"final",4,"Helpful","No Feedback","Hint","human_ai",FALSE,TRUE,TRUE,100,91,0
+"E3",1110,20,"intro",0,"Helpful","No Feedback","Conversation","human_ai",TRUE,TRUE,FALSE,77,8.5,0
+"E3",1119,20,"intro",1,"Unhelpful","Feedback","Hint","human_ai",FALSE,TRUE,FALSE,80,2.5,1
+"E3",1123,20,"intro",2,"Unhelpful","No Feedback","Conversation","human_ai",FALSE,FALSE,TRUE,91,4.5,0
+"E3",1133,20,"intro",2,"Unhelpful","Feedback","Hint","human_ai",FALSE,TRUE,FALSE,82,-4,1
+"E3",1140,20,"intro",2,"Helpful","Feedback","Hint","human_ai",TRUE,FALSE,TRUE,96,-16.5,1
+"E3",1141,20,"intro",1,"Helpful","No Feedback","Hint","human_ai",TRUE,TRUE,FALSE,87,8,0
+"E3",1144,20,"intro",0,"Helpful","No Feedback","Hint","human_ai",TRUE,TRUE,TRUE,75,54,1
+"E3",1156,20,"intro",1,"Unhelpful","No Feedback","Conversation","human_ai",FALSE,FALSE,TRUE,80,-1.5,0
+"E3",1157,20,"intro",0,"Helpful","No Feedback","Conversation","human_ai",TRUE,TRUE,TRUE,70,82.5,1
+"E3",1169,20,"intro",3,"Unhelpful","No Feedback","Hint","human_ai",FALSE,TRUE,FALSE,83,1,1
+"E3",1188,20,"intro",2,"Unhelpful","No Feedback","Hint","human_ai",FALSE,FALSE,TRUE,94,-1,0
+"E3",1194,20,"intro",2,"Unhelpful","No Feedback","Conversation","human_ai",FALSE,FALSE,TRUE,76,4.5,0
+"E3",1211,20,"intro",1,"Unhelpful","Feedback","Conversation","human_ai",FALSE,FALSE,TRUE,90,0.5,0
+"E3",1216,20,"intro",0,"Unhelpful","No Feedback","Conversation","human_ai",FALSE,FALSE,TRUE,100,0,0
+"E3",1225,20,"intro",1,"Unhelpful","Feedback","Conversation","human_ai",FALSE,FALSE,TRUE,93,-16.5,0
+"E3",1255,20,"intro",2,"Unhelpful","Feedback","Conversation","human_ai",FALSE,FALSE,FALSE,69,-68.5,1
+"E3",1270,20,"intro",1,"Helpful","No Feedback","Hint","human_ai",TRUE,TRUE,FALSE,99,19.5,0
+"E3",1274,20,"intro",2,"Helpful","No Feedback","Hint","human_ai",TRUE,TRUE,TRUE,100,90,1
+"E3",1280,20,"intro",2,"Unhelpful","Feedback","Hint","human_ai",FALSE,FALSE,TRUE,70,-20,0
+"E3",1307,20,"intro",2,"Unhelpful","No Feedback","Hint","human_ai",FALSE,FALSE,TRUE,65,1.5,0
+"E3",1310,20,"intro",3,"Unhelpful","No Feedback","Hint","human_ai",FALSE,FALSE,TRUE,73,-3.5,0
+"E3",1315,20,"intro",0,"Helpful","No Feedback","Hint","human_ai",TRUE,TRUE,FALSE,85,10,0
+"E3",1340,20,"intro",1,"Unhelpful","Feedback","Conversation","human_ai",FALSE,FALSE,TRUE,98,1,0
+"E3",1354,20,"intro",1,"Helpful","Feedback","Hint","human_ai",TRUE,FALSE,TRUE,99,-0.5,1
+"E3",1355,20,"intro",0,"Unhelpful","Feedback","Hint","human_ai",FALSE,FALSE,TRUE,84,7.5,0
+"E3",1360,20,"intro",1,"Unhelpful","No Feedback","Hint","human_ai",FALSE,FALSE,TRUE,100,0,0
+"E3",1383,20,"intro",2,"Unhelpful","Feedback","Hint","human_ai",FALSE,FALSE,TRUE,100,-18,0
+"E3",1395,20,"intro",1,"Unhelpful","No Feedback","Hint","human_ai",FALSE,FALSE,TRUE,58,-3,0
+"E3",1396,20,"intro",3,"Helpful","Feedback","Hint","human_ai",TRUE,TRUE,FALSE,100,0,0
+"E3",1419,20,"intro",3,"Unhelpful","Feedback","Hint","human_ai",FALSE,FALSE,TRUE,100,-37,0
+"E3",1425,20,"intro",2,"Unhelpful","No Feedback","Hint","human_ai",FALSE,FALSE,TRUE,100,-20,0
+"E3",1427,20,"intro",3,"Helpful","Feedback","Hint","human_ai",TRUE,TRUE,TRUE,100,100,1
+"E3",1451,20,"intro",0,"Helpful","Feedback","Conversation","human_ai",TRUE,TRUE,TRUE,100,100,1
+"E3",1462,20,"intro",3,"Helpful","No Feedback","Hint","human_ai",TRUE,FALSE,TRUE,59,0.5,1
+"E3",1463,20,"intro",2,"Unhelpful","No Feedback","Hint","human_ai",FALSE,FALSE,TRUE,82,-6,0
+"E3",1488,20,"final",4,"Unhelpful","Feedback","Conversation","human_ai",FALSE,TRUE,TRUE,100,72,0
+"E3",1519,20,"intro",1,"Unhelpful","No Feedback","Hint","human_ai",FALSE,TRUE,FALSE,80,36.5,1
+"E3",1544,20,"final",4,"Helpful","No Feedback","Hint","human_ai",FALSE,TRUE,FALSE,100,4.5,1
+"E3",1567,20,"intro",2,"Unhelpful","No Feedback","Conversation","human_ai",FALSE,FALSE,TRUE,82,-7,0
+"E3",1569,20,"intro",1,"Unhelpful","Feedback","Hint","human_ai",FALSE,FALSE,TRUE,85,-29,0
+"E3",1589,20,"intro",2,"Unhelpful","Feedback","Conversation","human_ai",FALSE,TRUE,FALSE,90,6.5,1
+"E3",1610,20,"intro",1,"Unhelpful","No Feedback","Conversation","human_ai",FALSE,TRUE,TRUE,100,55,0
+"E3",1626,20,"intro",0,"Unhelpful","No Feedback","Conversation","human_ai",FALSE,TRUE,TRUE,91,95.5,0
+"E3",1637,20,"intro",2,"Helpful","No Feedback","Hint","human_ai",TRUE,FALSE,TRUE,100,-0.5,1
+"E3",1641,20,"intro",3,"Helpful","No Feedback","Hint","human_ai",TRUE,TRUE,FALSE,100,0,0
+"E3",1650,20,"intro",3,"Unhelpful","No Feedback","Conversation","human_ai",FALSE,FALSE,TRUE,85,7.5,0
+"E3",1658,20,"intro",3,"Unhelpful","Feedback","Conversation","human_ai",FALSE,FALSE,TRUE,100,0,0
+"E3",847,20,"intro",2,"Unhelpful","No Feedback","Conversation","human_ai",FALSE,FALSE,TRUE,91,4.5,0
+"E3",852,20,"intro",0,"Unhelpful","Feedback","Conversation","human_ai",FALSE,FALSE,TRUE,55,17.5,0
+"E3",860,20,"intro",0,"Unhelpful","No Feedback","Hint","human_ai",FALSE,FALSE,TRUE,90,-4.5,0
+"E3",883,20,"intro",3,"Helpful","Feedback","Hint","human_ai",TRUE,TRUE,FALSE,84,7.5,0
+"E3",884,20,"intro",1,"Helpful","Feedback","Conversation","human_ai",TRUE,TRUE,TRUE,81,90.5,1
+"E3",888,20,"intro",3,"Unhelpful","No Feedback","Conversation","human_ai",FALSE,FALSE,TRUE,72,6,0
+"E3",892,20,"intro",3,"Helpful","Feedback","Hint","human_ai",TRUE,TRUE,FALSE,96,10.5,0
+"E3",909,20,"intro",0,"Unhelpful","No Feedback","Conversation","human_ai",FALSE,FALSE,TRUE,100,-12.5,0
+"E3",924,20,"intro",0,"Helpful","Feedback","Conversation","human_ai",TRUE,TRUE,TRUE,100,77.5,1
+"E3",926,20,"intro",2,"Helpful","No Feedback","Conversation","human_ai",TRUE,TRUE,TRUE,53,45.5,1
+"E3",941,20,"intro",3,"Unhelpful","No Feedback","Conversation","human_ai",FALSE,FALSE,FALSE,97,-90,1
+"E3",948,20,"intro",0,"Unhelpful","No Feedback","Hint","human_ai",FALSE,TRUE,FALSE,100,0,1
+"E3",953,20,"intro",3,"Helpful","Feedback","Conversation","human_ai",TRUE,TRUE,TRUE,80,78,1
+"E3",970,20,"intro",2,"Unhelpful","No Feedback","Hint","human_ai",FALSE,FALSE,TRUE,100,0,0
+"E3",983,20,"intro",2,"Helpful","Feedback","Conversation","human_ai",TRUE,FALSE,TRUE,79,10.5,1
+"E3",1005,21,"intro",2,"Helpful","Feedback","Conversation","human_ai",TRUE,FALSE,TRUE,100,0,1
+"E3",1008,21,"intro",1,"Helpful","Feedback","Hint","human_ai",TRUE,FALSE,TRUE,67,-17,1
+"E3",1014,21,"intro",1,"Unhelpful","No Feedback","Hint","human_ai",FALSE,FALSE,TRUE,81,9.5,0
+"E3",1015,21,"intro",0,"Helpful","No Feedback","Hint","human_ai",TRUE,FALSE,TRUE,96,2,1
+"E3",1016,21,"intro",2,"Unhelpful","No Feedback","Conversation","human_ai",FALSE,TRUE,FALSE,100,0,1
+"E3",1029,21,"intro",1,"Unhelpful","Feedback","Hint","human_ai",FALSE,TRUE,FALSE,100,0,1
+"E3",1030,21,"intro",0,"Helpful","Feedback","Hint","human_ai",TRUE,FALSE,TRUE,95,2.5,1
+"E3",1036,21,"intro",3,"Unhelpful","Feedback","Conversation","human_ai",FALSE,FALSE,TRUE,99,-0.5,0
+"E3",1039,21,"intro",3,"Unhelpful","No Feedback","Hint","human_ai",FALSE,FALSE,TRUE,64,-32,0
+"E3",1050,21,"intro",2,"Unhelpful","Feedback","Conversation","human_ai",FALSE,FALSE,TRUE,100,0,0
+"E3",1083,21,"intro",1,"Helpful","Feedback","Conversation","human_ai",TRUE,TRUE,TRUE,100,98.5,1
+"E3",1084,21,"intro",1,"Helpful","Feedback","Hint","human_ai",TRUE,TRUE,TRUE,70,70,1
+"E3",1089,21,"intro",1,"Helpful","No Feedback","Hint","human_ai",TRUE,FALSE,TRUE,67,2.5,1
+"E3",1120,21,"intro",0,"Helpful","No Feedback","Hint","human_ai",TRUE,FALSE,TRUE,81,-8,1
+"E3",1126,21,"intro",3,"Unhelpful","Feedback","Conversation","human_ai",FALSE,FALSE,TRUE,100,0,0
+"E3",1132,21,"intro",2,"Unhelpful","Feedback","Conversation","human_ai",FALSE,TRUE,TRUE,100,65,0
+"E3",1142,21,"intro",3,"Helpful","No Feedback","Hint","human_ai",TRUE,TRUE,FALSE,100,18,0
+"E3",1149,21,"intro",2,"Unhelpful","No Feedback","Conversation","human_ai",FALSE,FALSE,TRUE,98,1,0
+"E3",1154,21,"intro",0,"Helpful","Feedback","Conversation","human_ai",TRUE,TRUE,TRUE,82,91,1
+"E3",1159,21,"intro",1,"Helpful","Feedback","Conversation","human_ai",TRUE,TRUE,FALSE,80,14,0
+"E3",1163,21,"intro",2,"Unhelpful","Feedback","Conversation","human_ai",FALSE,TRUE,FALSE,99,2,1
+"E3",1164,21,"intro",2,"Helpful","No Feedback","Hint","human_ai",TRUE,TRUE,FALSE,93,31,0
+"E3",1184,21,"final",4,"Helpful","No Feedback","Hint","human_ai",FALSE,TRUE,FALSE,92,9.5,1
+"E3",1186,21,"intro",0,"Helpful","Feedback","Conversation","human_ai",TRUE,FALSE,TRUE,84,8,1
+"E3",1189,21,"intro",0,"Helpful","Feedback","Hint","human_ai",TRUE,TRUE,TRUE,100,83.5,1
+"E3",1194,21,"intro",1,"Unhelpful","No Feedback","Conversation","human_ai",FALSE,FALSE,TRUE,85,-7.5,0
+"E3",1199,21,"intro",1,"Unhelpful","Feedback","Conversation","human_ai",FALSE,FALSE,TRUE,73,0,0
+"E3",1211,21,"intro",3,"Unhelpful","Feedback","Conversation","human_ai",FALSE,TRUE,TRUE,100,89.5,0
+"E3",1213,21,"intro",3,"Unhelpful","Feedback","Hint","human_ai",FALSE,FALSE,TRUE,80,-6,0
+"E3",1217,21,"intro",2,"Helpful","No Feedback","Conversation","human_ai",TRUE,FALSE,TRUE,92,4,1
+"E3",1224,21,"intro",3,"Unhelpful","No Feedback","Conversation","human_ai",FALSE,FALSE,FALSE,65,-35,1
+"E3",1258,21,"intro",0,"Unhelpful","Feedback","Conversation","human_ai",FALSE,TRUE,TRUE,76,66,0
+"E3",1261,21,"final",4,"Unhelpful","Feedback","Hint","human_ai",FALSE,TRUE,FALSE,90,11,1
+"E3",1262,21,"intro",1,"Helpful","No Feedback","Conversation","human_ai",TRUE,TRUE,TRUE,87,62.5,1
+"E3",1280,21,"intro",3,"Unhelpful","Feedback","Hint","human_ai",FALSE,TRUE,FALSE,80,5,1
+"E3",1292,21,"intro",3,"Unhelpful","Feedback","Conversation","human_ai",FALSE,FALSE,TRUE,75,4.5,0
+"E3",1302,21,"intro",2,"Unhelpful","No Feedback","Conversation","human_ai",FALSE,FALSE,TRUE,77,11.5,0
+"E3",1312,21,"intro",3,"Helpful","No Feedback","Hint","human_ai",TRUE,TRUE,FALSE,100,1,0
+"E3",1313,21,"intro",2,"Unhelpful","Feedback","Hint","human_ai",FALSE,TRUE,FALSE,70,0,1
+"E3",1316,21,"intro",3,"Unhelpful","Feedback","Conversation","human_ai",FALSE,FALSE,TRUE,79,-7,0
+"E3",1318,21,"intro",1,"Unhelpful","No Feedback","Hint","human_ai",FALSE,FALSE,TRUE,90,5,0
+"E3",1324,21,"intro",1,"Helpful","Feedback","Hint","human_ai",TRUE,FALSE,TRUE,83,-6.5,1
+"E3",1334,21,"intro",3,"Helpful","No Feedback","Hint","human_ai",TRUE,FALSE,TRUE,95,-10,1
+"E3",1360,21,"intro",3,"Unhelpful","No Feedback","Hint","human_ai",FALSE,TRUE,FALSE,100,0,1
+"E3",1385,21,"intro",0,"Helpful","No Feedback","Hint","human_ai",TRUE,TRUE,FALSE,95,1.5,0
+"E3",1425,21,"intro",0,"Unhelpful","No Feedback","Hint","human_ai",FALSE,FALSE,TRUE,100,0,0
+"E3",1434,21,"final",4,"Unhelpful","Feedback","Conversation","human_ai",FALSE,TRUE,FALSE,99,-0.5,1
+"E3",1437,21,"intro",3,"Helpful","Feedback","Hint","human_ai",TRUE,TRUE,FALSE,100,9,0
+"E3",1443,21,"final",4,"Helpful","No Feedback","Hint","human_ai",FALSE,TRUE,FALSE,100,0,1
+"E3",1450,21,"intro",2,"Unhelpful","No Feedback","Hint","human_ai",FALSE,TRUE,FALSE,67,6,1
+"E3",1452,21,"intro",1,"Helpful","Feedback","Conversation","human_ai",TRUE,FALSE,TRUE,60,-12.5,1
+"E3",1519,21,"intro",2,"Unhelpful","No Feedback","Hint","human_ai",FALSE,FALSE,TRUE,88,-41,0
+"E3",1589,21,"intro",1,"Unhelpful","Feedback","Conversation","human_ai",FALSE,FALSE,TRUE,77,4,0
+"E3",1626,21,"intro",1,"Unhelpful","No Feedback","Conversation","human_ai",FALSE,FALSE,TRUE,77,2.5,0
+"E3",1628,21,"intro",3,"Unhelpful","No Feedback","Conversation","human_ai",FALSE,FALSE,TRUE,70,-5,0
+"E3",1663,21,"intro",3,"Helpful","Feedback","Conversation","human_ai",TRUE,TRUE,FALSE,92,29.5,0
+"E3",1668,21,"intro",3,"Unhelpful","No Feedback","Conversation","human_ai",FALSE,TRUE,TRUE,81,90.5,0
+"E3",873,21,"intro",0,"Helpful","No Feedback","Conversation","human_ai",TRUE,FALSE,TRUE,100,0,1
+"E3",888,21,"final",4,"Unhelpful","No Feedback","Conversation","human_ai",FALSE,TRUE,FALSE,100,25.5,1
+"E3",893,21,"final",4,"Helpful","Feedback","Conversation","human_ai",FALSE,TRUE,TRUE,85,91.5,0
+"E3",909,21,"intro",3,"Unhelpful","No Feedback","Conversation","human_ai",FALSE,FALSE,TRUE,100,0,0
+"E3",919,21,"intro",1,"Helpful","Feedback","Hint","human_ai",TRUE,TRUE,FALSE,74,6.5,0
+"E3",923,21,"intro",3,"Unhelpful","Feedback","Conversation","human_ai",FALSE,FALSE,TRUE,72,4,0
+"E3",936,21,"intro",1,"Unhelpful","No Feedback","Conversation","human_ai",FALSE,TRUE,FALSE,100,0,1
+"E3",945,21,"intro",3,"Unhelpful","Feedback","Hint","human_ai",FALSE,FALSE,TRUE,93,3.5,0
+"E3",951,21,"intro",1,"Helpful","No Feedback","Conversation","human_ai",TRUE,TRUE,TRUE,90,85,1
+"E3",956,21,"final",4,"Helpful","No Feedback","Hint","human_ai",FALSE,TRUE,FALSE,100,0,1
+"E3",961,21,"intro",2,"Unhelpful","No Feedback","Hint","human_ai",FALSE,FALSE,TRUE,94,-4.5,0
+"E3",967,21,"intro",1,"Unhelpful","Feedback","Conversation","human_ai",FALSE,FALSE,TRUE,77,4,0
+"E3",983,21,"intro",3,"Helpful","Feedback","Conversation","human_ai",TRUE,TRUE,TRUE,99,99.5,1
+"E3",997,21,"intro",3,"Unhelpful","Feedback","Hint","human_ai",FALSE,TRUE,FALSE,100,0,1
+"E3",1020,22,"intro",0,"Unhelpful","Feedback","Conversation","human_ai",FALSE,TRUE,FALSE,90,-2.5,1
+"E3",1070,22,"intro",1,"Unhelpful","No Feedback","Conversation","human_ai",FALSE,FALSE,TRUE,98,1,0
+"E3",1082,22,"intro",1,"Unhelpful","Feedback","Conversation","human_ai",FALSE,FALSE,TRUE,80,10,0
+"E3",1103,22,"final",4,"Unhelpful","No Feedback","Conversation","human_ai",FALSE,TRUE,TRUE,69,80,0
+"E3",1124,22,"intro",3,"Helpful","No Feedback","Conversation","human_ai",TRUE,FALSE,TRUE,100,0,1
+"E3",1136,22,"intro",3,"Unhelpful","No Feedback","Hint","human_ai",FALSE,FALSE,TRUE,68,16,0
+"E3",1156,22,"intro",2,"Unhelpful","No Feedback","Conversation","human_ai",FALSE,FALSE,TRUE,87,1,0
+"E3",1159,22,"intro",0,"Helpful","Feedback","Conversation","human_ai",TRUE,TRUE,TRUE,70,65,1
+"E3",1170,22,"intro",2,"Helpful","No Feedback","Conversation","human_ai",TRUE,TRUE,TRUE,93,83.5,1
+"E3",1207,22,"intro",3,"Helpful","No Feedback","Hint","human_ai",TRUE,FALSE,TRUE,93,-8.5,1
+"E3",1223,22,"intro",2,"Helpful","No Feedback","Conversation","human_ai",TRUE,TRUE,FALSE,100,10,0
+"E3",1225,22,"intro",0,"Unhelpful","Feedback","Conversation","human_ai",FALSE,FALSE,FALSE,95,-65,1
+"E3",1258,22,"final",4,"Unhelpful","Feedback","Conversation","human_ai",FALSE,TRUE,FALSE,85,3.5,1
+"E3",1278,22,"intro",1,"Unhelpful","Feedback","Hint","human_ai",FALSE,FALSE,TRUE,83,8.5,0
+"E3",1286,22,"intro",2,"Unhelpful","Feedback","Conversation","human_ai",FALSE,FALSE,TRUE,93,-8.5,0
+"E3",1290,22,"intro",3,"Unhelpful","Feedback","Conversation","human_ai",FALSE,TRUE,TRUE,80,90,0
+"E3",1294,22,"intro",1,"Unhelpful","No Feedback","Conversation","human_ai",FALSE,FALSE,TRUE,72,-2.5,0
+"E3",1303,22,"intro",0,"Helpful","No Feedback","Hint","human_ai",TRUE,TRUE,FALSE,91,24,0
+"E3",1305,22,"intro",3,"Helpful","Feedback","Hint","human_ai",TRUE,TRUE,FALSE,75,24.5,0
+"E3",1306,22,"intro",1,"Helpful","Feedback","Conversation","human_ai",TRUE,TRUE,FALSE,100,16.5,0
+"E3",1310,22,"intro",2,"Unhelpful","No Feedback","Hint","human_ai",FALSE,FALSE,TRUE,78,-2.5,0
+"E3",1356,22,"intro",3,"Helpful","No Feedback","Conversation","human_ai",TRUE,TRUE,TRUE,89,84.5,1
+"E3",1368,22,"intro",2,"Helpful","Feedback","Conversation","human_ai",TRUE,TRUE,TRUE,100,93.5,1
+"E3",1429,22,"final",4,"Unhelpful","No Feedback","Conversation","human_ai",FALSE,TRUE,TRUE,72,71,0
+"E3",1450,22,"intro",1,"Unhelpful","No Feedback","Hint","human_ai",FALSE,FALSE,TRUE,74,0.5,0
+"E3",1452,22,"intro",3,"Helpful","Feedback","Conversation","human_ai",TRUE,TRUE,TRUE,52,76,1
+"E3",1466,22,"intro",3,"Helpful","Feedback","Hint","human_ai",TRUE,TRUE,FALSE,78,5.5,0
+"E3",1471,22,"intro",2,"Helpful","No Feedback","Conversation","human_ai",TRUE,TRUE,TRUE,100,100,1
+"E3",1494,22,"intro",2,"Helpful","Feedback","Hint","human_ai",TRUE,TRUE,FALSE,99,19.5,0
+"E3",1601,22,"intro",2,"Unhelpful","No Feedback","Conversation","human_ai",FALSE,FALSE,TRUE,93,3.5,0
+"E3",1654,22,"intro",3,"Unhelpful","No Feedback","Hint","human_ai",FALSE,FALSE,TRUE,90,-7,0
+"E3",1658,22,"intro",1,"Unhelpful","Feedback","Conversation","human_ai",FALSE,FALSE,TRUE,100,-3,0
+"E3",843,22,"final",4,"Unhelpful","Feedback","Conversation","human_ai",FALSE,TRUE,FALSE,100,0,1
+"E3",873,22,"intro",2,"Helpful","No Feedback","Conversation","human_ai",TRUE,TRUE,TRUE,91,94.5,1
+"E3",896,22,"final",4,"Helpful","Feedback","Hint","human_ai",FALSE,TRUE,FALSE,100,20,1
+"E3",899,22,"intro",0,"Unhelpful","Feedback","Hint","human_ai",FALSE,FALSE,FALSE,71,-85.5,1
+"E3",938,22,"intro",1,"Unhelpful","Feedback","Conversation","human_ai",FALSE,FALSE,TRUE,100,0,0
+"E3",969,22,"intro",3,"Helpful","No Feedback","Conversation","human_ai",TRUE,FALSE,TRUE,94,3,1
+"E3",996,22,"intro",2,"Helpful","Feedback","Hint","human_ai",TRUE,FALSE,TRUE,100,0,1
+"E3",1003,23,"intro",3,"Unhelpful","No Feedback","Conversation","human_ai",FALSE,TRUE,TRUE,92,94.5,0
+"E3",1084,23,"intro",3,"Helpful","Feedback","Hint","human_ai",TRUE,FALSE,TRUE,77,6.5,1
+"E3",1088,23,"final",4,"Helpful","No Feedback","Conversation","human_ai",FALSE,TRUE,TRUE,82,79.5,0
+"E3",1097,23,"intro",3,"Unhelpful","No Feedback","Hint","human_ai",FALSE,FALSE,FALSE,83,-84.5,1
+"E3",1103,23,"intro",1,"Unhelpful","No Feedback","Conversation","human_ai",FALSE,TRUE,FALSE,64,-5.5,1
+"E3",1123,23,"final",4,"Unhelpful","No Feedback","Conversation","human_ai",FALSE,TRUE,TRUE,99,99.5,0
+"E3",1129,23,"intro",3,"Helpful","Feedback","Hint","human_ai",TRUE,FALSE,TRUE,100,-1.5,1
+"E3",1138,23,"intro",1,"Unhelpful","Feedback","Hint","human_ai",FALSE,FALSE,TRUE,63,0.5,0
+"E3",1158,23,"intro",1,"Helpful","No Feedback","Hint","human_ai",TRUE,FALSE,TRUE,55,5.5,1
+"E3",1168,23,"intro",2,"Unhelpful","Feedback","Hint","human_ai",FALSE,TRUE,FALSE,100,33.5,1
+"E3",1210,23,"intro",0,"Unhelpful","No Feedback","Hint","human_ai",FALSE,TRUE,TRUE,73,86.5,0
+"E3",1215,23,"intro",0,"Helpful","No Feedback","Hint","human_ai",TRUE,FALSE,TRUE,69,-5.5,1
+"E3",1221,23,"intro",0,"Unhelpful","Feedback","Hint","human_ai",FALSE,TRUE,TRUE,91,85.5,0
+"E3",1229,23,"intro",2,"Helpful","No Feedback","Conversation","human_ai",TRUE,FALSE,TRUE,94,3,1
+"E3",1230,23,"intro",3,"Unhelpful","Feedback","Conversation","human_ai",FALSE,FALSE,FALSE,92,-87,1
+"E3",1234,23,"intro",1,"Helpful","Feedback","Conversation","human_ai",TRUE,TRUE,FALSE,100,0,0
+"E3",1247,23,"intro",0,"Helpful","Feedback","Conversation","human_ai",TRUE,TRUE,TRUE,80,90,1
+"E3",1274,23,"intro",3,"Helpful","No Feedback","Hint","human_ai",TRUE,FALSE,TRUE,100,0,1
+"E3",1305,23,"intro",2,"Helpful","Feedback","Hint","human_ai",TRUE,FALSE,TRUE,65,1,1
+"E3",1321,23,"intro",3,"Unhelpful","Feedback","Conversation","human_ai",FALSE,TRUE,FALSE,64,32,1
+"E3",1325,23,"intro",3,"Helpful","Feedback","Conversation","human_ai",TRUE,FALSE,TRUE,77,9.5,1
+"E3",1332,23,"intro",1,"Unhelpful","No Feedback","Hint","human_ai",FALSE,TRUE,FALSE,89,16,1
+"E3",1344,23,"intro",0,"Unhelpful","Feedback","Conversation","human_ai",FALSE,FALSE,TRUE,90,4.5,0
+"E3",1369,23,"intro",1,"Unhelpful","No Feedback","Conversation","human_ai",FALSE,TRUE,FALSE,100,0,1
+"E3",1389,23,"intro",3,"Unhelpful","No Feedback","Conversation","human_ai",FALSE,FALSE,FALSE,100,-100,1
+"E3",1391,23,"final",4,"Unhelpful","No Feedback","Conversation","human_ai",FALSE,TRUE,FALSE,97,2.5,1
+"E3",1393,23,"final",4,"Helpful","No Feedback","Hint","human_ai",FALSE,TRUE,FALSE,100,0,1
+"E3",1405,23,"intro",2,"Unhelpful","Feedback","Conversation","human_ai",FALSE,FALSE,TRUE,92,4,0
+"E3",1427,23,"final",4,"Helpful","Feedback","Hint","human_ai",FALSE,TRUE,TRUE,100,100,0
+"E3",1452,23,"intro",0,"Helpful","Feedback","Conversation","human_ai",TRUE,TRUE,TRUE,51,45.5,1
+"E3",1526,23,"intro",1,"Unhelpful","Feedback","Hint","human_ai",FALSE,FALSE,TRUE,89,-2.5,0
+"E3",1544,23,"intro",0,"Helpful","No Feedback","Hint","human_ai",TRUE,TRUE,TRUE,94,82.5,1
+"E3",1570,23,"intro",1,"Unhelpful","Feedback","Hint","human_ai",FALSE,TRUE,FALSE,100,7,1
+"E3",1603,23,"intro",0,"Unhelpful","No Feedback","Hint","human_ai",FALSE,FALSE,TRUE,92,-1.5,0
+"E3",1625,23,"intro",3,"Unhelpful","Feedback","Hint","human_ai",FALSE,TRUE,FALSE,100,0,1
+"E3",1644,23,"intro",3,"Helpful","No Feedback","Hint","human_ai",TRUE,FALSE,TRUE,90,0,1
+"E3",844,23,"intro",3,"Helpful","No Feedback","Hint","human_ai",TRUE,TRUE,FALSE,97,5,0
+"E3",869,23,"intro",1,"Unhelpful","No Feedback","Hint","human_ai",FALSE,TRUE,TRUE,99,79.5,0
+"E3",872,23,"intro",2,"Helpful","No Feedback","Hint","human_ai",TRUE,FALSE,TRUE,95,-4.5,1
+"E3",875,23,"intro",2,"Unhelpful","Feedback","Hint","human_ai",FALSE,FALSE,TRUE,84,-4,0
+"E3",878,23,"intro",0,"Helpful","No Feedback","Conversation","human_ai",TRUE,TRUE,TRUE,97,98.5,1
+"E3",884,23,"intro",0,"Helpful","Feedback","Conversation","human_ai",TRUE,FALSE,TRUE,76,12,1
+"E3",902,23,"final",4,"Unhelpful","Feedback","Conversation","human_ai",FALSE,TRUE,FALSE,100,4,1
+"E3",927,23,"final",4,"Helpful","Feedback","Hint","human_ai",FALSE,TRUE,FALSE,78,-2.5,1
+"E3",949,23,"final",4,"Unhelpful","Feedback","Conversation","human_ai",FALSE,TRUE,FALSE,100,7,1
+"E3",974,23,"final",4,"Helpful","Feedback","Hint","human_ai",FALSE,TRUE,FALSE,100,42.5,1
+"E3",1001,24,"final",4,"Helpful","Feedback","Hint","human_ai",FALSE,TRUE,FALSE,85,5.5,1
+"E3",1010,24,"final",4,"Helpful","Feedback","Hint","human_ai",FALSE,TRUE,FALSE,100,0,1
+"E3",1020,24,"intro",3,"Unhelpful","Feedback","Conversation","human_ai",FALSE,TRUE,TRUE,96,81.5,0
+"E3",1027,24,"intro",1,"Unhelpful","No Feedback","Hint","human_ai",FALSE,TRUE,FALSE,100,8,1
+"E3",1028,24,"intro",3,"Helpful","Feedback","Hint","human_ai",TRUE,FALSE,TRUE,100,-18,1
+"E3",1029,24,"intro",3,"Unhelpful","Feedback","Hint","human_ai",FALSE,TRUE,FALSE,100,0,1
+"E3",1030,24,"intro",3,"Helpful","Feedback","Hint","human_ai",TRUE,FALSE,TRUE,95,2.5,1
+"E3",1038,24,"intro",0,"Unhelpful","Feedback","Conversation","human_ai",FALSE,TRUE,FALSE,100,37.5,1
+"E3",1050,24,"intro",1,"Unhelpful","Feedback","Conversation","human_ai",FALSE,TRUE,FALSE,68,-2,1
+"E3",1060,24,"intro",1,"Unhelpful","Feedback","Hint","human_ai",FALSE,TRUE,FALSE,94,13.5,1
+"E3",1061,24,"final",4,"Unhelpful","Feedback","Hint","human_ai",FALSE,TRUE,FALSE,100,0,1
+"E3",1067,24,"final",4,"Helpful","No Feedback","Conversation","human_ai",FALSE,TRUE,FALSE,100,0,1
+"E3",1080,24,"final",4,"Helpful","No Feedback","Hint","human_ai",FALSE,TRUE,FALSE,100,1,1
+"E3",1089,24,"final",4,"Helpful","No Feedback","Hint","human_ai",FALSE,TRUE,FALSE,84,3.5,1
+"E3",1091,24,"intro",3,"Helpful","Feedback","Hint","human_ai",TRUE,FALSE,TRUE,99,0.5,1
+"E3",1106,24,"final",4,"Helpful","No Feedback","Hint","human_ai",FALSE,TRUE,FALSE,95,-2.5,1
+"E3",1116,24,"intro",1,"Helpful","No Feedback","Hint","human_ai",TRUE,TRUE,TRUE,94,97,1
+"E3",1118,24,"intro",1,"Helpful","Feedback","Hint","human_ai",TRUE,FALSE,TRUE,100,0,1
+"E3",1119,24,"final",4,"Unhelpful","Feedback","Hint","human_ai",FALSE,TRUE,FALSE,100,4,1
+"E3",1126,24,"intro",0,"Unhelpful","Feedback","Conversation","human_ai",FALSE,TRUE,TRUE,100,92.5,0
+"E3",1127,24,"final",4,"Unhelpful","No Feedback","Conversation","human_ai",FALSE,TRUE,FALSE,100,30,1
+"E3",1137,24,"intro",3,"Helpful","No Feedback","Conversation","human_ai",TRUE,FALSE,TRUE,85,1.5,1
+"E3",1138,24,"final",4,"Unhelpful","Feedback","Hint","human_ai",FALSE,TRUE,FALSE,100,15,1
+"E3",1142,24,"intro",2,"Helpful","No Feedback","Hint","human_ai",TRUE,FALSE,TRUE,100,0,1
+"E3",1144,24,"intro",2,"Helpful","No Feedback","Hint","human_ai",TRUE,FALSE,TRUE,84,-2,1
+"E3",1146,24,"final",4,"Helpful","No Feedback","Hint","human_ai",FALSE,TRUE,FALSE,90,-5,1
+"E3",1153,24,"intro",3,"Unhelpful","Feedback","Conversation","human_ai",FALSE,TRUE,FALSE,100,13,1
+"E3",1158,24,"final",4,"Helpful","No Feedback","Hint","human_ai",FALSE,TRUE,TRUE,74,65,0
+"E3",1160,24,"intro",0,"Helpful","Feedback","Hint","human_ai",TRUE,FALSE,TRUE,89,-1.5,1
+"E3",1163,24,"final",4,"Unhelpful","Feedback","Conversation","human_ai",FALSE,TRUE,FALSE,100,0,1
+"E3",1166,24,"intro",0,"Unhelpful","No Feedback","Hint","human_ai",FALSE,TRUE,FALSE,75,4,1
+"E3",1169,24,"final",4,"Unhelpful","No Feedback","Hint","human_ai",FALSE,TRUE,FALSE,85,0.5,1
+"E3",1171,24,"intro",2,"Unhelpful","Feedback","Conversation","human_ai",FALSE,TRUE,FALSE,82,9.5,1
+"E3",1177,24,"intro",0,"Helpful","Feedback","Hint","human_ai",TRUE,FALSE,TRUE,81,6,1
+"E3",1193,24,"final",4,"Unhelpful","No Feedback","Hint","human_ai",FALSE,TRUE,FALSE,98,1.5,1
+"E3",1198,24,"final",4,"Unhelpful","Feedback","Conversation","human_ai",FALSE,TRUE,FALSE,95,34,1
+"E3",1204,24,"final",4,"Helpful","No Feedback","Hint","human_ai",FALSE,TRUE,FALSE,100,9,1
+"E3",1205,24,"final",4,"Unhelpful","Feedback","Conversation","human_ai",FALSE,TRUE,FALSE,100,20,1
+"E3",1206,24,"intro",2,"Helpful","Feedback","Hint","human_ai",TRUE,FALSE,TRUE,93,-6,1
+"E3",1207,24,"intro",0,"Helpful","No Feedback","Hint","human_ai",TRUE,TRUE,FALSE,100,7.5,0
+"E3",1208,24,"intro",1,"Unhelpful","Feedback","Conversation","human_ai",FALSE,TRUE,FALSE,97,28.5,1
+"E3",1209,24,"final",4,"Helpful","No Feedback","Conversation","human_ai",FALSE,TRUE,FALSE,100,36.5,1
+"E3",1212,24,"final",4,"Unhelpful","No Feedback","Hint","human_ai",FALSE,TRUE,FALSE,100,15.5,1
+"E3",1217,24,"final",4,"Helpful","No Feedback","Conversation","human_ai",FALSE,TRUE,TRUE,100,76.5,0
+"E3",1221,24,"final",4,"Unhelpful","Feedback","Hint","human_ai",FALSE,TRUE,FALSE,100,0,1
+"E3",1222,24,"final",4,"Helpful","Feedback","Conversation","human_ai",FALSE,TRUE,TRUE,100,100,0
+"E3",1223,24,"intro",3,"Helpful","No Feedback","Conversation","human_ai",TRUE,FALSE,TRUE,100,0,1
+"E3",1225,24,"intro",2,"Unhelpful","Feedback","Conversation","human_ai",FALSE,TRUE,TRUE,90,80,0
+"E3",1228,24,"final",4,"Unhelpful","Feedback","Conversation","human_ai",FALSE,TRUE,FALSE,100,0,1
+"E3",1229,24,"intro",3,"Helpful","No Feedback","Conversation","human_ai",TRUE,FALSE,FALSE,96,-85.5,0
+"E3",1230,24,"final",4,"Unhelpful","Feedback","Conversation","human_ai",FALSE,TRUE,FALSE,91,-0.5,1
+"E3",1241,24,"final",4,"Unhelpful","No Feedback","Hint","human_ai",FALSE,TRUE,FALSE,94,32.5,1
+"E3",1243,24,"intro",2,"Helpful","No Feedback","Conversation","human_ai",TRUE,TRUE,TRUE,61,65,1
+"E3",1247,24,"final",4,"Helpful","Feedback","Conversation","human_ai",FALSE,TRUE,TRUE,100,100,0
+"E3",1253,24,"intro",3,"Unhelpful","Feedback","Conversation","human_ai",FALSE,TRUE,FALSE,88,10.5,1
+"E3",1257,24,"intro",2,"Helpful","Feedback","Hint","human_ai",TRUE,FALSE,TRUE,64,3.5,1
+"E3",1260,24,"final",4,"Unhelpful","Feedback","Hint","human_ai",FALSE,TRUE,FALSE,96,2,1
+"E3",1262,24,"intro",3,"Helpful","No Feedback","Conversation","human_ai",TRUE,FALSE,FALSE,100,-100,0
+"E3",1266,24,"intro",1,"Unhelpful","No Feedback","Conversation","human_ai",FALSE,TRUE,TRUE,90,95,0
+"E3",1273,24,"intro",3,"Helpful","No Feedback","Conversation","human_ai",TRUE,FALSE,TRUE,88,-1.5,1
+"E3",1280,24,"intro",1,"Unhelpful","Feedback","Hint","human_ai",FALSE,TRUE,FALSE,80,5,1
+"E3",1288,24,"intro",1,"Unhelpful","No Feedback","Hint","human_ai",FALSE,TRUE,FALSE,100,0,1
+"E3",1303,24,"final",4,"Helpful","No Feedback","Hint","human_ai",FALSE,TRUE,TRUE,95,47.5,0
+"E3",1305,24,"final",4,"Helpful","Feedback","Hint","human_ai",FALSE,TRUE,FALSE,91,25.5,1
+"E3",1310,24,"intro",0,"Unhelpful","No Feedback","Hint","human_ai",FALSE,TRUE,FALSE,81,-9.5,1
+"E3",1313,24,"final",4,"Unhelpful","Feedback","Hint","human_ai",FALSE,TRUE,FALSE,100,6.5,1
+"E3",1316,24,"final",4,"Unhelpful","Feedback","Conversation","human_ai",FALSE,TRUE,FALSE,91,12.5,1
+"E3",1318,24,"final",4,"Unhelpful","No Feedback","Hint","human_ai",FALSE,TRUE,FALSE,100,2.5,1
+"E3",1321,24,"intro",0,"Unhelpful","Feedback","Conversation","human_ai",FALSE,TRUE,FALSE,68,34,1
+"E3",1326,24,"intro",3,"Helpful","No Feedback","Conversation","human_ai",TRUE,FALSE,FALSE,100,-82.5,0
+"E3",1331,24,"intro",0,"Helpful","No Feedback","Hint","human_ai",TRUE,FALSE,TRUE,73,13.5,1
+"E3",1332,24,"final",4,"Unhelpful","No Feedback","Hint","human_ai",FALSE,TRUE,FALSE,100,7,1
+"E3",1333,24,"intro",1,"Helpful","No Feedback","Hint","human_ai",TRUE,FALSE,TRUE,100,-8.5,1
+"E3",1343,24,"intro",1,"Unhelpful","Feedback","Hint","human_ai",FALSE,TRUE,FALSE,94,2,1
+"E3",1351,24,"intro",2,"Helpful","Feedback","Hint","human_ai",TRUE,FALSE,TRUE,67,6.5,1
+"E3",1358,24,"intro",3,"Unhelpful","Feedback","Conversation","human_ai",FALSE,TRUE,FALSE,100,0,1
+"E3",1360,24,"intro",0,"Unhelpful","No Feedback","Hint","human_ai",FALSE,TRUE,FALSE,100,0,1
+"E3",1378,24,"intro",3,"Unhelpful","No Feedback","Conversation","human_ai",FALSE,TRUE,TRUE,74,46.5,0
+"E3",1380,24,"intro",2,"Helpful","Feedback","Hint","human_ai",TRUE,FALSE,TRUE,98,1,1
+"E3",1386,24,"intro",3,"Helpful","No Feedback","Hint","human_ai",TRUE,TRUE,FALSE,100,0,0
+"E3",1389,24,"intro",2,"Unhelpful","No Feedback","Conversation","human_ai",FALSE,TRUE,FALSE,100,34.5,1
+"E3",1393,24,"intro",2,"Helpful","No Feedback","Hint","human_ai",TRUE,TRUE,TRUE,82,83,1
+"E3",1396,24,"intro",1,"Helpful","Feedback","Hint","human_ai",TRUE,FALSE,TRUE,100,0,1
+"E3",1400,24,"intro",0,"Unhelpful","No Feedback","Conversation","human_ai",FALSE,TRUE,FALSE,74,21.5,1
+"E3",1402,24,"intro",1,"Unhelpful","No Feedback","Conversation","human_ai",FALSE,TRUE,TRUE,100,94.5,0
+"E3",1430,24,"intro",3,"Helpful","Feedback","Hint","human_ai",TRUE,FALSE,TRUE,73,-0.5,1
+"E3",1431,24,"intro",1,"Helpful","No Feedback","Hint","human_ai",TRUE,FALSE,TRUE,80,-6,1
+"E3",1435,24,"intro",0,"Unhelpful","No Feedback","Hint","human_ai",FALSE,TRUE,FALSE,100,0,1
+"E3",1443,24,"intro",0,"Helpful","No Feedback","Hint","human_ai",TRUE,FALSE,TRUE,95,2.5,1
+"E3",1453,24,"intro",3,"Helpful","Feedback","Conversation","human_ai",TRUE,FALSE,TRUE,100,0,1
+"E3",1462,24,"intro",2,"Helpful","No Feedback","Hint","human_ai",TRUE,FALSE,TRUE,60,7.5,1
+"E3",1465,24,"intro",3,"Unhelpful","Feedback","Hint","human_ai",FALSE,TRUE,FALSE,76,-2,1
+"E3",1488,24,"intro",2,"Unhelpful","Feedback","Conversation","human_ai",FALSE,TRUE,FALSE,87,19,1
+"E3",1497,24,"intro",3,"Unhelpful","No Feedback","Conversation","human_ai",FALSE,FALSE,TRUE,80,5,0
+"E3",1499,24,"intro",0,"Helpful","Feedback","Conversation","human_ai",TRUE,FALSE,TRUE,100,0,1
+"E3",1504,24,"final",4,"Helpful","Feedback","Conversation","human_ai",FALSE,TRUE,TRUE,68,76.5,0
+"E3",1507,24,"intro",2,"Unhelpful","No Feedback","Hint","human_ai",FALSE,TRUE,FALSE,75,-2.5,1
+"E3",1520,24,"intro",0,"Unhelpful","No Feedback","Conversation","human_ai",FALSE,TRUE,TRUE,100,91,0
+"E3",1526,24,"intro",2,"Unhelpful","Feedback","Hint","human_ai",FALSE,FALSE,TRUE,93,1,0
+"E3",1531,24,"intro",0,"Unhelpful","No Feedback","Conversation","human_ai",FALSE,FALSE,TRUE,100,0,0
+"E3",1544,24,"intro",1,"Helpful","No Feedback","Hint","human_ai",TRUE,FALSE,TRUE,100,-5.5,1
+"E3",1553,24,"intro",3,"Helpful","Feedback","Hint","human_ai",TRUE,FALSE,TRUE,91,0,1
+"E3",1559,24,"intro",0,"Unhelpful","Feedback","Conversation","human_ai",FALSE,TRUE,TRUE,73,86.5,0
+"E3",1562,24,"final",4,"Helpful","Feedback","Conversation","human_ai",FALSE,TRUE,TRUE,100,97.5,0
+"E3",1574,24,"intro",3,"Unhelpful","No Feedback","Conversation","human_ai",FALSE,TRUE,TRUE,81,90.5,0
+"E3",1600,24,"final",4,"Unhelpful","Feedback","Conversation","human_ai",FALSE,TRUE,FALSE,100,0,1
+"E3",1603,24,"intro",2,"Unhelpful","No Feedback","Hint","human_ai",FALSE,TRUE,FALSE,100,0,1
+"E3",1610,24,"intro",2,"Unhelpful","No Feedback","Conversation","human_ai",FALSE,TRUE,FALSE,100,10,1
+"E3",1619,24,"final",4,"Helpful","Feedback","Hint","human_ai",FALSE,TRUE,TRUE,85,56,0
+"E3",1623,24,"intro",3,"Unhelpful","Feedback","Conversation","human_ai",FALSE,TRUE,TRUE,74,68,0
+"E3",1626,24,"intro",2,"Unhelpful","No Feedback","Conversation","human_ai",FALSE,FALSE,TRUE,63,18.5,0
+"E3",1633,24,"final",4,"Unhelpful","Feedback","Conversation","human_ai",FALSE,TRUE,FALSE,100,0,1
+"E3",1645,24,"final",4,"Unhelpful","Feedback","Hint","human_ai",FALSE,TRUE,FALSE,79,-4,1
+"E3",1648,24,"intro",0,"Unhelpful","Feedback","Conversation","human_ai",FALSE,TRUE,TRUE,100,87.5,0
+"E3",1649,24,"final",4,"Helpful","Feedback","Hint","human_ai",FALSE,TRUE,TRUE,67,64.5,0
+"E3",1654,24,"final",4,"Unhelpful","No Feedback","Hint","human_ai",FALSE,TRUE,FALSE,100,1.5,1
+"E3",1663,24,"intro",0,"Helpful","Feedback","Conversation","human_ai",TRUE,FALSE,TRUE,96,-3.5,1
+"E3",1668,24,"final",4,"Unhelpful","No Feedback","Conversation","human_ai",FALSE,TRUE,TRUE,94,88.5,0
+"E3",854,24,"intro",1,"Helpful","Feedback","Conversation","human_ai",TRUE,FALSE,TRUE,75,0,1
+"E3",855,24,"final",4,"Unhelpful","Feedback","Hint","human_ai",FALSE,TRUE,FALSE,100,10,1
+"E3",859,24,"intro",0,"Unhelpful","No Feedback","Conversation","human_ai",FALSE,TRUE,FALSE,86,30.5,1
+"E3",865,24,"final",4,"Unhelpful","No Feedback","Hint","human_ai",FALSE,TRUE,FALSE,74,-8,1
+"E3",866,24,"intro",1,"Unhelpful","Feedback","Conversation","human_ai",FALSE,FALSE,TRUE,90,5,0
+"E3",868,24,"final",4,"Helpful","No Feedback","Hint","human_ai",FALSE,TRUE,FALSE,80,5,1
+"E3",872,24,"intro",3,"Helpful","No Feedback","Hint","human_ai",TRUE,FALSE,TRUE,98,-21.5,1
+"E3",875,24,"intro",0,"Unhelpful","Feedback","Hint","human_ai",FALSE,TRUE,TRUE,69,84.5,0
+"E3",880,24,"intro",3,"Helpful","Feedback","Conversation","human_ai",TRUE,FALSE,FALSE,83,-74.5,0
+"E3",887,24,"final",4,"Unhelpful","No Feedback","Hint","human_ai",FALSE,TRUE,FALSE,89,1.5,1
+"E3",892,24,"intro",1,"Helpful","Feedback","Hint","human_ai",TRUE,FALSE,TRUE,100,0,1
+"E3",910,24,"final",4,"Unhelpful","Feedback","Conversation","human_ai",FALSE,TRUE,FALSE,100,0,1
+"E3",929,24,"final",4,"Unhelpful","No Feedback","Conversation","human_ai",FALSE,TRUE,FALSE,86,-2,1
+"E3",938,24,"intro",0,"Unhelpful","Feedback","Conversation","human_ai",FALSE,TRUE,TRUE,100,75.5,0
+"E3",939,24,"intro",0,"Helpful","No Feedback","Hint","human_ai",TRUE,FALSE,TRUE,96,-3,1
+"E3",941,24,"final",4,"Unhelpful","No Feedback","Conversation","human_ai",FALSE,TRUE,TRUE,100,54,0
+"E3",946,24,"final",4,"Unhelpful","Feedback","Conversation","human_ai",FALSE,TRUE,FALSE,98,11.5,1
+"E3",949,24,"intro",0,"Unhelpful","Feedback","Conversation","human_ai",FALSE,TRUE,FALSE,99,8.5,1
+"E3",951,24,"intro",0,"Helpful","No Feedback","Conversation","human_ai",TRUE,FALSE,TRUE,100,-5,1
+"E3",953,24,"final",4,"Helpful","Feedback","Conversation","human_ai",FALSE,TRUE,TRUE,72,73.5,0
+"E3",957,24,"intro",1,"Unhelpful","No Feedback","Hint","human_ai",FALSE,TRUE,TRUE,94,77,0
+"E3",959,24,"final",4,"Unhelpful","Feedback","Conversation","human_ai",FALSE,TRUE,FALSE,100,0,1
+"E3",961,24,"intro",3,"Unhelpful","No Feedback","Hint","human_ai",FALSE,TRUE,TRUE,100,97,0
+"E3",968,24,"final",4,"Helpful","No Feedback","Hint","human_ai",FALSE,TRUE,FALSE,88,31.5,1
+"E3",973,24,"final",4,"Unhelpful","No Feedback","Hint","human_ai",FALSE,TRUE,TRUE,99,99.5,0
+"E3",975,24,"final",4,"Unhelpful","No Feedback","Conversation","human_ai",FALSE,TRUE,TRUE,100,50,0
+"E3",982,24,"intro",0,"Unhelpful","Feedback","Hint","human_ai",FALSE,TRUE,TRUE,75,52.5,0
+"E3",985,24,"final",4,"Unhelpful","Feedback","Hint","human_ai",FALSE,TRUE,FALSE,100,11,1
+"E3",988,24,"final",4,"Unhelpful","Feedback","Conversation","human_ai",FALSE,TRUE,FALSE,100,0.5,1
+"E3",997,24,"intro",2,"Unhelpful","Feedback","Hint","human_ai",FALSE,TRUE,FALSE,100,8.5,1
+"E3",1009,25,"intro",1,"Unhelpful","No Feedback","Conversation","human_ai",FALSE,FALSE,TRUE,100,0,0
+"E3",1010,25,"intro",1,"Helpful","Feedback","Hint","human_ai",TRUE,TRUE,FALSE,100,0,0
+"E3",1037,25,"intro",3,"Unhelpful","Feedback","Hint","human_ai",FALSE,FALSE,TRUE,79,10.5,0
+"E3",1043,25,"intro",3,"Unhelpful","No Feedback","Conversation","human_ai",FALSE,FALSE,TRUE,99,0.5,0
+"E3",1069,25,"intro",3,"Unhelpful","Feedback","Conversation","human_ai",FALSE,TRUE,TRUE,100,85.5,0
+"E3",1070,25,"intro",2,"Unhelpful","No Feedback","Conversation","human_ai",FALSE,FALSE,TRUE,72,-12,0
+"E3",1084,25,"intro",0,"Helpful","Feedback","Hint","human_ai",TRUE,TRUE,FALSE,80,9.5,0
+"E3",1088,25,"intro",3,"Helpful","No Feedback","Conversation","human_ai",TRUE,TRUE,TRUE,66,63.5,1
+"E3",1089,25,"intro",2,"Helpful","No Feedback","Hint","human_ai",TRUE,TRUE,FALSE,82,-3.5,0
+"E3",1105,25,"intro",1,"Helpful","Feedback","Conversation","human_ai",TRUE,TRUE,TRUE,100,100,1
+"E3",1120,25,"intro",2,"Helpful","No Feedback","Hint","human_ai",TRUE,TRUE,FALSE,89,7.5,0
+"E3",1133,25,"intro",3,"Unhelpful","Feedback","Hint","human_ai",FALSE,FALSE,FALSE,77,-72,1
+"E3",1135,25,"intro",1,"Helpful","No Feedback","Hint","human_ai",TRUE,TRUE,FALSE,84,12,0
+"E3",1136,25,"intro",1,"Unhelpful","No Feedback","Hint","human_ai",FALSE,FALSE,TRUE,92,-6,0
+"E3",1154,25,"intro",1,"Helpful","Feedback","Conversation","human_ai",TRUE,FALSE,TRUE,100,0,1
+"E3",1163,25,"intro",3,"Unhelpful","Feedback","Conversation","human_ai",FALSE,FALSE,FALSE,62,-81,1
+"E3",1166,25,"intro",2,"Unhelpful","No Feedback","Hint","human_ai",FALSE,FALSE,TRUE,78,-12,0
+"E3",1183,25,"intro",1,"Unhelpful","No Feedback","Hint","human_ai",FALSE,FALSE,TRUE,48,8.5,0
+"E3",1200,25,"intro",1,"Unhelpful","Feedback","Conversation","human_ai",FALSE,TRUE,TRUE,62,73.5,0
+"E3",1204,25,"intro",1,"Helpful","No Feedback","Hint","human_ai",TRUE,TRUE,FALSE,92,7.5,0
+"E3",1224,25,"intro",1,"Unhelpful","No Feedback","Conversation","human_ai",FALSE,FALSE,TRUE,53,21.5,0
+"E3",1229,25,"intro",1,"Helpful","No Feedback","Conversation","human_ai",TRUE,TRUE,FALSE,96,7,0
+"E3",1253,25,"intro",0,"Unhelpful","Feedback","Conversation","human_ai",FALSE,FALSE,TRUE,99,-13.5,0
+"E3",1300,25,"intro",0,"Unhelpful","Feedback","Conversation","human_ai",FALSE,TRUE,TRUE,60,50.5,0
+"E3",1312,25,"intro",0,"Helpful","No Feedback","Hint","human_ai",TRUE,TRUE,FALSE,100,1,0
+"E3",1327,25,"intro",0,"Unhelpful","No Feedback","Conversation","human_ai",FALSE,FALSE,TRUE,90,2.5,0
+"E3",1333,25,"intro",3,"Helpful","No Feedback","Hint","human_ai",TRUE,TRUE,FALSE,98,16.5,0
+"E3",1360,25,"intro",2,"Unhelpful","No Feedback","Hint","human_ai",FALSE,FALSE,TRUE,100,0,0
+"E3",1369,25,"intro",3,"Unhelpful","No Feedback","Conversation","human_ai",FALSE,FALSE,TRUE,100,0,0
+"E3",1400,25,"intro",3,"Unhelpful","No Feedback","Conversation","human_ai",FALSE,FALSE,TRUE,66,6.5,0
+"E3",1411,25,"intro",3,"Helpful","Feedback","Conversation","human_ai",TRUE,FALSE,TRUE,99,0,1
+"E3",1414,25,"intro",1,"Helpful","No Feedback","Hint","human_ai",TRUE,TRUE,FALSE,85,5,0
+"E3",1559,25,"intro",1,"Unhelpful","Feedback","Conversation","human_ai",FALSE,FALSE,TRUE,67,16.5,0
+"E3",1569,25,"intro",0,"Unhelpful","Feedback","Hint","human_ai",FALSE,FALSE,TRUE,74,6.5,0
+"E3",1570,25,"intro",2,"Unhelpful","Feedback","Hint","human_ai",FALSE,FALSE,TRUE,90,-9.5,0
+"E3",1589,25,"intro",3,"Unhelpful","Feedback","Conversation","human_ai",FALSE,FALSE,TRUE,77,4,0
+"E3",1625,25,"intro",0,"Unhelpful","Feedback","Hint","human_ai",FALSE,FALSE,TRUE,82,-5.5,0
+"E3",1641,25,"intro",2,"Helpful","No Feedback","Hint","human_ai",TRUE,TRUE,FALSE,100,0,0
+"E3",1644,25,"intro",0,"Helpful","No Feedback","Hint","human_ai",TRUE,TRUE,FALSE,100,10,0
+"E3",841,25,"intro",0,"Helpful","No Feedback","Conversation","human_ai",TRUE,FALSE,TRUE,63,18.5,1
+"E3",843,25,"intro",2,"Unhelpful","Feedback","Conversation","human_ai",FALSE,FALSE,TRUE,77,-6.5,0
+"E3",845,25,"intro",0,"Helpful","Feedback","Conversation","human_ai",TRUE,TRUE,FALSE,99,-0.5,0
+"E3",854,25,"intro",2,"Helpful","Feedback","Conversation","human_ai",TRUE,TRUE,FALSE,90,7.5,0
+"E3",872,25,"intro",0,"Helpful","No Feedback","Hint","human_ai",TRUE,TRUE,FALSE,81,9,0
+"E3",893,25,"intro",0,"Helpful","Feedback","Conversation","human_ai",TRUE,FALSE,TRUE,81,9.5,1
+"E3",900,25,"intro",2,"Helpful","No Feedback","Hint","human_ai",TRUE,TRUE,FALSE,94,5.5,0
+"E3",911,25,"intro",1,"Unhelpful","No Feedback","Conversation","human_ai",FALSE,FALSE,TRUE,54,12.5,0
+"E3",935,25,"intro",3,"Helpful","Feedback","Hint","human_ai",TRUE,TRUE,TRUE,83,68.5,1
+"E3",939,25,"intro",1,"Helpful","No Feedback","Hint","human_ai",TRUE,TRUE,FALSE,100,5,0
+"E3",956,25,"intro",1,"Helpful","No Feedback","Hint","human_ai",TRUE,TRUE,FALSE,52,14.5,0
+"E3",968,25,"intro",3,"Helpful","No Feedback","Hint","human_ai",TRUE,FALSE,TRUE,63,-31.5,1
+"E3",997,25,"intro",1,"Unhelpful","Feedback","Hint","human_ai",FALSE,FALSE,TRUE,100,-16.5,0
+"E3",1003,26,"intro",0,"Unhelpful","No Feedback","Conversation","human_ai",FALSE,FALSE,TRUE,78,11,0
+"E3",1030,26,"intro",1,"Helpful","Feedback","Hint","human_ai",TRUE,TRUE,FALSE,97,13.5,0
+"E3",1061,26,"intro",3,"Unhelpful","Feedback","Hint","human_ai",FALSE,FALSE,TRUE,80,-7.5,0
+"E3",1097,26,"intro",1,"Unhelpful","No Feedback","Hint","human_ai",FALSE,TRUE,FALSE,73,-5.5,1
+"E3",1111,26,"intro",2,"Unhelpful","No Feedback","Hint","human_ai",FALSE,FALSE,TRUE,80,2.5,0
+"E3",1115,26,"intro",2,"Unhelpful","Feedback","Hint","human_ai",FALSE,FALSE,TRUE,100,-4,0
+"E3",1125,26,"intro",2,"Helpful","No Feedback","Conversation","human_ai",TRUE,TRUE,TRUE,100,100,1
+"E3",1146,26,"intro",2,"Helpful","No Feedback","Hint","human_ai",TRUE,FALSE,TRUE,80,6.5,1
+"E3",1158,26,"intro",0,"Helpful","No Feedback","Hint","human_ai",TRUE,TRUE,TRUE,71,75,1
+"E3",1169,26,"intro",0,"Unhelpful","No Feedback","Hint","human_ai",FALSE,FALSE,TRUE,74,8.5,0
+"E3",1198,26,"intro",3,"Unhelpful","Feedback","Conversation","human_ai",FALSE,TRUE,TRUE,56,64,0
+"E3",1205,26,"intro",1,"Unhelpful","Feedback","Conversation","human_ai",FALSE,FALSE,TRUE,88,-14.5,0
+"E3",1209,26,"intro",2,"Helpful","No Feedback","Conversation","human_ai",TRUE,FALSE,TRUE,97,-6,1
+"E3",1213,26,"intro",2,"Unhelpful","Feedback","Hint","human_ai",FALSE,FALSE,TRUE,85,-10,0
+"E3",1241,26,"intro",3,"Unhelpful","No Feedback","Hint","human_ai",FALSE,TRUE,TRUE,90,59,0
+"E3",1258,26,"intro",2,"Unhelpful","Feedback","Conversation","human_ai",FALSE,TRUE,TRUE,80,72,0
+"E3",1261,26,"intro",1,"Unhelpful","Feedback","Hint","human_ai",FALSE,TRUE,TRUE,85,60.5,0
+"E3",1262,26,"intro",2,"Helpful","No Feedback","Conversation","human_ai",TRUE,TRUE,TRUE,72,86,1
+"E3",1273,26,"intro",0,"Helpful","No Feedback","Conversation","human_ai",TRUE,TRUE,TRUE,81,78,1
+"E3",1303,26,"intro",3,"Helpful","No Feedback","Hint","human_ai",TRUE,TRUE,TRUE,90,45,1
+"E3",1314,26,"intro",2,"Unhelpful","No Feedback","Hint","human_ai",FALSE,FALSE,TRUE,78,0.5,0
+"E3",1343,26,"intro",0,"Unhelpful","Feedback","Hint","human_ai",FALSE,FALSE,TRUE,80,10,0
+"E3",1365,26,"intro",3,"Helpful","No Feedback","Hint","human_ai",TRUE,FALSE,TRUE,72,-3,1
+"E3",1406,26,"intro",1,"Unhelpful","Feedback","Hint","human_ai",FALSE,FALSE,TRUE,85,0,0
+"E3",1419,26,"intro",2,"Unhelpful","Feedback","Hint","human_ai",FALSE,TRUE,TRUE,100,86,0
+"E3",1427,26,"intro",0,"Helpful","Feedback","Hint","human_ai",TRUE,FALSE,TRUE,95,2.5,1
+"E3",1429,26,"intro",3,"Unhelpful","No Feedback","Conversation","human_ai",FALSE,TRUE,TRUE,71,76,0
+"E3",1430,26,"final",4,"Helpful","Feedback","Hint","human_ai",FALSE,TRUE,FALSE,90,13.5,1
+"E3",1439,26,"intro",0,"Helpful","No Feedback","Conversation","human_ai",TRUE,TRUE,FALSE,57,-5.5,0
+"E3",1570,26,"intro",0,"Unhelpful","Feedback","Hint","human_ai",FALSE,FALSE,TRUE,74,1.5,0
+"E3",1619,26,"intro",3,"Helpful","Feedback","Hint","human_ai",TRUE,TRUE,FALSE,80,7.5,0
+"E3",1654,26,"intro",0,"Unhelpful","No Feedback","Hint","human_ai",FALSE,TRUE,TRUE,75,51.5,0
+"E3",850,26,"intro",2,"Helpful","Feedback","Conversation","human_ai",TRUE,TRUE,TRUE,57,68.5,1
+"E3",852,26,"intro",1,"Unhelpful","Feedback","Conversation","human_ai",FALSE,TRUE,FALSE,57,-1.5,1
+"E3",854,26,"intro",3,"Helpful","Feedback","Conversation","human_ai",TRUE,FALSE,TRUE,75,0,1
+"E3",859,26,"intro",1,"Unhelpful","No Feedback","Conversation","human_ai",FALSE,FALSE,TRUE,87,6.5,0
+"E3",865,26,"intro",1,"Unhelpful","No Feedback","Hint","human_ai",FALSE,FALSE,TRUE,69,8.5,0
+"E3",875,26,"intro",3,"Unhelpful","Feedback","Hint","human_ai",FALSE,FALSE,FALSE,90,-91.5,1
+"E3",893,26,"intro",2,"Helpful","Feedback","Conversation","human_ai",TRUE,TRUE,TRUE,75,84.5,1
+"E3",926,26,"intro",1,"Helpful","No Feedback","Conversation","human_ai",TRUE,FALSE,TRUE,83,8.5,1
+"E3",935,26,"intro",2,"Helpful","Feedback","Hint","human_ai",TRUE,FALSE,TRUE,75,-2.5,1
+"E3",948,26,"intro",1,"Unhelpful","No Feedback","Hint","human_ai",FALSE,TRUE,FALSE,100,12,1
+"E3",959,26,"intro",2,"Unhelpful","Feedback","Conversation","human_ai",FALSE,FALSE,FALSE,75,-69,1
+"E3",966,26,"intro",2,"Helpful","No Feedback","Hint","human_ai",TRUE,FALSE,TRUE,69,5.5,1
+"E3",967,26,"intro",3,"Unhelpful","Feedback","Conversation","human_ai",FALSE,TRUE,FALSE,85,-2.5,1
+"E3",972,26,"intro",0,"Unhelpful","No Feedback","Hint","human_ai",FALSE,FALSE,TRUE,82,1.5,0
+"E3",988,26,"intro",2,"Unhelpful","Feedback","Conversation","human_ai",FALSE,TRUE,FALSE,76,6.5,1
+"E3",997,26,"intro",0,"Unhelpful","Feedback","Hint","human_ai",FALSE,FALSE,TRUE,92,-9,0
+"E3",1003,27,"intro",1,"Unhelpful","No Feedback","Conversation","human_ai",FALSE,FALSE,TRUE,78,11,0
+"E3",1005,27,"intro",3,"Helpful","Feedback","Conversation","human_ai",TRUE,FALSE,TRUE,100,0,1
+"E3",1009,27,"intro",0,"Unhelpful","No Feedback","Conversation","human_ai",FALSE,FALSE,TRUE,82,9,0
+"E3",1016,27,"intro",3,"Unhelpful","No Feedback","Conversation","human_ai",FALSE,FALSE,TRUE,100,0,0
+"E3",1035,27,"intro",2,"Unhelpful","No Feedback","Hint","human_ai",FALSE,FALSE,TRUE,99,0.5,0
+"E3",1036,27,"intro",0,"Unhelpful","Feedback","Conversation","human_ai",FALSE,FALSE,TRUE,84,6.5,0
+"E3",1039,27,"intro",2,"Unhelpful","No Feedback","Hint","human_ai",FALSE,FALSE,TRUE,62,-31,0
+"E3",1089,27,"intro",3,"Helpful","No Feedback","Hint","human_ai",TRUE,TRUE,FALSE,79,1,0
+"E3",1099,27,"intro",3,"Unhelpful","Feedback","Hint","human_ai",FALSE,FALSE,TRUE,71,-2,0
+"E3",1107,27,"intro",3,"Helpful","No Feedback","Hint","human_ai",TRUE,TRUE,FALSE,70,-1,0
+"E3",1141,27,"final",4,"Helpful","No Feedback","Hint","human_ai",FALSE,TRUE,FALSE,87,9,1
+"E3",1161,27,"intro",2,"Unhelpful","No Feedback","Conversation","human_ai",FALSE,FALSE,TRUE,75,12.5,0
+"E3",1163,27,"intro",0,"Unhelpful","Feedback","Conversation","human_ai",FALSE,TRUE,FALSE,100,29,1
+"E3",1171,27,"intro",3,"Unhelpful","Feedback","Conversation","human_ai",FALSE,FALSE,TRUE,64,-19.5,0
+"E3",1177,27,"intro",1,"Helpful","Feedback","Hint","human_ai",TRUE,TRUE,TRUE,80,61.5,1
+"E3",1184,27,"intro",1,"Helpful","No Feedback","Hint","human_ai",TRUE,TRUE,FALSE,89,0,0
+"E3",1193,27,"intro",2,"Unhelpful","No Feedback","Hint","human_ai",FALSE,FALSE,TRUE,98,-1.5,0
+"E3",1196,27,"intro",1,"Unhelpful","No Feedback","Conversation","human_ai",FALSE,TRUE,TRUE,100,68.5,0
+"E3",1199,27,"intro",0,"Unhelpful","Feedback","Conversation","human_ai",FALSE,TRUE,TRUE,96,98,0
+"E3",1211,27,"intro",0,"Unhelpful","Feedback","Conversation","human_ai",FALSE,FALSE,TRUE,90,5,0
+"E3",1216,27,"intro",1,"Unhelpful","No Feedback","Conversation","human_ai",FALSE,TRUE,TRUE,100,100,0
+"E3",1240,27,"intro",2,"Unhelpful","No Feedback","Conversation","human_ai",FALSE,FALSE,TRUE,99,-1,0
+"E3",1245,27,"intro",2,"Helpful","No Feedback","Conversation","human_ai",TRUE,TRUE,TRUE,88,77.5,1
+"E3",1248,27,"final",4,"Unhelpful","No Feedback","Hint","human_ai",FALSE,TRUE,FALSE,98,8,1
+"E3",1288,27,"intro",2,"Unhelpful","No Feedback","Hint","human_ai",FALSE,FALSE,TRUE,92,-1,0
+"E3",1295,27,"intro",1,"Helpful","Feedback","Conversation","human_ai",TRUE,TRUE,FALSE,100,36.5,0
+"E3",1300,27,"intro",2,"Unhelpful","Feedback","Conversation","human_ai",FALSE,FALSE,TRUE,57,-12.5,0
+"E3",1309,27,"intro",2,"Unhelpful","No Feedback","Hint","human_ai",FALSE,TRUE,TRUE,70,80.5,0
+"E3",1325,27,"intro",0,"Helpful","Feedback","Conversation","human_ai",TRUE,TRUE,FALSE,98,12,0
+"E3",1327,27,"intro",3,"Unhelpful","No Feedback","Conversation","human_ai",FALSE,FALSE,TRUE,90,0,0
+"E3",1340,27,"intro",3,"Unhelpful","Feedback","Conversation","human_ai",FALSE,FALSE,TRUE,90,-6,0
+"E3",1350,27,"intro",3,"Helpful","No Feedback","Hint","human_ai",TRUE,TRUE,FALSE,61,0,0
+"E3",1369,27,"intro",0,"Unhelpful","No Feedback","Conversation","human_ai",FALSE,FALSE,TRUE,70,15,0
+"E3",1380,27,"intro",0,"Helpful","Feedback","Hint","human_ai",TRUE,TRUE,FALSE,94,12,0
+"E3",1382,27,"intro",0,"Unhelpful","Feedback","Conversation","human_ai",FALSE,TRUE,FALSE,100,9,1
+"E3",1393,27,"intro",0,"Helpful","No Feedback","Hint","human_ai",TRUE,FALSE,TRUE,74,13,1
+"E3",1402,27,"intro",0,"Unhelpful","No Feedback","Conversation","human_ai",FALSE,FALSE,TRUE,96,2,0
+"E3",1406,27,"intro",3,"Unhelpful","Feedback","Hint","human_ai",FALSE,FALSE,TRUE,86,3,0
+"E3",1419,27,"intro",1,"Unhelpful","Feedback","Hint","human_ai",FALSE,TRUE,FALSE,100,17,1
+"E3",1428,27,"intro",3,"Unhelpful","No Feedback","Conversation","human_ai",FALSE,FALSE,TRUE,74,12.5,0
+"E3",1499,27,"intro",3,"Helpful","Feedback","Conversation","human_ai",TRUE,TRUE,TRUE,100,100,1
+"E3",1507,27,"intro",1,"Unhelpful","No Feedback","Hint","human_ai",FALSE,FALSE,TRUE,80,0,0
+"E3",1562,27,"intro",2,"Helpful","Feedback","Conversation","human_ai",TRUE,TRUE,TRUE,100,95,1
+"E3",1610,27,"intro",0,"Unhelpful","No Feedback","Conversation","human_ai",FALSE,FALSE,TRUE,100,0,0
+"E3",1617,27,"intro",2,"Helpful","No Feedback","Conversation","human_ai",TRUE,TRUE,TRUE,90,95,1
+"E3",1619,27,"intro",1,"Helpful","Feedback","Hint","human_ai",TRUE,TRUE,FALSE,66,-1,0
+"E3",869,27,"intro",0,"Unhelpful","No Feedback","Hint","human_ai",FALSE,FALSE,TRUE,86,1.5,0
+"E3",873,27,"intro",3,"Helpful","No Feedback","Conversation","human_ai",TRUE,FALSE,TRUE,100,-50,1
+"E3",892,27,"intro",2,"Helpful","Feedback","Hint","human_ai",TRUE,TRUE,FALSE,88,4,0
+"E3",928,27,"intro",2,"Helpful","No Feedback","Conversation","human_ai",TRUE,TRUE,TRUE,95,65,1
+"E3",944,27,"intro",3,"Unhelpful","Feedback","Hint","human_ai",FALSE,TRUE,FALSE,100,0,1
+"E3",957,27,"intro",0,"Unhelpful","No Feedback","Hint","human_ai",FALSE,FALSE,TRUE,100,0,0
+"E3",958,27,"intro",2,"Unhelpful","No Feedback","Hint","human_ai",FALSE,FALSE,TRUE,100,0,0
+"E3",961,27,"intro",0,"Unhelpful","No Feedback","Hint","human_ai",FALSE,FALSE,TRUE,93,-18.5,0
+"E3",973,27,"intro",3,"Unhelpful","No Feedback","Hint","human_ai",FALSE,FALSE,TRUE,77,11.5,0
+"E3",975,27,"intro",2,"Unhelpful","No Feedback","Conversation","human_ai",FALSE,FALSE,TRUE,78,11,0
+"E3",982,27,"intro",3,"Unhelpful","Feedback","Hint","human_ai",FALSE,FALSE,FALSE,66,-38,1
+"E3",994,27,"intro",1,"Helpful","No Feedback","Conversation","human_ai",TRUE,TRUE,FALSE,86,12.5,0
+"E3",1033,28,"intro",0,"Helpful","No Feedback","Hint","human_ai",TRUE,FALSE,TRUE,97,1.5,1
+"E3",1037,28,"final",4,"Unhelpful","Feedback","Hint","human_ai",FALSE,TRUE,FALSE,72,3,1
+"E3",1061,28,"intro",2,"Unhelpful","Feedback","Hint","human_ai",FALSE,TRUE,FALSE,100,0,1
+"E3",1066,28,"intro",1,"Helpful","Feedback","Hint","human_ai",TRUE,FALSE,TRUE,100,0,1
+"E3",1067,28,"intro",2,"Helpful","No Feedback","Conversation","human_ai",TRUE,FALSE,TRUE,94,0,1
+"E3",1077,28,"intro",3,"Unhelpful","Feedback","Hint","human_ai",FALSE,TRUE,FALSE,100,9.5,1
+"E3",1082,28,"intro",3,"Unhelpful","Feedback","Conversation","human_ai",FALSE,TRUE,TRUE,82,81,0
+"E3",1091,28,"intro",1,"Helpful","Feedback","Hint","human_ai",TRUE,FALSE,TRUE,100,-1.5,1
+"E3",1094,28,"final",4,"Helpful","Feedback","Hint","human_ai",FALSE,TRUE,FALSE,84,23,1
+"E3",1097,28,"intro",0,"Unhelpful","No Feedback","Hint","human_ai",FALSE,FALSE,TRUE,87,5.5,0
+"E3",1106,28,"intro",2,"Helpful","No Feedback","Hint","human_ai",TRUE,FALSE,TRUE,88,-8.5,1
+"E3",1108,28,"intro",0,"Unhelpful","No Feedback","Conversation","human_ai",FALSE,TRUE,FALSE,100,15,1
+"E3",1112,28,"intro",1,"Helpful","No Feedback","Hint","human_ai",TRUE,FALSE,TRUE,85,7.5,1
+"E3",1115,28,"final",4,"Unhelpful","Feedback","Hint","human_ai",FALSE,TRUE,FALSE,62,-7,1
+"E3",1120,28,"final",4,"Helpful","No Feedback","Hint","human_ai",FALSE,TRUE,FALSE,85,0.5,1
+"E3",1123,28,"intro",3,"Unhelpful","No Feedback","Conversation","human_ai",FALSE,TRUE,TRUE,98,90,0
+"E3",1127,28,"intro",3,"Unhelpful","No Feedback","Conversation","human_ai",FALSE,TRUE,FALSE,100,0,1
+"E3",1135,28,"final",4,"Helpful","No Feedback","Hint","human_ai",FALSE,TRUE,FALSE,100,15,1
+"E3",1138,28,"intro",0,"Unhelpful","Feedback","Hint","human_ai",FALSE,TRUE,TRUE,69,58,0
+"E3",1141,28,"intro",3,"Helpful","No Feedback","Hint","human_ai",TRUE,FALSE,TRUE,72,1,1
+"E3",1144,28,"final",4,"Helpful","No Feedback","Hint","human_ai",FALSE,TRUE,FALSE,85,6,1
+"E3",1146,28,"intro",3,"Helpful","No Feedback","Hint","human_ai",TRUE,FALSE,TRUE,68,6.5,1
+"E3",1164,28,"final",4,"Helpful","No Feedback","Hint","human_ai",FALSE,TRUE,FALSE,89,13.5,1
+"E3",1183,28,"intro",2,"Unhelpful","No Feedback","Hint","human_ai",FALSE,TRUE,TRUE,47,44,0
+"E3",1186,28,"intro",1,"Helpful","Feedback","Conversation","human_ai",TRUE,FALSE,TRUE,77,5.5,1
+"E3",1194,28,"intro",0,"Unhelpful","No Feedback","Conversation","human_ai",FALSE,TRUE,FALSE,72,1,1
+"E3",1202,28,"intro",3,"Unhelpful","Feedback","Hint","human_ai",FALSE,TRUE,FALSE,100,10,1
+"E3",1222,28,"intro",3,"Helpful","Feedback","Conversation","human_ai",TRUE,FALSE,TRUE,90,5,1
+"E3",1226,28,"intro",2,"Unhelpful","No Feedback","Hint","human_ai",FALSE,TRUE,FALSE,76,1.5,1
+"E3",1228,28,"intro",1,"Unhelpful","Feedback","Conversation","human_ai",FALSE,TRUE,FALSE,100,19.5,1
+"E3",1237,28,"intro",1,"Unhelpful","No Feedback","Conversation","human_ai",FALSE,FALSE,TRUE,85,7.5,0
+"E3",1248,28,"intro",0,"Unhelpful","No Feedback","Hint","human_ai",FALSE,TRUE,FALSE,81,-9.5,1
+"E3",1253,28,"final",4,"Unhelpful","Feedback","Conversation","human_ai",FALSE,TRUE,FALSE,95,13,1
+"E3",1255,28,"intro",0,"Unhelpful","Feedback","Conversation","human_ai",FALSE,TRUE,FALSE,85,-7.5,1
+"E3",1260,28,"intro",1,"Unhelpful","Feedback","Hint","human_ai",FALSE,TRUE,FALSE,80,-10,1
+"E3",1283,28,"intro",2,"Unhelpful","No Feedback","Conversation","human_ai",FALSE,TRUE,FALSE,85,10,1
+"E3",1300,28,"final",4,"Unhelpful","Feedback","Conversation","human_ai",FALSE,TRUE,FALSE,65,14.5,1
+"E3",1307,28,"intro",0,"Unhelpful","No Feedback","Hint","human_ai",FALSE,TRUE,FALSE,81,4,1
+"E3",1315,28,"final",4,"Helpful","No Feedback","Hint","human_ai",FALSE,TRUE,FALSE,90,0,1
+"E3",1318,28,"intro",0,"Unhelpful","No Feedback","Hint","human_ai",FALSE,TRUE,FALSE,90,15,1
+"E3",1325,28,"intro",1,"Helpful","Feedback","Conversation","human_ai",TRUE,FALSE,TRUE,77,11.5,1
+"E3",1327,28,"intro",1,"Unhelpful","No Feedback","Conversation","human_ai",FALSE,TRUE,TRUE,100,77.5,0
+"E3",1331,28,"final",4,"Helpful","No Feedback","Hint","human_ai",FALSE,TRUE,TRUE,100,63,0
+"E3",1334,28,"final",4,"Helpful","No Feedback","Hint","human_ai",FALSE,TRUE,FALSE,100,4.5,1
+"E3",1336,28,"final",4,"Unhelpful","No Feedback","Conversation","human_ai",FALSE,TRUE,TRUE,96,82.5,0
+"E3",1350,28,"intro",1,"Helpful","No Feedback","Hint","human_ai",TRUE,FALSE,TRUE,65,3.5,1
+"E3",1387,28,"intro",3,"Unhelpful","No Feedback","Conversation","human_ai",FALSE,TRUE,FALSE,86,3.5,1
+"E3",1392,28,"intro",0,"Helpful","Feedback","Conversation","human_ai",TRUE,FALSE,TRUE,90,-6.5,1
+"E3",1393,28,"intro",3,"Helpful","No Feedback","Hint","human_ai",TRUE,FALSE,TRUE,100,0,1
+"E3",1400,28,"intro",2,"Unhelpful","No Feedback","Conversation","human_ai",FALSE,TRUE,FALSE,69,-3.5,1
+"E3",1408,28,"final",4,"Helpful","Feedback","Conversation","human_ai",FALSE,TRUE,TRUE,98,94.5,0
+"E3",1425,28,"intro",3,"Unhelpful","No Feedback","Hint","human_ai",FALSE,TRUE,FALSE,96,-2,1
+"E3",1427,28,"intro",1,"Helpful","Feedback","Hint","human_ai",TRUE,FALSE,TRUE,100,0,1
+"E3",1435,28,"intro",1,"Unhelpful","No Feedback","Hint","human_ai",FALSE,TRUE,FALSE,100,0,1
+"E3",1463,28,"intro",0,"Unhelpful","No Feedback","Hint","human_ai",FALSE,TRUE,FALSE,91,10.5,1
+"E3",1617,28,"intro",3,"Helpful","No Feedback","Conversation","human_ai",TRUE,FALSE,TRUE,100,0,1
+"E3",1623,28,"intro",1,"Unhelpful","Feedback","Conversation","human_ai",FALSE,TRUE,TRUE,75,82.5,0
+"E3",1628,28,"intro",0,"Unhelpful","No Feedback","Conversation","human_ai",FALSE,TRUE,TRUE,73,70,0
+"E3",1633,28,"intro",0,"Unhelpful","Feedback","Conversation","human_ai",FALSE,TRUE,FALSE,94,-3,1
+"E3",1654,28,"intro",2,"Unhelpful","No Feedback","Hint","human_ai",FALSE,TRUE,FALSE,80,20,1
+"E3",1668,28,"intro",0,"Unhelpful","No Feedback","Conversation","human_ai",FALSE,TRUE,FALSE,90,1,1
+"E3",841,28,"final",4,"Helpful","No Feedback","Conversation","human_ai",FALSE,TRUE,FALSE,100,15,1
+"E3",842,28,"intro",0,"Helpful","Feedback","Conversation","human_ai",TRUE,FALSE,TRUE,85,7.5,1
+"E3",850,28,"intro",1,"Helpful","Feedback","Conversation","human_ai",TRUE,FALSE,TRUE,59,0.5,1
+"E3",859,28,"intro",3,"Unhelpful","No Feedback","Conversation","human_ai",FALSE,TRUE,FALSE,100,20,1
+"E3",868,28,"intro",1,"Helpful","No Feedback","Hint","human_ai",TRUE,FALSE,TRUE,75,0,1
+"E3",875,28,"intro",1,"Unhelpful","Feedback","Hint","human_ai",FALSE,TRUE,FALSE,81,-3.5,1
+"E3",880,28,"final",4,"Helpful","Feedback","Conversation","human_ai",FALSE,TRUE,FALSE,91,13.5,1
+"E3",884,28,"intro",3,"Helpful","Feedback","Conversation","human_ai",TRUE,FALSE,TRUE,100,0,1
+"E3",895,28,"intro",2,"Helpful","Feedback","Conversation","human_ai",TRUE,FALSE,TRUE,100,0,1
+"E3",902,28,"intro",2,"Unhelpful","Feedback","Conversation","human_ai",FALSE,TRUE,FALSE,100,3.5,1
+"E3",910,28,"intro",2,"Unhelpful","Feedback","Conversation","human_ai",FALSE,TRUE,FALSE,80,-2.5,1
+"E3",911,28,"final",4,"Unhelpful","No Feedback","Conversation","human_ai",FALSE,TRUE,TRUE,58,41.5,0
+"E3",925,28,"intro",2,"Helpful","No Feedback","Conversation","human_ai",TRUE,FALSE,TRUE,54,23,1
+"E3",935,28,"final",4,"Helpful","Feedback","Hint","human_ai",FALSE,TRUE,TRUE,82,60.5,0
+"E3",937,28,"intro",2,"Unhelpful","No Feedback","Conversation","human_ai",FALSE,TRUE,TRUE,100,81.5,0
+"E3",939,28,"intro",3,"Helpful","No Feedback","Hint","human_ai",TRUE,FALSE,TRUE,97,-13.5,1
+"E3",941,28,"intro",0,"Unhelpful","No Feedback","Conversation","human_ai",FALSE,TRUE,TRUE,95,90,0
+"E3",945,28,"intro",1,"Unhelpful","Feedback","Hint","human_ai",FALSE,TRUE,FALSE,85,1.5,1
+"E3",961,28,"intro",1,"Unhelpful","No Feedback","Hint","human_ai",FALSE,TRUE,FALSE,96,3,1
+"E3",963,28,"intro",3,"Unhelpful","Feedback","Hint","human_ai",FALSE,TRUE,FALSE,95,0.5,1
+"E3",975,28,"intro",0,"Unhelpful","No Feedback","Conversation","human_ai",FALSE,TRUE,TRUE,74,87,0
+"E3",985,28,"intro",1,"Unhelpful","Feedback","Hint","human_ai",FALSE,TRUE,FALSE,95,6.5,1
+"E3",1016,29,"intro",0,"Unhelpful","No Feedback","Conversation","human_ai",FALSE,FALSE,TRUE,100,0,0
+"E3",1037,29,"intro",0,"Unhelpful","Feedback","Hint","human_ai",FALSE,FALSE,TRUE,88,-5,0
+"E3",1038,29,"intro",2,"Unhelpful","Feedback","Conversation","human_ai",FALSE,FALSE,TRUE,97,1.5,0
+"E3",1060,29,"intro",3,"Unhelpful","Feedback","Hint","human_ai",FALSE,FALSE,FALSE,100,-50,1
+"E3",1080,29,"intro",2,"Helpful","No Feedback","Hint","human_ai",TRUE,FALSE,TRUE,88,-16.5,1
+"E3",1091,29,"intro",0,"Helpful","Feedback","Hint","human_ai",TRUE,TRUE,FALSE,100,2.5,0
+"E3",1105,29,"intro",2,"Helpful","Feedback","Conversation","human_ai",TRUE,FALSE,TRUE,91,4.5,1
+"E3",1107,29,"intro",2,"Helpful","No Feedback","Hint","human_ai",TRUE,FALSE,TRUE,100,-17,1
+"E3",1116,29,"intro",3,"Helpful","No Feedback","Hint","human_ai",TRUE,TRUE,TRUE,79,85.5,1
+"E3",1118,29,"intro",0,"Helpful","Feedback","Hint","human_ai",TRUE,TRUE,FALSE,100,0,0
+"E3",1124,29,"intro",1,"Helpful","No Feedback","Conversation","human_ai",TRUE,TRUE,TRUE,100,100,1
+"E3",1142,29,"intro",0,"Helpful","No Feedback","Hint","human_ai",TRUE,TRUE,FALSE,84,12.5,0
+"E3",1157,29,"intro",3,"Helpful","No Feedback","Conversation","human_ai",TRUE,TRUE,TRUE,70,70.5,1
+"E3",1158,29,"intro",2,"Helpful","No Feedback","Hint","human_ai",TRUE,TRUE,TRUE,70,63.5,1
+"E3",1202,29,"intro",1,"Unhelpful","Feedback","Hint","human_ai",FALSE,FALSE,TRUE,100,-3,0
+"E3",1206,29,"intro",1,"Helpful","Feedback","Hint","human_ai",TRUE,TRUE,FALSE,90,10,0
+"E3",1209,29,"intro",0,"Helpful","No Feedback","Conversation","human_ai",TRUE,TRUE,FALSE,97,39.5,0
+"E3",1226,29,"intro",0,"Unhelpful","No Feedback","Hint","human_ai",FALSE,FALSE,TRUE,93,-15.5,0
+"E3",1228,29,"intro",0,"Unhelpful","Feedback","Conversation","human_ai",FALSE,FALSE,FALSE,100,-100,1
+"E3",1230,29,"intro",2,"Unhelpful","Feedback","Conversation","human_ai",FALSE,FALSE,TRUE,91,4.5,0
+"E3",1243,29,"intro",0,"Helpful","No Feedback","Conversation","human_ai",TRUE,FALSE,TRUE,71,14.5,1
+"E3",1245,29,"intro",3,"Helpful","No Feedback","Conversation","human_ai",TRUE,TRUE,TRUE,86,75,1
+"E3",1313,29,"intro",3,"Unhelpful","Feedback","Hint","human_ai",FALSE,FALSE,TRUE,88,-5.5,0
+"E3",1316,29,"intro",1,"Unhelpful","Feedback","Conversation","human_ai",FALSE,FALSE,TRUE,100,-16.5,0
+"E3",1318,29,"intro",3,"Unhelpful","No Feedback","Hint","human_ai",FALSE,FALSE,TRUE,90,5,0
+"E3",1324,29,"final",4,"Helpful","Feedback","Hint","human_ai",FALSE,TRUE,FALSE,100,8.5,1
+"E3",1325,29,"intro",2,"Helpful","Feedback","Conversation","human_ai",TRUE,TRUE,TRUE,97,82.5,1
+"E3",1334,29,"intro",1,"Helpful","No Feedback","Hint","human_ai",TRUE,FALSE,TRUE,100,-2.5,1
+"E3",1336,29,"intro",0,"Unhelpful","No Feedback","Conversation","human_ai",FALSE,FALSE,TRUE,85,1,0
+"E3",1354,29,"intro",2,"Helpful","Feedback","Hint","human_ai",TRUE,TRUE,FALSE,100,0,0
+"E3",1365,29,"intro",0,"Helpful","No Feedback","Hint","human_ai",TRUE,TRUE,FALSE,68,20.5,0
+"E3",1408,29,"intro",0,"Helpful","Feedback","Conversation","human_ai",TRUE,TRUE,TRUE,57,61,1
+"E3",1423,29,"intro",0,"Unhelpful","No Feedback","Conversation","human_ai",FALSE,FALSE,TRUE,74,4.5,0
+"E3",1434,29,"intro",1,"Unhelpful","Feedback","Conversation","human_ai",FALSE,TRUE,TRUE,99,92.5,0
+"E3",1453,29,"intro",2,"Helpful","Feedback","Conversation","human_ai",TRUE,TRUE,TRUE,100,100,1
+"E3",1466,29,"final",4,"Helpful","Feedback","Hint","human_ai",FALSE,TRUE,FALSE,99,12.5,1
+"E3",1471,29,"intro",1,"Helpful","No Feedback","Conversation","human_ai",TRUE,TRUE,TRUE,27,63.5,1
+"E3",1488,29,"intro",3,"Unhelpful","Feedback","Conversation","human_ai",FALSE,FALSE,TRUE,79,-8,0
+"E3",1531,29,"intro",2,"Unhelpful","No Feedback","Conversation","human_ai",FALSE,TRUE,FALSE,77,-4,1
+"E3",1541,29,"intro",1,"Unhelpful","No Feedback","Hint","human_ai",FALSE,FALSE,TRUE,76,12,0
+"E3",1561,29,"intro",3,"Helpful","No Feedback","Hint","human_ai",TRUE,TRUE,FALSE,65,14.5,0
+"E3",1614,29,"final",4,"Helpful","No Feedback","Conversation","human_ai",FALSE,TRUE,TRUE,100,80.5,0
+"E3",1633,29,"intro",3,"Unhelpful","Feedback","Conversation","human_ai",FALSE,FALSE,TRUE,75,9,0
+"E3",1654,29,"intro",1,"Unhelpful","No Feedback","Hint","human_ai",FALSE,FALSE,TRUE,95,-11.5,0
+"E3",1668,29,"intro",1,"Unhelpful","No Feedback","Conversation","human_ai",FALSE,FALSE,TRUE,100,0,0
+"E3",844,29,"intro",1,"Helpful","No Feedback","Hint","human_ai",TRUE,TRUE,FALSE,96,2,0
+"E3",853,29,"final",4,"Helpful","Feedback","Hint","human_ai",FALSE,TRUE,TRUE,100,94,0
+"E3",855,29,"intro",1,"Unhelpful","Feedback","Hint","human_ai",FALSE,FALSE,TRUE,84,-7,0
+"E3",880,29,"intro",2,"Helpful","Feedback","Conversation","human_ai",TRUE,TRUE,FALSE,100,20.5,0
+"E3",926,29,"intro",3,"Helpful","No Feedback","Conversation","human_ai",TRUE,TRUE,TRUE,59,69.5,1
+"E3",929,29,"intro",2,"Unhelpful","No Feedback","Conversation","human_ai",FALSE,FALSE,TRUE,81,9.5,0
+"E3",937,29,"intro",3,"Unhelpful","No Feedback","Conversation","human_ai",FALSE,FALSE,TRUE,100,0,0
+"E3",946,29,"intro",2,"Unhelpful","Feedback","Conversation","human_ai",FALSE,FALSE,TRUE,83,-4,0
+"E3",962,29,"intro",3,"Helpful","No Feedback","Hint","human_ai",TRUE,TRUE,FALSE,89,17,0
+"E3",963,29,"intro",1,"Unhelpful","Feedback","Hint","human_ai",FALSE,FALSE,TRUE,100,-4,0
+"E3",969,29,"intro",2,"Helpful","No Feedback","Conversation","human_ai",TRUE,TRUE,TRUE,83,91.5,1
+"E3",970,29,"intro",1,"Unhelpful","No Feedback","Hint","human_ai",FALSE,FALSE,TRUE,77,-3.5,0
+"E3",973,29,"intro",2,"Unhelpful","No Feedback","Hint","human_ai",FALSE,TRUE,TRUE,79,89.5,0
+"E3",981,29,"intro",0,"Helpful","Feedback","Hint","human_ai",TRUE,TRUE,TRUE,91,89,1
+"E3",987,29,"intro",2,"Helpful","Feedback","Hint","human_ai",TRUE,TRUE,FALSE,78,-4.5,0
+"E3",988,29,"intro",1,"Unhelpful","Feedback","Conversation","human_ai",FALSE,FALSE,TRUE,88,6,0
+"E3",1020,3,"final",4,"Unhelpful","Feedback","Conversation","human_ai",FALSE,TRUE,TRUE,100,100,0
+"E3",1063,3,"final",4,"Unhelpful","No Feedback","Hint","human_ai",FALSE,TRUE,FALSE,77,8,1
+"E3",1070,3,"final",4,"Unhelpful","No Feedback","Conversation","human_ai",FALSE,TRUE,FALSE,100,0,1
+"E3",1079,3,"final",4,"Helpful","No Feedback","Conversation","human_ai",FALSE,TRUE,FALSE,100,0,1
+"E3",1080,3,"intro",1,"Helpful","No Feedback","Hint","human_ai",TRUE,FALSE,FALSE,95,-67.5,0
+"E3",1081,3,"intro",3,"Unhelpful","Feedback","Conversation","human_ai",FALSE,FALSE,TRUE,100,0,0
+"E3",1095,3,"intro",3,"Helpful","Feedback","Conversation","human_ai",TRUE,TRUE,TRUE,84,75.5,1
+"E3",1099,3,"intro",2,"Unhelpful","Feedback","Hint","human_ai",FALSE,TRUE,FALSE,73,8,1
+"E3",1100,3,"intro",2,"Helpful","No Feedback","Hint","human_ai",TRUE,TRUE,FALSE,100,0,0
+"E3",1116,3,"final",4,"Helpful","No Feedback","Hint","human_ai",FALSE,TRUE,TRUE,100,92,0
+"E3",1132,3,"intro",3,"Unhelpful","Feedback","Conversation","human_ai",FALSE,FALSE,TRUE,100,0,0
+"E3",1137,3,"intro",0,"Helpful","No Feedback","Conversation","human_ai",TRUE,FALSE,TRUE,85,2.5,1
+"E3",1152,3,"intro",0,"Helpful","Feedback","Hint","human_ai",TRUE,TRUE,FALSE,89,2.5,0
+"E3",1154,3,"final",4,"Helpful","Feedback","Conversation","human_ai",FALSE,TRUE,TRUE,100,100,0
+"E3",1160,3,"intro",3,"Helpful","Feedback","Hint","human_ai",TRUE,TRUE,TRUE,64,45,1
+"E3",1171,3,"intro",0,"Unhelpful","Feedback","Conversation","human_ai",FALSE,FALSE,TRUE,63,8,0
+"E3",1186,3,"intro",3,"Helpful","Feedback","Conversation","human_ai",TRUE,TRUE,TRUE,80,78.5,1
+"E3",1187,3,"intro",1,"Unhelpful","Feedback","Hint","human_ai",FALSE,FALSE,TRUE,70,5,0
+"E3",1190,3,"intro",3,"Helpful","Feedback","Hint","human_ai",TRUE,TRUE,FALSE,100,18,0
+"E3",1210,3,"intro",3,"Unhelpful","No Feedback","Hint","human_ai",FALSE,FALSE,TRUE,78,11,0
+"E3",1215,3,"intro",1,"Helpful","No Feedback","Hint","human_ai",TRUE,TRUE,FALSE,82,11,0
+"E3",1218,3,"intro",3,"Unhelpful","Feedback","Conversation","human_ai",FALSE,FALSE,FALSE,76,-57.5,1
+"E3",1221,3,"intro",1,"Unhelpful","Feedback","Hint","human_ai",FALSE,TRUE,FALSE,76,-12,1
+"E3",1233,3,"intro",0,"Helpful","No Feedback","Conversation","human_ai",TRUE,TRUE,FALSE,100,0,0
+"E3",1237,3,"intro",0,"Unhelpful","No Feedback","Conversation","human_ai",FALSE,TRUE,TRUE,72,86,0
+"E3",1278,3,"final",4,"Unhelpful","Feedback","Hint","human_ai",FALSE,TRUE,FALSE,100,22,1
+"E3",1286,3,"final",4,"Unhelpful","Feedback","Conversation","human_ai",FALSE,TRUE,TRUE,100,82.5,0
+"E3",1293,3,"final",4,"Helpful","Feedback","Conversation","human_ai",FALSE,TRUE,FALSE,100,0,1
+"E3",1295,3,"final",4,"Helpful","Feedback","Conversation","human_ai",FALSE,TRUE,TRUE,100,90,0
+"E3",1305,3,"intro",1,"Helpful","Feedback","Hint","human_ai",TRUE,TRUE,TRUE,70,51,1
+"E3",1309,3,"intro",3,"Unhelpful","No Feedback","Hint","human_ai",FALSE,FALSE,TRUE,74,13,0
+"E3",1324,3,"intro",0,"Helpful","Feedback","Hint","human_ai",TRUE,TRUE,FALSE,80,25,0
+"E3",1326,3,"intro",1,"Helpful","No Feedback","Conversation","human_ai",TRUE,TRUE,TRUE,100,97,1
+"E3",1336,3,"intro",2,"Unhelpful","No Feedback","Conversation","human_ai",FALSE,FALSE,FALSE,89,-77.5,1
+"E3",1338,3,"intro",1,"Unhelpful","No Feedback","Hint","human_ai",FALSE,FALSE,TRUE,74,3.5,0
+"E3",1343,3,"intro",2,"Unhelpful","Feedback","Hint","human_ai",FALSE,FALSE,TRUE,73,-5.5,0
+"E3",1345,3,"intro",0,"Helpful","Feedback","Conversation","human_ai",TRUE,TRUE,FALSE,100,2.5,0
+"E3",1361,3,"intro",1,"Helpful","Feedback","Hint","human_ai",TRUE,TRUE,FALSE,97,-1.5,0
+"E3",1381,3,"intro",0,"Unhelpful","Feedback","Hint","human_ai",FALSE,FALSE,TRUE,100,-4.5,0
+"E3",1389,3,"intro",0,"Unhelpful","No Feedback","Conversation","human_ai",FALSE,FALSE,TRUE,100,0,0
+"E3",1392,3,"intro",2,"Helpful","Feedback","Conversation","human_ai",TRUE,TRUE,TRUE,82,83.5,1
+"E3",1409,3,"intro",2,"Helpful","Feedback","Hint","human_ai",TRUE,TRUE,FALSE,90,10,0
+"E3",1414,3,"final",4,"Helpful","No Feedback","Hint","human_ai",FALSE,TRUE,TRUE,100,62.5,0
+"E3",1434,3,"intro",0,"Unhelpful","Feedback","Conversation","human_ai",FALSE,FALSE,TRUE,89,-1.5,0
+"E3",1435,3,"intro",2,"Unhelpful","No Feedback","Hint","human_ai",FALSE,FALSE,TRUE,100,0,0
+"E3",1453,3,"intro",0,"Helpful","Feedback","Conversation","human_ai",TRUE,TRUE,TRUE,100,100,1
+"E3",1466,3,"intro",1,"Helpful","Feedback","Hint","human_ai",TRUE,FALSE,TRUE,74,4.5,1
+"E3",1499,3,"final",4,"Helpful","Feedback","Conversation","human_ai",FALSE,TRUE,FALSE,100,0,1
+"E3",1507,3,"intro",0,"Unhelpful","No Feedback","Hint","human_ai",FALSE,FALSE,TRUE,77,4,0
+"E3",1559,3,"intro",3,"Unhelpful","Feedback","Conversation","human_ai",FALSE,FALSE,TRUE,65,5.5,0
+"E3",1570,3,"final",4,"Unhelpful","Feedback","Hint","human_ai",FALSE,TRUE,FALSE,100,16,1
+"E3",1572,3,"intro",3,"Helpful","No Feedback","Conversation","human_ai",TRUE,TRUE,TRUE,100,100,1
+"E3",1614,3,"intro",1,"Helpful","No Feedback","Conversation","human_ai",TRUE,TRUE,TRUE,87,85,1
+"E3",1628,3,"final",4,"Unhelpful","No Feedback","Conversation","human_ai",FALSE,TRUE,TRUE,82,63.5,0
+"E3",1644,3,"intro",2,"Helpful","No Feedback","Hint","human_ai",TRUE,FALSE,TRUE,90,-2.5,1
+"E3",1650,3,"intro",0,"Unhelpful","No Feedback","Conversation","human_ai",FALSE,TRUE,FALSE,89,7,1
+"E3",842,3,"final",4,"Helpful","Feedback","Conversation","human_ai",FALSE,TRUE,TRUE,100,90,0
+"E3",844,3,"intro",2,"Helpful","No Feedback","Hint","human_ai",TRUE,FALSE,TRUE,97,-28.5,1
+"E3",845,3,"intro",2,"Helpful","Feedback","Conversation","human_ai",TRUE,TRUE,TRUE,99,78,1
+"E3",847,3,"final",4,"Unhelpful","No Feedback","Conversation","human_ai",FALSE,TRUE,FALSE,100,0,1
+"E3",866,3,"intro",2,"Unhelpful","Feedback","Conversation","human_ai",FALSE,FALSE,TRUE,95,-2.5,0
+"E3",867,3,"final",4,"Unhelpful","Feedback","Hint","human_ai",FALSE,TRUE,FALSE,100,0,1
+"E3",869,3,"intro",3,"Unhelpful","No Feedback","Hint","human_ai",FALSE,TRUE,TRUE,97,85.5,0
+"E3",872,3,"final",4,"Helpful","No Feedback","Hint","human_ai",FALSE,TRUE,FALSE,98,8,1
+"E3",880,3,"intro",0,"Helpful","Feedback","Conversation","human_ai",TRUE,TRUE,TRUE,95,83,1
+"E3",882,3,"intro",2,"Helpful","No Feedback","Hint","human_ai",TRUE,TRUE,FALSE,100,0,0
+"E3",900,3,"intro",1,"Helpful","No Feedback","Hint","human_ai",TRUE,TRUE,FALSE,97,0.5,0
+"E3",902,3,"intro",0,"Unhelpful","Feedback","Conversation","human_ai",FALSE,FALSE,TRUE,93,-8,0
+"E3",909,3,"intro",1,"Unhelpful","No Feedback","Conversation","human_ai",FALSE,TRUE,FALSE,98,10,1
+"E3",910,3,"intro",1,"Unhelpful","Feedback","Conversation","human_ai",FALSE,FALSE,TRUE,75,-12.5,0
+"E3",923,3,"intro",0,"Unhelpful","Feedback","Conversation","human_ai",FALSE,TRUE,FALSE,80,-2.5,1
+"E3",925,3,"intro",1,"Helpful","No Feedback","Conversation","human_ai",TRUE,TRUE,TRUE,64,71,1
+"E3",945,3,"intro",2,"Unhelpful","Feedback","Hint","human_ai",FALSE,TRUE,FALSE,86,13,1
+"E3",946,3,"intro",3,"Unhelpful","Feedback","Conversation","human_ai",FALSE,TRUE,FALSE,80,5,1
+"E3",959,3,"intro",3,"Unhelpful","Feedback","Conversation","human_ai",FALSE,TRUE,TRUE,64,72,0
+"E3",972,3,"intro",2,"Unhelpful","No Feedback","Hint","human_ai",FALSE,TRUE,TRUE,64,71.5,0
+"E3",973,3,"intro",1,"Unhelpful","No Feedback","Hint","human_ai",FALSE,TRUE,TRUE,77,88.5,0
+"E3",974,3,"intro",3,"Helpful","Feedback","Hint","human_ai",TRUE,TRUE,FALSE,75,32.5,0
+"E3",981,3,"final",4,"Helpful","Feedback","Hint","human_ai",FALSE,TRUE,FALSE,100,13.5,1
+"E3",982,3,"intro",1,"Unhelpful","Feedback","Hint","human_ai",FALSE,FALSE,TRUE,68,-4,0
+"E3",996,3,"final",4,"Helpful","Feedback","Hint","human_ai",FALSE,TRUE,FALSE,100,0,1
+"E3",1063,30,"intro",0,"Unhelpful","No Feedback","Hint","human_ai",FALSE,TRUE,FALSE,64,2.5,1
+"E3",1066,30,"intro",3,"Helpful","Feedback","Hint","human_ai",TRUE,TRUE,FALSE,66,3,0
+"E3",1083,30,"intro",2,"Helpful","Feedback","Conversation","human_ai",TRUE,FALSE,TRUE,94,3,1
+"E3",1099,30,"intro",0,"Unhelpful","Feedback","Hint","human_ai",FALSE,TRUE,FALSE,75,18.5,1
+"E3",1107,30,"intro",1,"Helpful","No Feedback","Hint","human_ai",TRUE,FALSE,TRUE,78,7,1
+"E3",1115,30,"intro",3,"Unhelpful","Feedback","Hint","human_ai",FALSE,TRUE,FALSE,62,-3,1
+"E3",1118,30,"intro",2,"Helpful","Feedback","Hint","human_ai",TRUE,FALSE,TRUE,78,-9,1
+"E3",1119,30,"intro",2,"Unhelpful","Feedback","Hint","human_ai",FALSE,TRUE,FALSE,83,2.5,1
+"E3",1125,30,"intro",0,"Helpful","No Feedback","Conversation","human_ai",TRUE,FALSE,TRUE,100,0,1
+"E3",1133,30,"intro",0,"Unhelpful","Feedback","Hint","human_ai",FALSE,FALSE,TRUE,89,5.5,0
+"E3",1144,30,"intro",3,"Helpful","No Feedback","Hint","human_ai",TRUE,FALSE,TRUE,82,-1.5,1
+"E3",1156,30,"intro",0,"Unhelpful","No Feedback","Conversation","human_ai",FALSE,TRUE,TRUE,73,76,0
+"E3",1166,30,"intro",1,"Unhelpful","No Feedback","Hint","human_ai",FALSE,TRUE,FALSE,69,0,1
+"E3",1168,30,"intro",1,"Unhelpful","Feedback","Hint","human_ai",FALSE,TRUE,FALSE,99,31.5,1
+"E3",1204,30,"intro",2,"Helpful","No Feedback","Hint","human_ai",TRUE,FALSE,TRUE,85,3.5,1
+"E3",1208,30,"intro",3,"Unhelpful","Feedback","Conversation","human_ai",FALSE,FALSE,TRUE,100,-35.5,0
+"E3",1228,30,"intro",3,"Unhelpful","Feedback","Conversation","human_ai",FALSE,FALSE,FALSE,98,-77,1
+"E3",1237,30,"final",4,"Unhelpful","No Feedback","Conversation","human_ai",FALSE,TRUE,TRUE,86,93,0
+"E3",1247,30,"intro",1,"Helpful","Feedback","Conversation","human_ai",TRUE,TRUE,TRUE,71,85.5,1
+"E3",1256,30,"intro",3,"Helpful","Feedback","Conversation","human_ai",TRUE,TRUE,TRUE,79,66.5,1
+"E3",1258,30,"intro",1,"Unhelpful","Feedback","Conversation","human_ai",FALSE,FALSE,TRUE,56,7.5,0
+"E3",1260,30,"intro",2,"Unhelpful","Feedback","Hint","human_ai",FALSE,FALSE,TRUE,100,0,0
+"E3",1307,30,"intro",1,"Unhelpful","No Feedback","Hint","human_ai",FALSE,TRUE,FALSE,79,11.5,1
+"E3",1331,30,"intro",1,"Helpful","No Feedback","Hint","human_ai",TRUE,FALSE,TRUE,69,15.5,1
+"E3",1340,30,"intro",2,"Unhelpful","Feedback","Conversation","human_ai",FALSE,TRUE,FALSE,100,0,1
+"E3",1351,30,"intro",0,"Helpful","Feedback","Hint","human_ai",TRUE,TRUE,TRUE,56,57.5,1
+"E3",1356,30,"intro",2,"Helpful","No Feedback","Conversation","human_ai",TRUE,FALSE,TRUE,100,0,1
+"E3",1391,30,"intro",3,"Unhelpful","No Feedback","Conversation","human_ai",FALSE,FALSE,FALSE,73,-81,1
+"E3",1393,30,"intro",1,"Helpful","No Feedback","Hint","human_ai",TRUE,TRUE,FALSE,76,-7.5,0
+"E3",1395,30,"intro",3,"Unhelpful","No Feedback","Hint","human_ai",FALSE,TRUE,TRUE,65,77.5,0
+"E3",1431,30,"intro",3,"Helpful","No Feedback","Hint","human_ai",TRUE,FALSE,TRUE,78,0.5,1
+"E3",1544,30,"intro",2,"Helpful","No Feedback","Hint","human_ai",TRUE,FALSE,TRUE,98,-4,1
+"E3",1600,30,"intro",2,"Unhelpful","Feedback","Conversation","human_ai",FALSE,TRUE,TRUE,100,100,0
+"E3",1663,30,"intro",2,"Helpful","Feedback","Conversation","human_ai",TRUE,TRUE,TRUE,92,87.5,1
+"E3",853,30,"intro",3,"Helpful","Feedback","Hint","human_ai",TRUE,FALSE,TRUE,98,-0.5,1
+"E3",869,30,"final",4,"Unhelpful","No Feedback","Hint","human_ai",FALSE,TRUE,FALSE,100,20.5,1
+"E3",873,30,"intro",1,"Helpful","No Feedback","Conversation","human_ai",TRUE,TRUE,TRUE,93,96.5,1
+"E3",883,30,"intro",2,"Helpful","Feedback","Hint","human_ai",TRUE,FALSE,TRUE,90,5,1
+"E3",892,30,"intro",0,"Helpful","Feedback","Hint","human_ai",TRUE,FALSE,TRUE,88,3.5,1
+"E3",959,30,"intro",0,"Unhelpful","Feedback","Conversation","human_ai",FALSE,TRUE,TRUE,81,87,0
+"E3",963,30,"intro",0,"Unhelpful","Feedback","Hint","human_ai",FALSE,TRUE,FALSE,98,4.5,1
+"E3",989,30,"intro",1,"Unhelpful","No Feedback","Hint","human_ai",FALSE,FALSE,TRUE,72,-4,0
+"E3",1005,4,"intro",0,"Helpful","Feedback","Conversation","human_ai",TRUE,TRUE,FALSE,70,15,0
+"E3",1015,4,"intro",1,"Helpful","No Feedback","Hint","human_ai",TRUE,TRUE,FALSE,82,-4.5,0
+"E3",1031,4,"intro",1,"Helpful","Feedback","Hint","human_ai",TRUE,TRUE,TRUE,96,98,1
+"E3",1044,4,"intro",3,"Unhelpful","Feedback","Conversation","human_ai",FALSE,FALSE,FALSE,43,-21.5,1
+"E3",1061,4,"intro",1,"Unhelpful","Feedback","Hint","human_ai",FALSE,FALSE,TRUE,80,-3.5,0
+"E3",1081,4,"final",4,"Unhelpful","Feedback","Conversation","human_ai",FALSE,TRUE,FALSE,100,0,1
+"E3",1112,4,"intro",3,"Helpful","No Feedback","Hint","human_ai",TRUE,TRUE,FALSE,87,3.5,0
+"E3",1120,4,"intro",1,"Helpful","No Feedback","Hint","human_ai",TRUE,FALSE,TRUE,81,2,1
+"E3",1124,4,"intro",2,"Helpful","No Feedback","Conversation","human_ai",TRUE,TRUE,TRUE,90,95,1
+"E3",1127,4,"intro",1,"Unhelpful","No Feedback","Conversation","human_ai",FALSE,FALSE,TRUE,80,10,0
+"E3",1129,4,"intro",1,"Helpful","Feedback","Hint","human_ai",TRUE,TRUE,TRUE,96,80,1
+"E3",1132,4,"intro",1,"Unhelpful","Feedback","Conversation","human_ai",FALSE,FALSE,TRUE,100,0,0
+"E3",1133,4,"intro",1,"Unhelpful","Feedback","Hint","human_ai",FALSE,TRUE,TRUE,80,90,0
+"E3",1153,4,"intro",0,"Unhelpful","Feedback","Conversation","human_ai",FALSE,FALSE,TRUE,93,3.5,0
+"E3",1162,4,"intro",2,"Helpful","Feedback","Hint","human_ai",TRUE,TRUE,FALSE,73,7,0
+"E3",1168,4,"intro",3,"Unhelpful","Feedback","Hint","human_ai",FALSE,FALSE,TRUE,62,1.5,0
+"E3",1177,4,"intro",2,"Helpful","Feedback","Hint","human_ai",TRUE,TRUE,FALSE,84,3.5,0
+"E3",1180,4,"intro",1,"Helpful","Feedback","Conversation","human_ai",TRUE,TRUE,FALSE,100,0,0
+"E3",1186,4,"intro",2,"Helpful","Feedback","Conversation","human_ai",TRUE,TRUE,TRUE,79,86.5,1
+"E3",1190,4,"intro",2,"Helpful","Feedback","Hint","human_ai",TRUE,TRUE,FALSE,100,0,0
+"E3",1198,4,"intro",0,"Unhelpful","Feedback","Conversation","human_ai",FALSE,FALSE,TRUE,68,16,0
+"E3",1206,4,"intro",0,"Helpful","Feedback","Hint","human_ai",TRUE,TRUE,FALSE,80,0.5,0
+"E3",1218,4,"intro",2,"Unhelpful","Feedback","Conversation","human_ai",FALSE,FALSE,TRUE,75,-25,0
+"E3",1219,4,"intro",2,"Unhelpful","Feedback","Hint","human_ai",FALSE,FALSE,TRUE,74,13,0
+"E3",1243,4,"intro",1,"Helpful","No Feedback","Conversation","human_ai",TRUE,TRUE,TRUE,54,77,1
+"E3",1255,4,"intro",1,"Unhelpful","Feedback","Conversation","human_ai",FALSE,FALSE,TRUE,65,5.5,0
+"E3",1274,4,"final",4,"Helpful","No Feedback","Hint","human_ai",FALSE,TRUE,FALSE,100,10,1
+"E3",1283,4,"intro",0,"Unhelpful","No Feedback","Conversation","human_ai",FALSE,FALSE,TRUE,75,0,0
+"E3",1290,4,"intro",0,"Unhelpful","Feedback","Conversation","human_ai",FALSE,FALSE,TRUE,76,12,0
+"E3",1292,4,"intro",1,"Unhelpful","Feedback","Conversation","human_ai",FALSE,FALSE,TRUE,70,-35,0
+"E3",1309,4,"intro",0,"Unhelpful","No Feedback","Hint","human_ai",FALSE,FALSE,TRUE,74,3,0
+"E3",1314,4,"intro",3,"Unhelpful","No Feedback","Hint","human_ai",FALSE,TRUE,FALSE,68,-0.5,1
+"E3",1321,4,"intro",1,"Unhelpful","Feedback","Conversation","human_ai",FALSE,FALSE,TRUE,59,-29.5,0
+"E3",1350,4,"intro",0,"Helpful","No Feedback","Hint","human_ai",TRUE,TRUE,FALSE,66,15.5,0
+"E3",1358,4,"intro",0,"Unhelpful","Feedback","Conversation","human_ai",FALSE,FALSE,TRUE,100,-7,0
+"E3",1366,4,"intro",0,"Helpful","Feedback","Hint","human_ai",TRUE,TRUE,FALSE,100,0,0
+"E3",1370,4,"intro",0,"Helpful","Feedback","Hint","human_ai",TRUE,TRUE,FALSE,100,0,0
+"E3",1375,4,"intro",1,"Unhelpful","No Feedback","Hint","human_ai",FALSE,FALSE,TRUE,100,0,0
+"E3",1377,4,"intro",3,"Unhelpful","Feedback","Hint","human_ai",FALSE,FALSE,TRUE,92,-1,0
+"E3",1380,4,"intro",3,"Helpful","Feedback","Hint","human_ai",TRUE,TRUE,FALSE,96,3,0
+"E3",1387,4,"intro",1,"Unhelpful","No Feedback","Conversation","human_ai",FALSE,FALSE,TRUE,78,2,0
+"E3",1389,4,"final",4,"Unhelpful","No Feedback","Conversation","human_ai",FALSE,TRUE,TRUE,100,100,0
+"E3",1401,4,"final",4,"Unhelpful","Feedback","Conversation","human_ai",FALSE,TRUE,FALSE,100,0,1
+"E3",1414,4,"intro",0,"Helpful","No Feedback","Hint","human_ai",TRUE,TRUE,FALSE,95,10,0
+"E3",1420,4,"final",4,"Unhelpful","Feedback","Hint","human_ai",FALSE,TRUE,FALSE,100,19,1
+"E3",1430,4,"intro",1,"Helpful","Feedback","Hint","human_ai",TRUE,TRUE,FALSE,62,-5.5,0
+"E3",1435,4,"intro",3,"Unhelpful","No Feedback","Hint","human_ai",FALSE,FALSE,TRUE,100,0,0
+"E3",1462,4,"intro",1,"Helpful","No Feedback","Hint","human_ai",TRUE,TRUE,TRUE,80,67.5,1
+"E3",1465,4,"intro",2,"Unhelpful","Feedback","Hint","human_ai",FALSE,FALSE,TRUE,88,-24.5,0
+"E3",1504,4,"intro",0,"Helpful","Feedback","Conversation","human_ai",TRUE,FALSE,TRUE,63,9.5,1
+"E3",1523,4,"intro",3,"Helpful","Feedback","Conversation","human_ai",TRUE,TRUE,TRUE,85,84.5,1
+"E3",1553,4,"intro",1,"Helpful","Feedback","Hint","human_ai",TRUE,TRUE,FALSE,88,5,0
+"E3",1556,4,"intro",2,"Helpful","No Feedback","Conversation","human_ai",TRUE,TRUE,FALSE,100,17.5,0
+"E3",1572,4,"intro",2,"Helpful","No Feedback","Conversation","human_ai",TRUE,TRUE,TRUE,100,100,1
+"E3",1613,4,"intro",1,"Helpful","No Feedback","Hint","human_ai",TRUE,TRUE,FALSE,100,0,0
+"E3",1648,4,"intro",1,"Unhelpful","Feedback","Conversation","human_ai",FALSE,FALSE,TRUE,100,0,0
+"E3",842,4,"intro",3,"Helpful","Feedback","Conversation","human_ai",TRUE,TRUE,TRUE,100,90,1
+"E3",843,4,"intro",1,"Unhelpful","Feedback","Conversation","human_ai",FALSE,FALSE,TRUE,100,-15,0
+"E3",853,4,"intro",0,"Helpful","Feedback","Hint","human_ai",TRUE,TRUE,TRUE,84,81,1
+"E3",860,4,"intro",1,"Unhelpful","No Feedback","Hint","human_ai",FALSE,FALSE,TRUE,90,5,0
+"E3",869,4,"intro",2,"Unhelpful","No Feedback","Hint","human_ai",FALSE,FALSE,TRUE,84,-14,0
+"E3",872,4,"intro",1,"Helpful","No Feedback","Hint","human_ai",TRUE,TRUE,FALSE,78,-1.5,0
+"E3",881,4,"intro",1,"Helpful","No Feedback","Conversation","human_ai",TRUE,TRUE,TRUE,76,56,1
+"E3",882,4,"intro",1,"Helpful","No Feedback","Hint","human_ai",TRUE,TRUE,FALSE,100,0,0
+"E3",895,4,"intro",1,"Helpful","Feedback","Conversation","human_ai",TRUE,TRUE,TRUE,78,86,1
+"E3",913,4,"intro",0,"Helpful","Feedback","Hint","human_ai",TRUE,TRUE,FALSE,100,0,0
+"E3",935,4,"intro",1,"Helpful","Feedback","Hint","human_ai",TRUE,TRUE,TRUE,87,71.5,1
+"E3",942,4,"intro",3,"Helpful","Feedback","Hint","human_ai",TRUE,TRUE,TRUE,73,70.5,1
+"E3",943,4,"intro",3,"Helpful","Feedback","Conversation","human_ai",TRUE,TRUE,TRUE,94,87,1
+"E3",949,4,"intro",3,"Unhelpful","Feedback","Conversation","human_ai",FALSE,FALSE,TRUE,93,2,0
+"E3",951,4,"intro",3,"Helpful","No Feedback","Conversation","human_ai",TRUE,TRUE,TRUE,92,96,1
+"E3",954,4,"intro",1,"Unhelpful","Feedback","Conversation","human_ai",FALSE,FALSE,FALSE,86,-78.5,1
+"E3",963,4,"intro",2,"Unhelpful","Feedback","Hint","human_ai",FALSE,FALSE,FALSE,96,-79.5,1
+"E3",968,4,"intro",2,"Helpful","No Feedback","Hint","human_ai",TRUE,TRUE,FALSE,70,-2.5,0
+"E3",974,4,"intro",2,"Helpful","Feedback","Hint","human_ai",TRUE,FALSE,TRUE,75,-7.5,1
+"E3",984,4,"final",4,"Helpful","No Feedback","Hint","human_ai",FALSE,TRUE,TRUE,100,100,0
+"E3",988,4,"intro",0,"Unhelpful","Feedback","Conversation","human_ai",FALSE,TRUE,TRUE,86,93,0
+"E3",989,4,"intro",2,"Unhelpful","No Feedback","Hint","human_ai",FALSE,FALSE,FALSE,69,-64,1
+"E3",998,4,"intro",3,"Helpful","No Feedback","Hint","human_ai",TRUE,FALSE,FALSE,100,-100,0
+"E3",1005,5,"intro",1,"Helpful","Feedback","Conversation","human_ai",TRUE,TRUE,TRUE,75,77.5,1
+"E3",1014,5,"intro",2,"Unhelpful","No Feedback","Hint","human_ai",FALSE,TRUE,TRUE,100,100,0
+"E3",1063,5,"intro",3,"Unhelpful","No Feedback","Hint","human_ai",FALSE,TRUE,FALSE,76,18,1
+"E3",1079,5,"intro",2,"Helpful","No Feedback","Conversation","human_ai",TRUE,FALSE,TRUE,100,0,1
+"E3",1081,5,"intro",2,"Unhelpful","Feedback","Conversation","human_ai",FALSE,FALSE,FALSE,100,-100,1
+"E3",1094,5,"intro",2,"Helpful","Feedback","Hint","human_ai",TRUE,TRUE,FALSE,69,14.5,0
+"E3",1097,5,"final",4,"Unhelpful","No Feedback","Hint","human_ai",FALSE,TRUE,FALSE,82,-0.5,1
+"E3",1100,5,"intro",1,"Helpful","No Feedback","Hint","human_ai",TRUE,TRUE,FALSE,100,0,0
+"E3",1101,5,"intro",1,"Helpful","Feedback","Conversation","human_ai",TRUE,TRUE,TRUE,100,89,1
+"E3",1110,5,"intro",2,"Helpful","No Feedback","Conversation","human_ai",TRUE,TRUE,TRUE,80,75,1
+"E3",1111,5,"final",4,"Unhelpful","No Feedback","Hint","human_ai",FALSE,TRUE,TRUE,80,70,0
+"E3",1133,5,"final",4,"Unhelpful","Feedback","Hint","human_ai",FALSE,TRUE,FALSE,87,-0.5,1
+"E3",1140,5,"intro",0,"Helpful","Feedback","Hint","human_ai",TRUE,FALSE,TRUE,90,-8,1
+"E3",1156,5,"intro",3,"Unhelpful","No Feedback","Conversation","human_ai",FALSE,TRUE,TRUE,69,75,0
+"E3",1162,5,"final",4,"Helpful","Feedback","Hint","human_ai",FALSE,TRUE,FALSE,100,8,1
+"E3",1171,5,"final",4,"Unhelpful","Feedback","Conversation","human_ai",FALSE,TRUE,FALSE,100,11.5,1
+"E3",1180,5,"intro",3,"Helpful","Feedback","Conversation","human_ai",TRUE,FALSE,TRUE,100,0,1
+"E3",1186,5,"final",4,"Helpful","Feedback","Conversation","human_ai",FALSE,TRUE,FALSE,91,5.5,1
+"E3",1188,5,"intro",1,"Unhelpful","No Feedback","Hint","human_ai",FALSE,FALSE,TRUE,85,7.5,0
+"E3",1189,5,"final",4,"Helpful","Feedback","Hint","human_ai",FALSE,TRUE,FALSE,100,25.5,1
+"E3",1193,5,"intro",1,"Unhelpful","No Feedback","Hint","human_ai",FALSE,TRUE,FALSE,90,0,1
+"E3",1202,5,"final",4,"Unhelpful","Feedback","Hint","human_ai",FALSE,TRUE,FALSE,100,0,1
+"E3",1203,5,"final",4,"Helpful","No Feedback","Conversation","human_ai",FALSE,TRUE,FALSE,100,0,1
+"E3",1208,5,"intro",0,"Unhelpful","Feedback","Conversation","human_ai",FALSE,FALSE,TRUE,87,6.5,0
+"E3",1209,5,"intro",1,"Helpful","No Feedback","Conversation","human_ai",TRUE,FALSE,TRUE,95,1,1
+"E3",1212,5,"intro",1,"Unhelpful","No Feedback","Hint","human_ai",FALSE,FALSE,TRUE,82,-10,0
+"E3",1215,5,"final",4,"Helpful","No Feedback","Hint","human_ai",FALSE,TRUE,FALSE,76,9.5,1
+"E3",1222,5,"intro",0,"Helpful","Feedback","Conversation","human_ai",TRUE,FALSE,TRUE,95,2.5,1
+"E3",1226,5,"final",4,"Unhelpful","No Feedback","Hint","human_ai",FALSE,TRUE,FALSE,90,1.5,1
+"E3",1312,5,"final",4,"Helpful","No Feedback","Hint","human_ai",FALSE,TRUE,FALSE,99,6.5,1
+"E3",1314,5,"intro",1,"Unhelpful","No Feedback","Hint","human_ai",FALSE,TRUE,FALSE,77,7.5,1
+"E3",1326,5,"final",4,"Helpful","No Feedback","Conversation","human_ai",FALSE,TRUE,FALSE,100,0,1
+"E3",1352,5,"intro",0,"Helpful","Feedback","Conversation","human_ai",TRUE,TRUE,FALSE,100,0,0
+"E3",1361,5,"intro",0,"Helpful","Feedback","Hint","human_ai",TRUE,FALSE,TRUE,98,1,1
+"E3",1375,5,"intro",2,"Unhelpful","No Feedback","Hint","human_ai",FALSE,FALSE,TRUE,100,0,0
+"E3",1395,5,"intro",2,"Unhelpful","No Feedback","Hint","human_ai",FALSE,TRUE,TRUE,61,60,0
+"E3",1420,5,"intro",2,"Unhelpful","Feedback","Hint","human_ai",FALSE,TRUE,FALSE,100,0,1
+"E3",1425,5,"final",4,"Unhelpful","No Feedback","Hint","human_ai",FALSE,TRUE,FALSE,100,4.5,1
+"E3",1430,5,"intro",2,"Helpful","Feedback","Hint","human_ai",TRUE,FALSE,TRUE,68,3,1
+"E3",1431,5,"final",4,"Helpful","No Feedback","Hint","human_ai",FALSE,TRUE,TRUE,100,87.5,0
+"E3",1463,5,"intro",1,"Unhelpful","No Feedback","Hint","human_ai",FALSE,TRUE,FALSE,91,0.5,1
+"E3",1466,5,"intro",0,"Helpful","Feedback","Hint","human_ai",TRUE,TRUE,FALSE,73,3,0
+"E3",1517,5,"intro",2,"Helpful","No Feedback","Hint","human_ai",TRUE,FALSE,TRUE,91,0,1
+"E3",1561,5,"intro",1,"Helpful","No Feedback","Hint","human_ai",TRUE,FALSE,TRUE,85,7.5,1
+"E3",1569,5,"final",4,"Unhelpful","Feedback","Hint","human_ai",FALSE,TRUE,FALSE,100,16,1
+"E3",1592,5,"intro",2,"Helpful","No Feedback","Conversation","human_ai",TRUE,TRUE,FALSE,100,19.5,0
+"E3",1612,5,"final",4,"Unhelpful","No Feedback","Conversation","human_ai",FALSE,TRUE,FALSE,87,-2,1
+"E3",1650,5,"intro",1,"Unhelpful","No Feedback","Conversation","human_ai",FALSE,TRUE,FALSE,82,-9,1
+"E3",1660,5,"intro",2,"Helpful","Feedback","Hint","human_ai",TRUE,TRUE,TRUE,78,77,1
+"E3",1668,5,"intro",2,"Unhelpful","No Feedback","Conversation","human_ai",FALSE,FALSE,TRUE,96,2,0
+"E3",865,5,"intro",0,"Unhelpful","No Feedback","Hint","human_ai",FALSE,TRUE,FALSE,54,-16,1
+"E3",867,5,"intro",3,"Unhelpful","Feedback","Hint","human_ai",FALSE,FALSE,TRUE,100,0,0
+"E3",868,5,"intro",3,"Helpful","No Feedback","Hint","human_ai",TRUE,TRUE,FALSE,70,0,0
+"E3",878,5,"intro",1,"Helpful","No Feedback","Conversation","human_ai",TRUE,FALSE,TRUE,89,5.5,1
+"E3",882,5,"intro",0,"Helpful","No Feedback","Hint","human_ai",TRUE,FALSE,TRUE,100,0,1
+"E3",893,5,"intro",1,"Helpful","Feedback","Conversation","human_ai",TRUE,TRUE,TRUE,67,83.5,1
+"E3",911,5,"intro",3,"Unhelpful","No Feedback","Conversation","human_ai",FALSE,TRUE,FALSE,32,-1,1
+"E3",913,5,"intro",3,"Helpful","Feedback","Hint","human_ai",TRUE,FALSE,TRUE,100,0,1
+"E3",916,5,"final",4,"Unhelpful","Feedback","Conversation","human_ai",FALSE,TRUE,FALSE,100,0,1
+"E3",944,5,"final",4,"Unhelpful","Feedback","Hint","human_ai",FALSE,TRUE,TRUE,100,50,0
+"E3",948,5,"intro",3,"Unhelpful","No Feedback","Hint","human_ai",FALSE,FALSE,TRUE,100,-18.5,0
+"E3",976,5,"intro",1,"Unhelpful","No Feedback","Hint","human_ai",FALSE,TRUE,FALSE,100,0,1
+"E3",983,5,"final",4,"Helpful","Feedback","Conversation","human_ai",FALSE,TRUE,TRUE,100,100,0
+"E3",987,5,"intro",3,"Helpful","Feedback","Hint","human_ai",TRUE,TRUE,FALSE,80,2,0
+"E3",989,5,"intro",3,"Unhelpful","No Feedback","Hint","human_ai",FALSE,TRUE,TRUE,65,71.5,0
+"E3",996,5,"intro",1,"Helpful","Feedback","Hint","human_ai",TRUE,TRUE,FALSE,100,0,0
+"E3",998,5,"intro",2,"Helpful","No Feedback","Hint","human_ai",TRUE,TRUE,FALSE,100,0,0
+"E3",1001,6,"intro",1,"Helpful","Feedback","Hint","human_ai",TRUE,TRUE,TRUE,76,58,1
+"E3",1003,6,"final",4,"Unhelpful","No Feedback","Conversation","human_ai",FALSE,TRUE,TRUE,100,100,0
+"E3",1008,6,"intro",3,"Helpful","Feedback","Hint","human_ai",TRUE,FALSE,TRUE,66,-4,1
+"E3",1013,6,"final",4,"Unhelpful","No Feedback","Conversation","human_ai",FALSE,TRUE,FALSE,100,37.5,1
+"E3",1027,6,"intro",3,"Unhelpful","No Feedback","Hint","human_ai",FALSE,FALSE,TRUE,100,-9.5,0
+"E3",1086,6,"intro",1,"Helpful","Feedback","Hint","human_ai",TRUE,TRUE,FALSE,100,0,0
+"E3",1135,6,"intro",2,"Helpful","No Feedback","Hint","human_ai",TRUE,FALSE,TRUE,70,0,1
+"E3",1142,6,"final",4,"Helpful","No Feedback","Hint","human_ai",FALSE,TRUE,FALSE,100,12,1
+"E3",1152,6,"final",4,"Helpful","Feedback","Hint","human_ai",FALSE,TRUE,TRUE,100,82,0
+"E3",1180,6,"intro",0,"Helpful","Feedback","Conversation","human_ai",TRUE,FALSE,TRUE,100,0,1
+"E3",1218,6,"intro",0,"Unhelpful","Feedback","Conversation","human_ai",FALSE,TRUE,TRUE,90,85,0
+"E3",1294,6,"intro",3,"Unhelpful","No Feedback","Conversation","human_ai",FALSE,FALSE,FALSE,60,-31.5,1
+"E3",1306,6,"final",4,"Helpful","Feedback","Conversation","human_ai",FALSE,TRUE,TRUE,100,87,0
+"E3",1316,6,"intro",2,"Unhelpful","Feedback","Conversation","human_ai",FALSE,TRUE,TRUE,62,67.5,0
+"E3",1353,6,"intro",0,"Helpful","No Feedback","Hint","human_ai",TRUE,FALSE,TRUE,100,0,1
+"E3",1401,6,"intro",2,"Unhelpful","Feedback","Conversation","human_ai",FALSE,FALSE,FALSE,80,-75,1
+"E3",1408,6,"intro",1,"Helpful","Feedback","Conversation","human_ai",TRUE,TRUE,TRUE,67,83.5,1
+"E3",1420,6,"intro",0,"Unhelpful","Feedback","Hint","human_ai",FALSE,TRUE,FALSE,100,0,1
+"E3",1429,6,"intro",2,"Unhelpful","No Feedback","Conversation","human_ai",FALSE,FALSE,TRUE,77,11.5,0
+"E3",1439,6,"intro",3,"Helpful","No Feedback","Conversation","human_ai",TRUE,FALSE,TRUE,60,20,1
+"E3",1462,6,"final",4,"Helpful","No Feedback","Hint","human_ai",FALSE,TRUE,FALSE,98,21,1
+"E3",1497,6,"intro",0,"Unhelpful","No Feedback","Conversation","human_ai",FALSE,TRUE,TRUE,87,83.5,0
+"E3",1600,6,"intro",3,"Unhelpful","Feedback","Conversation","human_ai",FALSE,TRUE,FALSE,88,-6,1
+"E3",1637,6,"intro",0,"Helpful","No Feedback","Hint","human_ai",TRUE,TRUE,TRUE,100,94,1
+"E3",843,6,"intro",3,"Unhelpful","Feedback","Conversation","human_ai",FALSE,TRUE,TRUE,78,74,0
+"E3",860,6,"final",4,"Unhelpful","No Feedback","Hint","human_ai",FALSE,TRUE,FALSE,100,11,1
+"E3",899,6,"intro",2,"Unhelpful","Feedback","Hint","human_ai",FALSE,TRUE,TRUE,70,44,0
+"E3",929,6,"intro",3,"Unhelpful","No Feedback","Conversation","human_ai",FALSE,TRUE,TRUE,79,77.5,0
+"E3",941,6,"intro",2,"Unhelpful","No Feedback","Conversation","human_ai",FALSE,TRUE,TRUE,96,65,0
+"E3",998,6,"intro",0,"Helpful","No Feedback","Hint","human_ai",TRUE,FALSE,TRUE,100,0,1
+"E3",1008,7,"intro",0,"Helpful","Feedback","Hint","human_ai",TRUE,TRUE,FALSE,64,-5.5,0
+"E3",1013,7,"intro",3,"Unhelpful","No Feedback","Conversation","human_ai",FALSE,FALSE,TRUE,100,0,0
+"E3",1050,7,"final",4,"Unhelpful","Feedback","Conversation","human_ai",FALSE,TRUE,FALSE,100,25.5,1
+"E3",1066,7,"intro",0,"Helpful","Feedback","Hint","human_ai",TRUE,TRUE,FALSE,76,0.5,0
+"E3",1082,7,"intro",0,"Unhelpful","Feedback","Conversation","human_ai",FALSE,TRUE,FALSE,76,-4.5,1
+"E3",1086,7,"intro",2,"Helpful","Feedback","Hint","human_ai",TRUE,TRUE,FALSE,100,5,0
+"E3",1100,7,"intro",3,"Helpful","No Feedback","Hint","human_ai",TRUE,FALSE,TRUE,100,0,1
+"E3",1108,7,"intro",3,"Unhelpful","No Feedback","Conversation","human_ai",FALSE,FALSE,FALSE,100,-95,1
+"E3",1140,7,"final",4,"Helpful","Feedback","Hint","human_ai",FALSE,TRUE,TRUE,100,98,0
+"E3",1158,7,"intro",3,"Helpful","No Feedback","Hint","human_ai",TRUE,FALSE,TRUE,61,-2,1
+"E3",1159,7,"final",4,"Helpful","Feedback","Conversation","human_ai",FALSE,TRUE,TRUE,98,79,0
+"E3",1161,7,"intro",0,"Unhelpful","No Feedback","Conversation","human_ai",FALSE,FALSE,TRUE,60,20,0
+"E3",1162,7,"intro",0,"Helpful","Feedback","Hint","human_ai",TRUE,TRUE,FALSE,76,17.5,0
+"E3",1180,7,"intro",2,"Helpful","Feedback","Conversation","human_ai",TRUE,TRUE,FALSE,100,0,0
+"E3",1198,7,"intro",1,"Unhelpful","Feedback","Conversation","human_ai",FALSE,FALSE,TRUE,93,-20.5,0
+"E3",1200,7,"final",4,"Unhelpful","Feedback","Conversation","human_ai",FALSE,TRUE,FALSE,74,-13,1
+"E3",1210,7,"intro",1,"Unhelpful","No Feedback","Hint","human_ai",FALSE,TRUE,TRUE,58,79,0
+"E3",1213,7,"intro",0,"Unhelpful","Feedback","Hint","human_ai",FALSE,TRUE,FALSE,85,11,1
+"E3",1256,7,"intro",0,"Helpful","Feedback","Conversation","human_ai",TRUE,TRUE,TRUE,67,66.5,1
+"E3",1278,7,"intro",0,"Unhelpful","Feedback","Hint","human_ai",FALSE,TRUE,TRUE,100,90,0
+"E3",1283,7,"intro",3,"Unhelpful","No Feedback","Conversation","human_ai",FALSE,TRUE,TRUE,76,56,0
+"E3",1290,7,"final",4,"Unhelpful","Feedback","Conversation","human_ai",FALSE,TRUE,TRUE,100,100,0
+"E3",1293,7,"intro",2,"Helpful","Feedback","Conversation","human_ai",TRUE,TRUE,TRUE,98,99,1
+"E3",1307,7,"intro",3,"Unhelpful","No Feedback","Hint","human_ai",FALSE,FALSE,TRUE,72,0.5,0
+"E3",1313,7,"intro",0,"Unhelpful","Feedback","Hint","human_ai",FALSE,TRUE,FALSE,91,14,1
+"E3",1334,7,"intro",2,"Helpful","No Feedback","Hint","human_ai",TRUE,TRUE,FALSE,89,14,0
+"E3",1345,7,"final",4,"Helpful","Feedback","Conversation","human_ai",FALSE,TRUE,TRUE,100,99,0
+"E3",1352,7,"intro",3,"Helpful","Feedback","Conversation","human_ai",TRUE,FALSE,TRUE,100,-20,1
+"E3",1366,7,"final",4,"Helpful","Feedback","Hint","human_ai",FALSE,TRUE,FALSE,100,0,1
+"E3",1377,7,"intro",0,"Unhelpful","Feedback","Hint","human_ai",FALSE,FALSE,TRUE,92,1.5,0
+"E3",1378,7,"intro",1,"Unhelpful","No Feedback","Conversation","human_ai",FALSE,FALSE,TRUE,80,-1,0
+"E3",1381,7,"final",4,"Unhelpful","Feedback","Hint","human_ai",FALSE,TRUE,FALSE,100,0,1
+"E3",1392,7,"intro",1,"Helpful","Feedback","Conversation","human_ai",TRUE,TRUE,TRUE,84,76.5,1
+"E3",1405,7,"intro",0,"Unhelpful","Feedback","Conversation","human_ai",FALSE,TRUE,TRUE,75,87.5,0
+"E3",1408,7,"intro",2,"Helpful","Feedback","Conversation","human_ai",TRUE,FALSE,TRUE,76,12,1
+"E3",1434,7,"intro",2,"Unhelpful","Feedback","Conversation","human_ai",FALSE,FALSE,TRUE,85,-17,0
+"E3",1443,7,"intro",3,"Helpful","No Feedback","Hint","human_ai",TRUE,FALSE,TRUE,85,0,1
+"E3",1451,7,"final",4,"Helpful","Feedback","Conversation","human_ai",FALSE,TRUE,TRUE,100,100,0
+"E3",1488,7,"intro",1,"Unhelpful","Feedback","Conversation","human_ai",FALSE,TRUE,FALSE,85,31.5,1
+"E3",1517,7,"final",4,"Helpful","No Feedback","Hint","human_ai",FALSE,TRUE,FALSE,92,4.5,1
+"E3",1556,7,"intro",0,"Helpful","No Feedback","Conversation","human_ai",TRUE,TRUE,TRUE,100,100,1
+"E3",1561,7,"intro",2,"Helpful","No Feedback","Hint","human_ai",TRUE,TRUE,FALSE,62,11,0
+"E3",1592,7,"intro",1,"Helpful","No Feedback","Conversation","human_ai",TRUE,TRUE,FALSE,100,0,0
+"E3",1623,7,"final",4,"Unhelpful","Feedback","Conversation","human_ai",FALSE,TRUE,TRUE,82,69,0
+"E3",1647,7,"final",4,"Helpful","No Feedback","Conversation","human_ai",FALSE,TRUE,TRUE,100,100,0
+"E3",845,7,"intro",1,"Helpful","Feedback","Conversation","human_ai",TRUE,FALSE,TRUE,99,0.5,1
+"E3",850,7,"intro",3,"Helpful","Feedback","Conversation","human_ai",TRUE,TRUE,TRUE,58,63.5,1
+"E3",855,7,"intro",2,"Unhelpful","Feedback","Hint","human_ai",FALSE,TRUE,FALSE,85,10,1
+"E3",882,7,"intro",3,"Helpful","No Feedback","Hint","human_ai",TRUE,FALSE,TRUE,100,0,1
+"E3",895,7,"intro",0,"Helpful","Feedback","Conversation","human_ai",TRUE,TRUE,TRUE,80,86.5,1
+"E3",927,7,"intro",3,"Helpful","Feedback","Hint","human_ai",TRUE,FALSE,TRUE,67,14,1
+"E3",928,7,"final",4,"Helpful","No Feedback","Conversation","human_ai",FALSE,TRUE,TRUE,100,85,0
+"E3",941,7,"intro",1,"Unhelpful","No Feedback","Conversation","human_ai",FALSE,FALSE,TRUE,95,2.5,0
+"E3",942,7,"final",4,"Helpful","Feedback","Hint","human_ai",FALSE,TRUE,FALSE,86,11.5,1
+"E3",951,7,"intro",2,"Helpful","No Feedback","Conversation","human_ai",TRUE,FALSE,TRUE,90,2.5,1
+"E3",952,7,"final",4,"Helpful","Feedback","Hint","human_ai",FALSE,TRUE,TRUE,70,77,0
+"E3",954,7,"intro",0,"Unhelpful","Feedback","Conversation","human_ai",FALSE,FALSE,TRUE,88,6,0
+"E3",969,7,"intro",0,"Helpful","No Feedback","Conversation","human_ai",TRUE,TRUE,TRUE,85,91,1
+"E3",975,7,"intro",1,"Unhelpful","No Feedback","Conversation","human_ai",FALSE,FALSE,TRUE,89,5.5,0
+"E3",976,7,"intro",0,"Unhelpful","No Feedback","Hint","human_ai",FALSE,FALSE,TRUE,100,0,0
+"E3",982,7,"final",4,"Unhelpful","Feedback","Hint","human_ai",FALSE,TRUE,FALSE,75,6.5,1
+"E3",998,7,"intro",1,"Helpful","No Feedback","Hint","human_ai",TRUE,TRUE,TRUE,100,100,1
+"E3",1103,8,"intro",2,"Unhelpful","No Feedback","Conversation","human_ai",FALSE,TRUE,TRUE,64,66.5,0
+"E3",1116,8,"intro",0,"Helpful","No Feedback","Hint","human_ai",TRUE,FALSE,TRUE,100,0,1
+"E3",1136,8,"intro",2,"Unhelpful","No Feedback","Hint","human_ai",FALSE,TRUE,TRUE,100,100,0
+"E3",1161,8,"final",4,"Unhelpful","No Feedback","Conversation","human_ai",FALSE,TRUE,FALSE,100,24,1
+"E3",1170,8,"intro",0,"Helpful","No Feedback","Conversation","human_ai",TRUE,FALSE,TRUE,79,5.5,1
+"E3",1196,8,"final",4,"Unhelpful","No Feedback","Conversation","human_ai",FALSE,TRUE,TRUE,100,72.5,0
+"E3",1206,8,"final",4,"Helpful","Feedback","Hint","human_ai",FALSE,TRUE,FALSE,96,7,1
+"E3",1266,8,"intro",2,"Unhelpful","No Feedback","Conversation","human_ai",FALSE,TRUE,FALSE,93,11.5,1
+"E3",1313,8,"intro",1,"Unhelpful","Feedback","Hint","human_ai",FALSE,FALSE,TRUE,96,-12.5,0
+"E3",1326,8,"intro",0,"Helpful","No Feedback","Conversation","human_ai",TRUE,TRUE,TRUE,100,80,1
+"E3",1353,8,"intro",3,"Helpful","No Feedback","Hint","human_ai",TRUE,FALSE,TRUE,100,0,1
+"E3",1355,8,"intro",1,"Unhelpful","Feedback","Hint","human_ai",FALSE,FALSE,TRUE,71,-11,0
+"E3",1428,8,"intro",2,"Unhelpful","No Feedback","Conversation","human_ai",FALSE,FALSE,TRUE,71,-15.5,0
+"E3",1439,8,"final",4,"Helpful","No Feedback","Conversation","human_ai",FALSE,TRUE,TRUE,67,83.5,0
+"E3",1501,8,"intro",3,"Unhelpful","No Feedback","Hint","human_ai",FALSE,FALSE,TRUE,69,0.5,0
+"E3",1517,8,"intro",1,"Helpful","No Feedback","Hint","human_ai",TRUE,TRUE,FALSE,85,0,0
+"E3",1523,8,"intro",1,"Helpful","Feedback","Conversation","human_ai",TRUE,TRUE,TRUE,69,78.5,1
+"E3",1592,8,"intro",3,"Helpful","No Feedback","Conversation","human_ai",TRUE,FALSE,FALSE,100,-100,0
+"E3",1614,8,"intro",0,"Helpful","No Feedback","Conversation","human_ai",TRUE,FALSE,TRUE,99,-7.5,1
+"E3",1626,8,"intro",3,"Unhelpful","No Feedback","Conversation","human_ai",FALSE,TRUE,TRUE,90,92,0
+"E3",842,8,"intro",1,"Helpful","Feedback","Conversation","human_ai",TRUE,TRUE,FALSE,100,7.5,0
+"E3",878,8,"intro",3,"Helpful","No Feedback","Conversation","human_ai",TRUE,TRUE,TRUE,94,86.5,1
+"E3",897,8,"final",4,"Unhelpful","Feedback","Hint","human_ai",FALSE,TRUE,FALSE,100,0,1
+"E3",899,8,"intro",3,"Unhelpful","Feedback","Hint","human_ai",FALSE,FALSE,FALSE,68,-54,1
+"E3",936,8,"intro",0,"Unhelpful","No Feedback","Conversation","human_ai",FALSE,FALSE,TRUE,71,14.5,0
+"E3",942,8,"intro",2,"Helpful","Feedback","Hint","human_ai",TRUE,FALSE,TRUE,66,-13.5,1
+"E3",945,8,"final",4,"Unhelpful","Feedback","Hint","human_ai",FALSE,TRUE,FALSE,91,-4.5,1
+"E3",949,8,"intro",2,"Unhelpful","Feedback","Conversation","human_ai",FALSE,FALSE,TRUE,90,-2.5,0
+"E3",956,8,"intro",2,"Helpful","No Feedback","Hint","human_ai",TRUE,TRUE,TRUE,56,32.5,1
+"E3",976,8,"intro",3,"Unhelpful","No Feedback","Hint","human_ai",FALSE,TRUE,FALSE,100,0,1
+"E3",994,8,"intro",3,"Helpful","No Feedback","Conversation","human_ai",TRUE,TRUE,TRUE,77,58,1
+"E3",1013,9,"intro",1,"Unhelpful","No Feedback","Conversation","human_ai",FALSE,TRUE,TRUE,100,100,0
+"E3",1016,9,"final",4,"Unhelpful","No Feedback","Conversation","human_ai",FALSE,TRUE,FALSE,100,6,1
+"E3",1077,9,"intro",0,"Unhelpful","Feedback","Hint","human_ai",FALSE,FALSE,TRUE,80,10,0
+"E3",1156,9,"final",4,"Unhelpful","No Feedback","Conversation","human_ai",FALSE,TRUE,TRUE,82,78,0
+"E3",1185,9,"intro",3,"Unhelpful","Feedback","Hint","human_ai",FALSE,TRUE,FALSE,63,27.5,1
+"E3",1219,9,"intro",1,"Unhelpful","Feedback","Hint","human_ai",FALSE,FALSE,TRUE,80,10,0
+"E3",1234,9,"final",4,"Helpful","Feedback","Conversation","human_ai",FALSE,TRUE,TRUE,100,75.5,0
+"E3",1243,9,"final",4,"Helpful","No Feedback","Conversation","human_ai",FALSE,TRUE,TRUE,83,52.5,0
+"E3",1256,9,"final",4,"Helpful","Feedback","Conversation","human_ai",FALSE,TRUE,FALSE,77,-2,1
+"E3",1280,9,"intro",0,"Unhelpful","Feedback","Hint","human_ai",FALSE,FALSE,TRUE,80,2.5,0
+"E3",1288,9,"intro",3,"Unhelpful","No Feedback","Hint","human_ai",FALSE,FALSE,TRUE,87,-3.5,0
+"E3",1293,9,"intro",0,"Helpful","Feedback","Conversation","human_ai",TRUE,TRUE,TRUE,90,95,1
+"E3",1302,9,"intro",1,"Unhelpful","No Feedback","Conversation","human_ai",FALSE,FALSE,TRUE,84,8,0
+"E3",1307,9,"final",4,"Unhelpful","No Feedback","Hint","human_ai",FALSE,TRUE,FALSE,83,3,1
+"E3",1316,9,"intro",0,"Unhelpful","Feedback","Conversation","human_ai",FALSE,TRUE,TRUE,66,71,0
+"E3",1331,9,"intro",3,"Helpful","No Feedback","Hint","human_ai",TRUE,TRUE,TRUE,89,94.5,1
+"E3",1358,9,"final",4,"Unhelpful","Feedback","Conversation","human_ai",FALSE,TRUE,FALSE,100,33.5,1
+"E3",1385,9,"intro",1,"Helpful","No Feedback","Hint","human_ai",TRUE,TRUE,TRUE,93,48,1
+"E3",1439,9,"intro",2,"Helpful","No Feedback","Conversation","human_ai",TRUE,FALSE,TRUE,66,17,1
+"E3",1463,9,"final",4,"Unhelpful","No Feedback","Hint","human_ai",FALSE,TRUE,FALSE,99,13,1
+"E3",1501,9,"intro",0,"Unhelpful","No Feedback","Hint","human_ai",FALSE,TRUE,FALSE,85,9.5,1
+"E3",1553,9,"intro",2,"Helpful","Feedback","Hint","human_ai",TRUE,TRUE,TRUE,77,70,1
+"E3",1592,9,"intro",0,"Helpful","No Feedback","Conversation","human_ai",TRUE,FALSE,TRUE,100,0,1
+"E3",1600,9,"intro",0,"Unhelpful","Feedback","Conversation","human_ai",FALSE,FALSE,TRUE,100,0,0
+"E3",1601,9,"intro",1,"Unhelpful","No Feedback","Conversation","human_ai",FALSE,FALSE,TRUE,88,-15.5,0
+"E3",842,9,"intro",2,"Helpful","Feedback","Conversation","human_ai",TRUE,FALSE,TRUE,95,2.5,1
+"E3",867,9,"intro",1,"Unhelpful","Feedback","Hint","human_ai",FALSE,TRUE,FALSE,100,0,1
+"E3",916,9,"intro",1,"Unhelpful","Feedback","Conversation","human_ai",FALSE,TRUE,TRUE,100,100,0
+"E3",919,9,"final",4,"Helpful","Feedback","Hint","human_ai",FALSE,TRUE,FALSE,100,19,1
+"E3",933,9,"intro",0,"Helpful","Feedback","Hint","human_ai",TRUE,FALSE,TRUE,87,-3,1
+"E3",940,9,"final",4,"Helpful","Feedback","Conversation","human_ai",FALSE,TRUE,TRUE,100,100,0
+"E3",948,9,"final",4,"Unhelpful","No Feedback","Hint","human_ai",FALSE,TRUE,FALSE,100,21,1
+"E3",957,9,"final",4,"Unhelpful","No Feedback","Hint","human_ai",FALSE,TRUE,FALSE,100,6,1
+"E3",996,9,"intro",3,"Helpful","Feedback","Hint","human_ai",TRUE,TRUE,FALSE,100,0,0

@@ -1,0 +1,468 @@
+{% load static %}
+<!doctype html>
+
+<html lang="en">
+
+<head>
+    <!-- Meta -->
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Conversation Experiment</title>
+
+    <!-- Bootstrap -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet"
+        integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH" crossorigin="anonymous">
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"
+        integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz"
+        crossorigin="anonymous"></script>
+
+    <!-- Fonts -->
+    <link
+        href="https://fonts.googleapis.com/css2?family=Source+Sans+Pro:wght@200;300;400;600;700;900&family=Cormorant:wght@300;400&display=swap"
+        rel="stylesheet">
+
+    <!-- Axios -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/axios/1.6.0/axios.min.js"></script>
+
+    <!-- Cookies -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/js-cookie/2.0.4/js.cookie.min.js"
+        integrity="sha512-Nonc2AqL1+VEN+97F3n4YxucBOAL5BgqNwEVc2uUjdKOWAmzwj5ChdJQvN2KldAxkCxE4OenuJ/RL18bWxGGzA=="
+        crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+
+
+    <!-- Cookies -->
+    <!-- <script src="{% static 'cookies/cookies.min.js' %}"></script> -->
+
+    <!-- Vue -->
+    <script src="{% static 'conversation/vue/vue.min.js' %}"></script>
+
+    <!-- Local CSS -->
+    <link rel="stylesheet" href="{% static 'conversation/conversation.css' %}" type="text/css" media="screen" />
+    <link rel="stylesheet" href="{% static 'conversation/chat_interface.css' %}" type="text/css" media="screen" />
+</head>
+
+{{ context|json_script:"context" }}
+
+<body>
+
+    <div id="app">
+        <!-- As a link -->
+        <nav id="navbar" class="navbar">
+            <div id="chat-header">
+
+                <div id="jspsych-progressbar-container"><span>Hints | Part 2 of 3</span>
+                    <div id="jspsych-progressbar-outer">
+                        <div id="jspsych-progressbar-inner"></div>
+                    </div>
+                </div>
+
+                <span id="time-remaining">[[formattedTimeRemaining]]</span>
+                <!-- <span id="help" @click="toggleOverlay('help')">
+                <img src="{% static 'conversation/svg/help.svg' %}">
+            </span>
+            <span id="report" @click="toggleOverlay('report')">
+                <img src="{% static 'conversation/svg/report.svg' %}">
+            </span> -->
+            </div>
+            <div id="navbar-container" class="container-fluid">
+                <p id="question-hint">
+                    [[question]]
+                </p>
+                <div class="answer-container" :class="{'reversed': randomizeAnswers == true}">
+                    <span class="answer-hint">[[answer1]]</span>
+                    <span class="answer-hint">[[answer2]]</span>
+                </div>
+            </div>
+        </nav>
+
+
+        <div id="chat-container">
+
+            <div id="chat-log">
+
+
+                <div v-for="(message, index) in messages">
+                    <span v-if="message.first" class="role-label" :class="{'sent-by-me': message.sentByMe}">
+                        [[message.label]]
+                    </span>
+                    <div class="message" :class="{'sent-by-me': message.sentByMe}">
+                        <span class="message-text">[[message.message]]</span>
+                    </div>
+                </div>
+
+                <div class="message" v-if="typing && lastMsgUser && !(gameOver)">
+                    <div class="message-text, typing">
+                        <div class="dot"></div>
+                        <div class="dot"></div>
+                        <div class="dot"></div>
+                    </div>
+                </div>
+
+                <!-- Static hint message -->
+                <span class="role-label">
+                    The LLM Assistant says:
+                </span>
+                <div class="message">
+                    <span class="message-text">The correct answer is: "[[persuaderAnswer]]"</span>
+                </div>
+
+                
+                <!-- Verdict -->
+                <div id="instructions" class="section" v-if="role == 'T'">
+            
+                    <h2 class="instructions-title"></h2>
+
+            
+                    <div id='decide-button-container' class="button-container" :class="{'reversed': randomizeAnswers == true}">
+                        <input type="radio" id="answer1" :value="answer1" name="verdict" v-model="verdict" class="hidden-radio"
+                            required>
+                        <label :class="verdict === answer1 ? 'button-selected' : 'button-unselected'" for="answer1"
+                            @click="selectVerdict(answer1)">[[answer1]]</label>
+            
+                        <input type="radio" id="answer2" :value="answer2" name="verdict" v-model="verdict" class="hidden-radio"
+                            required>
+                        <label :class="verdict === answer2 ? 'button-selected' : 'button-unselected'" for="answer2"
+                            @click="selectVerdict(answer2)">[[answer2]]</label>
+                    </div>
+            
+                    <p class="error" v-if="verdictError">[[ verdictError ]]</p>
+            
+                    <p class="decide-supertitle">Confidence</p>
+            
+                    <div class="slider-labels">
+                        <span>Total guess</span>
+                        <span>Totally sure</span>
+                    </div>
+            
+                    <input type="range" min="0" max="100" v-model="confidence" class="slider" @change="markConfidenceAdjusted">
+            
+                    <div class="slider-value">
+                        <span>[[confidence]]%</span>
+                    </div>
+            
+                    <p class="decide-supertitle">Reason</p>
+            
+                    <textarea class="reason" v-model="reason" required></textarea>
+            
+                    <div class="button-container right">
+                        <button class="button-dark" type="button" :class="{'disabled': !verdictValid}"
+                            @click.stop="submitVerdict">Submit</button>
+                    </div>
+            
+                </div>
+            
+            </div>
+
+
+            <!-- Chat Popover -->
+            <div id="chat-popover" ref="chatPopover" v-show="chatPopoverMessage != ''">
+                <p>[[chatPopoverMessage]]</p>
+            </div>
+
+            <!-- Help -->
+            <div id="help-overlay" class='overlay' v-if="overlay == 'help'">
+
+                <div class="overlay-inner">
+
+                    <!-- Interrogator -->
+                    <div id="instructions" class="section" v-if="role == 'I'">
+                        <p class="instructions-supertitle">
+                            You are the
+                        </p>
+                        <h2 class="instructions-title">INTERROGATOR</h2>
+
+                        <ul class="bullet-points">
+                            <li>
+                                Ask the witness a question to get started.
+                            </li>
+                            <li>
+                                Your goal is to determine if the Witness is a Human or an AI
+                            </li>
+                            <li>
+                                Click the orange gavel if you're ready to decide.
+                            </li>
+                            <li>
+                                After the game, you'll find out if the witness was a human or an AI.
+                            </li>
+                        </ul>
+
+                        <div class="button-container right">
+                            <button class="button-dark" type="button" @click="closeOverlay">Okay</button>
+                        </div>
+
+                    </div>
+
+                    <div id="instructions" class="section" v-if="role == 'W'">
+                        <p class="instructions-supertitle">
+                            You are the
+                        </p>
+                        <h2 class="instructions-title">WITNESS</h2>
+
+                        <ul class="bullet-points">
+                            <li>
+                                Wait for the Interrogator to ask the first question.
+                            </li>
+                            <li>
+                                Answer the Interrogators questions and try to convince them that you are a human.
+                            </li>
+                            <li>
+                                The game will last 5 minutes or until the Interrogator makes a decision.
+                            </li>
+                            <li>
+                                After the game, you'll find out if the interrogator thought you were a human or an AI.
+                            </li>
+                        </ul>
+
+                        <div class="button-container right">
+                            <button class="button-dark" type="button" @click="closeOverlay">Okay</button>
+                        </div>
+
+                    </div>
+
+                </div>
+
+            </div>
+
+            <!-- Report -->
+            <div id="report-overlay" class='overlay' v-if="overlay == 'report'">
+
+                <div class="overlay-inner">
+
+                    <div class="section">
+
+                        <h2 class="instructions-title">REPORT</h2>
+
+                        <p class="instructions-supertitle">
+                            Report inappropriate behavior.
+                        </p>
+
+                        <!-- Report type -->
+                        <div class='question demographics'>
+
+                            <h3 class='question-title demographics'>What kind of inappropriate behavior are you reporting?
+                            </h3>
+
+                            <select class="demographics-select form-control" v-model="report.category">
+                                <option></option>
+                                <option value="harassment">Harassment</option>
+                                <option value="sexual">Sexual</option>
+                                <option value="violence">Violence</option>
+                                <option value="hate">Hate Speech</option>
+                                <option value="other">Other</option>
+                            </select>
+
+                        </div>
+
+                        <div class="question demographics">
+
+                            <h3 class='question-title demographics'>Please provide any other relevant information (optional)
+                            </h3>
+
+                            <textarea class="reason" v-model="report.reason"></textarea>
+
+                        </div>
+
+                        <p class="instructions-supertitle">
+                            Thank you for your report. You will be redirected to the homepage.
+                        </p>
+
+                        <div class="button-container right">
+                            <button class="button-dark" type="button" @click="submitReport">Send</button>
+                        </div>
+
+                    </div>
+
+                </div>
+
+            </div>
+
+
+
+            <!-- Demographics -->
+            <div id="demographics-overlay" class='overlay' v-if="overlay == 'demographics'">
+
+                <div class="overlay-inner">
+
+                    <!-- Demo -->
+                    <div id="instructions" class="section">
+
+                        <h2 class="instructions-title">SURVEY</h2>
+
+                        <p class="instructions-supertitle">
+                            Help us to understand how representative our data is.
+                        </p>
+
+                        <p class="error" v-if="demoError">[[ demoError ]]</p>
+
+                        <!-- YoB -->
+                        <div class='question demographics'>
+
+                            <h3 class='question-title demographics'>Year of birth</h3>
+
+                            <input type="number" min="1800" max="2020" style="width:100px" v-model="demographics.year"
+                                class='form-control demographics' required>
+
+                        </div>
+
+                        <!-- Gender -->
+                        <div class='question demographics'>
+
+                            <h3 class='question-title demographics'>Gender</h3>
+
+                            <select class="demographics-select form-control" v-model="demographics.gender" required>
+                                <option value="f">Female</option>
+                                <option value="m">Male</option>
+                                <option value="n">Non-binary</option>
+                                <option value="-">Prefer not to say</option>
+                            </select>
+                        </div>
+
+                        <!-- Education -->
+                        <div class='question demographics'>
+
+                            <h3 class='question-title demographics'>Highest level of education</h3>
+
+                            <select class="demographics-select form-control" v-model="demographics.education" required>
+                                <option></option>
+                                <option value="1">No formal qualifications</option>
+                                <option value="2">High School Diploma</option>
+                                <option value="3">Bachelor's Degree</option>
+                                <option value="4">Postgraduate Degree</option>
+                                <option value="-">Prefer not to say</option>
+                            </select>
+
+                        </div>
+
+
+                        <!-- CB frequency -->
+                        <div class='question demographics'>
+
+                            <h3 class='question-title demographics'>How frequently do you interact with chatbots?</h3>
+
+                            <select class="demographics-select form-control" v-model="demographics.frequency" required>
+                                <option></option>
+                                <option value="1">Never</option>
+                                <option value="2">Monthly</option>
+                                <option value="3">Weekly</option>
+                                <option value="4">Daily</option>
+                                <option value="-">Prefer not to say</option>
+                            </select>
+
+                        </div>
+
+
+                        <!-- CB familiarity -->
+                        <div class='question demographics'>
+
+                            <h3 class='question-title demographics'>How much do you know about Language Models like GPT-3?
+                            </h3>
+
+                            <select class="demographics-select form-control" v-model="demographics.familiarity" required>
+                                <option></option>
+                                <option value="1">Never heard of them</option>
+                                <option value="2">Somewhat familiar</option>
+                                <option value="3">I've read a lot about them</option>
+                                <option value="4">I conduct research with them</option>
+                                <option value="-">Prefer not to say</option>
+                            </select>
+
+                        </div>
+
+                        <!-- Expt Aware -->
+                        <div class='question demographics'>
+
+                            <h3 class='question-title demographics'>Have you ever visited this website before
+                                (REDACTED), or
+                                read about it in an academic journal or a news article? </h3>
+
+                            <select class="demographics-select form-control" v-model="demographics.expt_aware" required>
+                                <option></option>
+                                <option value="0">No</option>
+                                <option value="1">Yes</option>
+                            </select>
+
+                        </div>
+
+                        <div class="button-container demographics right">
+                            <button id="demographics-submit" class="button-dark" type="button"
+                                :class="{'disabled': !demoValid}" @click="submitDemographics"
+                                @touchstart="submitDemographics">Submit</button>
+                        </div>
+
+                    </div>
+
+                </div>
+
+            </div>
+
+            <!-- Decide -->
+            <div id="decide-overlay" class='overlay' v-if="overlay == 'decide'">
+
+
+                </div>
+
+            </div>
+
+            <!-- Feedback -->
+            <div id="feedback-overlay" class='overlay' v-if="overlay == 'feedback'">
+
+                <div class="overlay-inner">
+
+                    <!-- Feedback -->
+                    <div id="instructions" class="section" v-if="feedbackCondition == 1">
+
+                        <h2 class="instructions-title"></h2>
+
+                        <p class="decide-supertitle">
+                            [[isCorrect]]
+                        </p>
+
+                        <p>You answered: [[targetAnswer]]</p>
+
+                        <p>The correct answer was: [[correctAnswer]]</p>
+
+                        <div class="button-container right">
+                            <button class="button-dark" @click.stop="nextConversation">Continue</button>
+                        </div>
+
+                    </div>
+
+                    <!-- No feedback -->
+                    <div id="instructions" class="section" v-else>
+
+                        <h2 class="instructions-title"></h2>
+
+                        <p class="decide-supertitle">
+                            Response stored
+                        </p>
+
+                        <p>You answered: [[targetAnswer]]</p>
+
+                        <div class="button-container right">
+                            <button class="button-dark" @click.stop="nextConversation">Continue</button>
+                        </div>
+
+                    </div>
+                </div>
+
+            </div>
+        </div>
+
+        <!-- Toast -->
+        <div id="toast">
+            <div id="toast-header">
+                <span id="toast-title">Something went wrong</span>
+                <span id="close-toast" onclick="hideToast()">&times;</span>
+            </div>
+            <div id="toast-body">
+                <span id="toast-message">
+                    Sorry, you've been disconnected from the game.
+                    You will be redirected to the homepage
+                </span>
+                <button id="toast-button" class="button-dark" onclick="hideToast()">OK</button>
+            </div>
+        </div>
+
+        {% csrf_token %}
+
+        <script src="{% static 'conversation/conversation.js' %}?v=1v"></script>

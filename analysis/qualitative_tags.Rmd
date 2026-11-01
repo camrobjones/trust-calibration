@@ -1,0 +1,2442 @@
+---
+title: "Qualitative strategy tags: E1–E4 analysis"
+output:
+  html_document:
+    toc: yes
+    toc_float: true
+    theme: flatly
+    highlight: kate
+    code_folding: hide
+date: "2026-08-14"
+---
+
+# Setup
+
+```{r setup, message=FALSE, warning=FALSE}
+knitr::opts_chunk$set(echo = TRUE, message = FALSE, warning = FALSE)
+library(tidyverse)
+library(lmerTest)
+library(kableExtra)
+library(patchwork)
+theme_set(theme_minimal())
+
+PAL_TYPE  <- c("LLM" = "#4477AA", "Human" = "#AA3377")          # persuader type
+PAL_TRUTH <- c("Truth" = "#009988", "Falsehood" = "#CC3311")    # assigned position
+PAL_HELP  <- c("Helpful" = "#4DAF4A", "Mixed" = "#999999", "Unhelpful" = "#E41A1C")
+
+data_dir <- "../data"
+stats_dir <- "stats"
+tags_dir <- "../data/tags"
+```
+
+```{r load-data}
+tags <- read.csv(file.path(tags_dir, "final_ratings.csv"))
+tags_raw <- read.csv(file.path(tags_dir, "final_ratings_raw.csv"))
+
+if (file.exists("../data/tags/final_ratings_addendum.csv")) {
+  tags <- bind_rows(tags, read.csv("../data/tags/final_ratings_addendum.csv"))
+  tags_raw <- bind_rows(tags_raw, read.csv("../data/tags/final_ratings_raw_addendum.csv"))
+}
+corr_old <- read.csv(file.path(data_dir, "corrigibility_tags.csv"))
+
+conv <- read.csv(file.path(data_dir, "conversation_Conversation.csv"))
+questions <- read.csv(file.path(data_dir, "conversation_Question.csv"))
+
+trials <- bind_rows(lapply(c("e1", "e2", "e3", "e4"), function(e)
+  read.csv(sprintf("%s/%s_trials.csv", stats_dir, e))))
+
+# Tag metadata: display labels, role/type, and IRR from the original write-up
+# (Cohen's kappa between the two human raters; Krippendorff's alpha across
+# humans + the FINAL tagger, not the GPT-majority; tagging/irr_report.pdf Table 1).
+tag_info <- tribble(
+  ~tag,                       ~label,                  ~role,       ~type,        ~kappa, ~alpha,
+  "deception_false",          "False statements",      "Persuader", "Deception",  0.76,   0.76,
+  "deception_misleading",     "Misleading statements", "Persuader", "Deception",  0.36,   0.44,
+  "deception_provably_false", "Provably false",        "Persuader", "Deception",  0.60,   0.69,
+  "persuader_math",           "Math",                  "Persuader", "Content",    0.68,   0.63,
+  "persuader_principle",      "Principle",             "Persuader", "Content",    0.59,   0.62,
+  "persuader_analogy",        "Analogy",               "Persuader", "Content",    0.61,   0.59,
+  "persuader_authority",      "Authority",             "Persuader", "Content",    0.56,   0.70,
+  "persuader_acknowledge",    "Acknowledge",           "Persuader", "Social",     0.63,   0.51,
+  "persuader_flattery",       "Flattery",              "Persuader", "Social",     0.53,   0.59,
+  "persuader_personal",       "Personal",              "Persuader", "Social",     0.63,   0.69,
+  "persuader_gave_up",        "Concession",            "Persuader", "Concession", 0.48,   0.51,
+  "target_probe",             "Probing statements",    "Target",    "Response",   0.62,   0.67,
+  "target_disagreement",      "Disagreement",          "Target",    "Response",   0.60,   0.46,
+  "target_question",          "Question (opener)",     "Target",    "Opener",     0.86,   0.86,
+  "target_statement",         "Statement (opener)",    "Target",    "Opener",     0.84,   0.85
+)
+# kable escapes the "|" in "Pr(>|z|)" as &#124; in HTML output, which renders badly.
+# coef_tab() pulls a coefficient matrix, rounds it, and gives the columns clean names.
+coef_tab <- function(x, digits = 3) {
+  co <- if (is.matrix(x)) x else summary(x)$coefficients
+  co <- round(co, digits)
+  colnames(co) <- colnames(co) %>%
+    sub("Pr\\(>\\|[tz]\\|\\)", "p", .) %>%
+    sub("^Std. Error$", "SE", .) %>%
+    sub("^t value$", "t", .) %>%
+    sub("^z value$", "z", .) %>%
+    sub("^Estimate$", "b", .)
+  co
+}
+
+paper_tags <- setdiff(tag_info$tag, "deception_provably_false")
+persuader_tags <- setdiff(tag_info$tag[tag_info$role == "Persuader"], "deception_provably_false")
+target_tags <- tag_info$tag[tag_info$role == "Target"]
+```
+
+```{r assemble}
+conv_map <- conv %>%
+  select(conversation_id = id, participant_id, question_id, trial_index, human_persuader_id)
+
+d <- trials %>%
+  left_join(conv_map, by = c("participant_id", "question_id", "trial_index")) %>%
+  left_join(tags, by = "conversation_id") %>%
+  left_join(questions %>% select(question_id = id, q_name = name, q_subcategory = subcategory),
+            by = "question_id") %>%
+  mutate(
+    experiment = factor(experiment),
+    tagged = !is.na(persuader_gave_up),
+    persuader_type = factor(ifelse(interaction_type == "human_human", "Human", "LLM"),
+                            levels = c("LLM", "Human")),
+    truth = factor(ifelse(persuader_correct, "Truth", "Falsehood"),
+                   levels = c("Truth", "Falsehood")),
+    disagree = participant_persuader_disagree,
+    intro_condition = factor(intro_condition, levels = c("Helpful", "Mixed", "Unhelpful")),
+    mind_changed = (disagree & persuader_success) | (!disagree & !persuader_success),
+    conf_pre_z = as.numeric(scale(confidence_pre))
+  )
+
+# Persuader honesty (E4 human persuaders only): did the persuader's OWN
+# pre-conversation answer match the side they were assigned to argue?
+# Derivation follows e4.Rmd L1040-1054. Derived, not manipulated: random
+# assignment crossed with the persuader's private belief. Available for all 614.
+qr_pre <- read.csv(file.path(data_dir, "conversation_QuestionResponse.csv")) %>%
+  filter(response_type == "pre") %>%
+  select(question_id, human_persuader_id = participant_id,
+         persuader_response_pre = response, persuader_confidence_pre = confidence)
+
+honesty <- d %>%
+  filter(interaction_type == "human_human") %>%
+  select(conversation_id, question_id, human_persuader_id) %>%
+  left_join(conv %>% select(conversation_id = id, persuader_answer), by = "conversation_id") %>%
+  left_join(questions %>% select(question_id = id, answer1, answer2), by = "question_id") %>%
+  left_join(qr_pre, by = c("question_id", "human_persuader_id")) %>%
+  mutate(persuader_honest = ifelse(persuader_response_pre == answer1, "answer1", "answer2")
+           == persuader_answer) %>%
+  select(conversation_id, persuader_response_pre, persuader_confidence_pre, persuader_honest)
+
+stopifnot(!any(duplicated(honesty$conversation_id)))
+d <- d %>% left_join(honesty, by = "conversation_id")
+
+# Analysis samples
+dc <- d %>% filter(hint_condition == "Conversation", tagged)   # tagged conversation trials
+dd <- dc %>% filter(disagree)                                  # persuasion-at-stake trials
+
+cat(sprintf("honesty available for %d/%d tagged human-persuader conversations\n",
+            sum(dc$persuader_type == "Human" & !is.na(dc$persuader_honest)),
+            sum(dc$persuader_type == "Human")))
+```
+
+# Reliability & coverage
+
+## Coverage of the samples
+
+```{r coverage}
+d %>%
+  filter(hint_condition == "Conversation") %>%
+  group_by(experiment, persuader_type) %>%
+  summarize(
+    conversation_trials = n(),
+    pct_tagged = round(100 * mean(tagged), 1),
+    tagged = sum(tagged),
+    .groups = "drop"
+  ) %>%
+  relocate(pct_tagged, .after = tagged) %>%
+  kable(caption = "Tag coverage of conversation trials") %>%
+  kable_styling(full_width = FALSE)
+```
+
+```{r export-untagged}
+untagged_ids <- d %>%
+  filter(hint_condition == "Conversation", !tagged) %>%
+  pull(conversation_id)
+
+messages <- read.csv(file.path(data_dir, "conversation_Message.csv"))
+untagged_export <- messages %>%
+  filter(conversation_id %in% untagged_ids) %>%
+  left_join(
+    d %>% select(conversation_id, question_id) %>%
+      left_join(questions %>%
+                  select(question_id = id, question, answer1, answer2), by = "question_id") %>%
+      left_join(conv %>% select(conversation_id = id, persuader_answer), by = "conversation_id") %>%
+      mutate(persuader_answer = ifelse(persuader_answer == "answer1", answer1, answer2)) %>%
+      select(-question_id),
+    by = "conversation_id"
+  ) %>%
+  select(conversation_id, id, sender_role, content, timestamp, cost,
+         question, answer1, answer2, persuader_answer)
+
+if (nrow(untagged_export) > 0) {
+  write.csv(untagged_export, "untagged_conversations.csv", row.names = FALSE, na = "")
+  cat(n_distinct(untagged_export$conversation_id),
+      "untagged conversations exported to untagged_conversations.csv\n")
+} else {
+  cat(length(untagged_ids), "conversation trials remain untagged,",
+      "all with empty transcripts (nothing to tag)\n")
+}
+```
+
+## Reliability and prevalence
+
+```{r prevalence-table}
+prev <- dc %>%
+  summarize(across(all_of(tag_info$tag), mean)) %>%
+  pivot_longer(everything(), names_to = "tag", values_to = "prevalence")
+
+tag_info %>%
+  left_join(prev, by = "tag") %>%
+  arrange(role, type, -prevalence) %>%
+  mutate(prevalence = sprintf("%.1f%%", 100 * prevalence)) %>%
+  select(Role = role, Type = type, Category = label, `Prevalence` = prevalence,
+         `Human kappa` = kappa, `K. alpha (H+LLM)` = alpha) %>%
+  kable(caption = "Final categories: prevalence in tagged sample + IRR from validation set") %>%
+  kable_styling(full_width = FALSE)
+```
+
+## Old vs new "giving up" tags
+
+```{r old-vs-new-gaveup}
+overlap <- corr_old %>%
+  inner_join(tags %>% select(conversation_id, persuader_gave_up), by = "conversation_id") %>%
+  mutate(old = ifelse(corrigibility_tag %in% c("Yes", "Unclear"), 1, 0),
+         new = persuader_gave_up)
+
+tab <- table(Old = overlap$old, New = overlap$new)
+po <- sum(diag(tab)) / sum(tab)
+pe <- sum(rowSums(tab) * colSums(tab)) / sum(tab)^2
+kappa_oldnew <- (po - pe) / (1 - pe)
+
+kable(tab, caption = sprintf(
+  "Old (gpt-4.1-mini, Unclear=Yes) vs new gave-up tags; n = %d, agreement = %.1f%%, kappa = %.2f",
+  sum(tab), 100 * po, kappa_oldnew)) %>%
+  kable_styling(full_width = FALSE)
+
+overlap %>%
+  summarize(`Old prevalence` = mean(old), `New prevalence` = mean(new)) %>%
+  kable(digits = 3) %>% kable_styling(full_width = FALSE)
+```
+
+# What strategies get used
+
+## Overall and by experiment
+
+```{r prevalence-plot, fig.height=5}
+tag_long <- dc %>%
+  pivot_longer(all_of(paper_tags), names_to = "tag", values_to = "present") %>%
+  left_join(tag_info, by = "tag")
+
+tag_long %>%
+  group_by(role, type, label, tag) %>%
+  summarize(prevalence = mean(present), .groups = "drop") %>%
+  ggplot(aes(x = prevalence, y = reorder(label, prevalence), fill = type)) +
+  geom_col() +
+  facet_grid(role ~ ., scales = "free_y", space = "free_y") +
+  scale_x_continuous(labels = scales::percent) +
+  labs(x = "Proportion of conversations", y = NULL, fill = "Type")
+```
+
+```{r prevalence-by-experiment, fig.height=6}
+tag_long %>%
+  group_by(experiment, persuader_type, label) %>%
+  summarize(prevalence = mean(present), .groups = "drop") %>%
+  mutate(panel = ifelse(experiment == "E4", paste0("E4 ", persuader_type), as.character(experiment))) %>%
+  ggplot(aes(x = panel, y = reorder(label, prevalence), fill = prevalence)) +
+  geom_tile() +
+  geom_text(aes(label = sprintf("%.0f", 100 * prevalence)), size = 3, color = "white") +
+  scale_fill_viridis_c(labels = scales::percent) +
+  labs(x = NULL, y = NULL, fill = "Prevalence",
+       title = "Tag prevalence by experiment (E4 split by persuader type)")
+```
+
+## Humans vs LLMs (E4)
+
+```{r fit-helpers}
+# Fit one glmer per tag; extract the coefficient for `term`; BH-correct.
+fit_per_tag <- function(data, tag_cols, rhs, term, outcome = NULL, family = "binomial") {
+  map_dfr(tag_cols, function(tg) {
+    lhs <- if (is.null(outcome)) tg else outcome
+    rhs_full <- if (is.null(outcome)) rhs else paste(tg, "+", rhs)
+    f <- as.formula(paste(lhs, "~", rhs_full))
+    fit <- tryCatch({
+      if (family == "binomial") {
+        glmer(f, data = data, family = binomial,
+              control = glmerControl(optimizer = "bobyqa", calc.derivs = FALSE))
+      } else {
+        lmer(f, data = data)
+      }
+    }, error = function(e) NULL)
+    if (is.null(fit)) return(tibble(tag = tg, term = term, b = NA))
+    co <- summary(fit)$coefficients
+    row <- grep(paste0("^", term), rownames(co), value = TRUE)[1]
+    if (is.na(row)) return(tibble(tag = tg, term = term, b = NA))
+    tibble(
+      tag = tg, term = term,
+      b = co[row, "Estimate"], se = co[row, "Std. Error"],
+      stat = co[row, ncol(co) - 1], p = co[row, ncol(co)],
+      singular = isSingular(fit)
+    )
+  }) %>%
+    mutate(p_bh = p.adjust(p, method = "BH")) %>%
+    left_join(tag_info %>% select(tag, label, role, type, kappa), by = "tag")
+}
+
+TYPE_LV <- c("Deception", "Content", "Social", "Concession", "Response", "Opener")
+PAL_CAT <- c(Deception = "#CC3311", Content = "#0077BB", Social = "#EE7733",
+             Concession = "#AA3377", Response = "#009988", Opener = "#777777")
+SIGCOL <- c("BH p < .05" = "#CC3311", "n.s." = "grey45")
+
+# Forest plot of per-tag odds ratios.
+#   layout = "effect"   -> facet by role (Persuader / Target), rows sorted by effect
+#                          size, tag category shown as a coloured swatch in the margin.
+#   layout = "category" -> nested strips (role then category); rows grouped by category
+#                          and sorted by effect within group.
+# A background-band version was tried and dropped: sorting by effect size interleaves
+# categories, so the bands are not contiguous unless you group by category (= "category").
+or_forest <- function(res, title, xlab = "Odds ratio", layout = c("effect", "category"),
+                      max_se = 5) {
+  layout <- match.arg(layout)
+  d <- res %>%
+    filter(!is.na(b), se < max_se) %>%
+    mutate(sig = ifelse(p_bh < .05, "BH p < .05", "n.s."),
+           type = factor(type, levels = TYPE_LV),
+           role = factor(role, levels = c("Persuader", "Target")),
+           label = fct_reorder(label, b))
+  lim <- range(c(exp(d$b - 1.96 * d$se), exp(d$b + 1.96 * d$se)), na.rm = TRUE) * c(0.75, 1.3)
+
+  p <- ggplot(d, aes(exp(b), label)) +
+    geom_vline(xintercept = 1, linetype = "dashed", colour = "grey65") +
+    geom_pointrange(aes(xmin = exp(b - 1.96 * se), xmax = exp(b + 1.96 * se), colour = sig),
+                    size = .4) +
+    scale_x_log10(limits = lim) +
+    scale_colour_manual(values = SIGCOL, name = NULL) +
+    labs(x = xlab, y = NULL, title = title) +
+    theme(panel.grid.minor = element_blank())
+
+  if (layout == "effect") {
+    p + geom_point(aes(x = lim[1] * 1.15, fill = type), shape = 22, size = 2.8, stroke = 0) +
+      scale_fill_manual(values = PAL_CAT, name = "Category") +
+      facet_grid(role ~ ., scales = "free_y", space = "free_y")
+  } else {
+    p + facet_grid(role + type ~ ., scales = "free_y", space = "free_y", switch = "y") +
+      theme(strip.text.y.left = element_text(angle = 0, hjust = 1, size = 7.5),
+            strip.placement = "outside")
+  }
+}
+
+
+fmt_res <- function(res) {
+  res %>%
+    arrange(p) %>%
+    transmute(Category = label, Role = role, OR = round(exp(b), 2),
+              b = round(b, 2), SE = round(se, 2), z = round(stat, 2),
+              p = signif(p, 2), `p (BH)` = signif(p_bh, 2),
+              kappa = kappa, singular = singular)
+}
+```
+
+```{r human-vs-llm, fig.height=5}
+e4 <- dc %>% filter(experiment == "E4")
+
+res_type <- fit_per_tag(
+  e4, paper_tags,
+  rhs = "persuader_type + intro_condition + persuader_correct + (1 | question_id) + (1 | participant_id)",
+  term = "persuader_typeHuman"
+)
+
+or_forest(res_type %>% filter(!label %in% c("Concession", "Personal")),
+          "Human vs LLM persuaders (E4): OR > 1 = more common for humans")
+fmt_res(res_type) %>% kable(caption = "Tag ~ persuader type (E4), controlling condition & truth") %>%
+  kable_styling(full_width = FALSE)
+```
+
+```{r gaveup-fisher}
+gu_tab <- e4 %>% count(persuader_type, persuader_gave_up) %>%
+  pivot_wider(names_from = persuader_gave_up, values_from = n, values_fill = 0)
+kable(gu_tab) %>% kable_styling(full_width = FALSE)
+fisher.test(matrix(c(gu_tab$`0`, gu_tab$`1`), ncol = 2))
+```
+
+```{r human-vs-llm-descriptive}
+e4 %>%
+  pivot_longer(all_of(paper_tags), names_to = "tag", values_to = "present") %>%
+  left_join(tag_info, by = "tag") %>%
+  group_by(label, persuader_type) %>%
+  summarize(prevalence = mean(present), .groups = "drop") %>%
+  pivot_wider(names_from = persuader_type, values_from = prevalence) %>%
+  mutate(diff = LLM - Human) %>%
+  arrange(-abs(diff)) %>%
+  kable(digits = 2, caption = "E4 tag prevalence by persuader type") %>%
+  kable_styling(full_width = FALSE)
+```
+
+# When are strategies used?
+
+## Arguing truth vs falsehood
+
+```{r truth-tags, fig.height=5}
+llm <- dc %>% filter(persuader_type == "LLM")
+
+res_truth <- fit_per_tag(
+  llm, paper_tags,
+  rhs = "truth + experiment + disagree + (1 | question_id) + (1 | participant_id)",
+  term = "truthFalsehood"
+)
+
+or_forest(res_truth, "Assigned falsehood vs truth (LLM persuaders): OR > 1 = more common when arguing falsehood")
+fmt_res(res_truth) %>% kable(caption = "Tag ~ assigned position (LLM, E1-E4)") %>%
+  kable_styling(full_width = FALSE)
+```
+
+```{r truth-tags-human, fig.height=5}
+hum <- dc %>% filter(persuader_type == "Human")
+
+res_truth_h <- fit_per_tag(
+  hum, paper_tags,
+  rhs = "truth + disagree + (1 | question_id) + (1 | participant_id)",
+  term = "truthFalsehood"
+)
+
+or_forest(res_truth_h, "Assigned falsehood vs truth (human persuaders, E4)")
+fmt_res(res_truth_h) %>% kable() %>% kable_styling(full_width = FALSE)
+```
+
+## Prior disagreement
+
+```{r disagree-tags, fig.height=5}
+res_dis <- fit_per_tag(
+  llm, paper_tags,
+  rhs = "disagree + truth + experiment + (1 | question_id) + (1 | participant_id)",
+  term = "disagreeTRUE"
+)
+or_forest(res_dis, "Target initially disagrees vs agrees (LLM): OR > 1 = more common under disagreement")
+fmt_res(res_dis) %>% kable() %>% kable_styling(full_width = FALSE)
+```
+
+## Trial position
+
+```{r trial-index, fig.height=6}
+dc %>%
+  filter(persuader_type == "LLM") %>%
+  pivot_longer(all_of(persuader_tags), names_to = "tag", values_to = "present") %>%
+  left_join(tag_info, by = "tag") %>%
+  ggplot(aes(x = trial_index + 1, y = present, color = type)) +
+  stat_summary(geom = "line", fun = mean) +
+  stat_summary(geom = "point", fun = mean, size = 1) +
+  facet_wrap(~ reorder(label, -present), ncol = 4) +
+  scale_y_continuous(labels = scales::percent) +
+  labs(x = "Trial", y = "Prevalence", color = NULL,
+       title = "Persuader strategy use across trials (LLM)") +
+  theme(legend.position = "bottom")
+```
+
+# Which strategies predict success?
+
+```{r success-per-tag, fig.height=9}
+ddl <- dd %>% filter(persuader_type == "LLM")
+
+res_succ <- map_dfr(paper_tags, function(tg) {
+  f <- as.formula(paste("persuader_success ~", tg,
+    "+ truth + conf_pre_z + experiment + (1 | question_id) + (1 | participant_id)"))
+  fit <- tryCatch(
+    glmer(f, data = ddl, family = binomial,
+          control = glmerControl(optimizer = "bobyqa", calc.derivs = FALSE)),
+    error = function(e) NULL)
+  if (is.null(fit)) return(tibble(tag = tg, b = NA))
+  co <- summary(fit)$coefficients
+  tibble(tag = tg, b = co[tg, "Estimate"], se = co[tg, "Std. Error"],
+         stat = co[tg, "z value"], p = co[tg, "Pr(>|z|)"], singular = isSingular(fit))
+}) %>%
+  mutate(p_bh = p.adjust(p, method = "BH")) %>%
+  left_join(tag_info %>% select(tag, label, role, type, kappa), by = "tag")
+
+or_forest(res_succ, "Persuasion success ~ tag (disagreement trials, LLM persuaders)")
+
+or_forest(res_succ, "Same models, grouped by category", layout = "category")
+fmt_res(res_succ %>% mutate(term = tag)) %>%
+  kable(caption = "Per-tag mixed logistic models: persuader_success ~ tag + truth + confidence + experiment + (1|q) + (1|ppt)") %>%
+  kable_styling(full_width = FALSE)
+```
+
+## Joint model (persuader tags entered together)
+
+```{r success-joint}
+f_joint <- as.formula(paste(
+  "persuader_success ~", paste(persuader_tags, collapse = " + "),
+  "+ truth + conf_pre_z + experiment + (1 | question_id) + (1 | participant_id)"))
+m_joint <- glmer(f_joint, data = ddl, family = binomial,
+                 control = glmerControl(optimizer = "bobyqa", calc.derivs = FALSE))
+co <- summary(m_joint)$coefficients
+as.data.frame(co) %>%
+  rownames_to_column("term") %>%
+  filter(term %in% persuader_tags) %>%
+  left_join(tag_info %>% select(term = tag, label), by = "term") %>%
+  arrange(`Pr(>|z|)`) %>%
+  transmute(Category = label, OR = round(exp(Estimate), 2), b = round(Estimate, 2),
+            SE = round(`Std. Error`, 2), z = round(`z value`, 2), p = signif(`Pr(>|z|)`, 2)) %>%
+  kable(caption = "Joint model: all persuader tags simultaneously") %>%
+  kable_styling(full_width = FALSE)
+```
+
+## Adjusted model
+
+```{r success-adjusted}
+adj_tags <- setdiff(persuader_tags, "deception_provably_false")
+f_adj <- as.formula(paste(
+  "persuader_success ~", paste(adj_tags, collapse = " + "),
+  "+ target_disagreement + target_probe + truth + conf_pre_z + experiment",
+  "+ (1 | question_id) + (1 | participant_id)"))
+m_adj <- glmer(f_adj, data = ddl, family = binomial,
+               control = glmerControl(optimizer = "bobyqa", optCtrl = list(maxfun = 2e5)))
+co <- summary(m_adj)$coefficients
+res_adj <- as.data.frame(co) %>%
+  rownames_to_column("tag") %>%
+  filter(tag %in% c(persuader_tags, "target_disagreement", "target_probe")) %>%
+  transmute(tag, b = Estimate, se = `Std. Error`, stat = `z value`, p = `Pr(>|z|)`,
+            singular = isSingular(m_adj)) %>%
+  mutate(p_bh = p.adjust(p, method = "BH")) %>%
+  left_join(tag_info %>% select(tag, label, role, type, kappa), by = "tag")
+
+or_forest(res_adj, "Adjusted: all persuader tags jointly + target behaviour (LLM disagreement trials)")
+fmt_res(res_adj %>% mutate(term = tag)) %>%
+  kable(caption = "Adjusted success model: all persuader tags + target disagreement/probing + truth + confidence + experiment + (1|q) + (1|ppt)") %>%
+  kable_styling(full_width = FALSE)
+```
+
+## Confidence change as outcome
+
+```{r cc-per-tag, fig.height=5}
+dcl <- dc %>% filter(persuader_type == "LLM")
+
+res_cc <- map_dfr(paper_tags, function(tg) {
+  f <- as.formula(paste("confidence_change ~", tg,
+    "+ truth + disagree + conf_pre_z + experiment + (1 | question_id) + (1 | participant_id)"))
+  fit <- tryCatch(lmer(f, data = dcl), error = function(e) NULL)
+  if (is.null(fit)) return(tibble(tag = tg, b = NA))
+  co <- summary(fit)$coefficients
+  tibble(tag = tg, b = co[tg, "Estimate"], se = co[tg, "Std. Error"],
+         stat = co[tg, "t value"], p = co[tg, "Pr(>|t|)"], singular = isSingular(fit))
+}) %>%
+  mutate(p_bh = p.adjust(p, method = "BH")) %>%
+  left_join(tag_info %>% select(tag, label, role, type, kappa), by = "tag")
+
+res_cc %>%
+  filter(!is.na(b)) %>%
+  mutate(sig = ifelse(p_bh < .05, "BH p < .05", "n.s.")) %>%
+  ggplot(aes(x = b, y = reorder(label, b), color = sig)) +
+  geom_vline(xintercept = 0, linetype = "dashed", color = "grey60") +
+  geom_pointrange(aes(xmin = b - 1.96 * se, xmax = b + 1.96 * se)) +
+  scale_color_manual(values = c("BH p < .05" = "#CC3311", "n.s." = "grey40")) +
+  labs(x = "b (percentage points of confidence toward persuader)", y = NULL, color = NULL,
+       title = "Confidence change ~ tag (all conversation trials, LLM)")
+
+fmt_res(res_cc %>% mutate(term = tag)) %>% select(-OR) %>%
+  kable(caption = "b = percentage points of confidence change toward the persuader") %>%
+  kable_styling(full_width = FALSE)
+```
+
+## Do the same strategies work for humans? (E4)
+
+```{r success-by-type-side-by-side, fig.height=5}
+dd4 <- dd %>% filter(experiment == "E4")
+
+res_within <- map_dfr(c("LLM", "Human"), function(pt) {
+  map_dfr(persuader_tags, function(tg) {
+    dsub <- dd4 %>% filter(persuader_type == pt)
+    if (mean(dsub[[tg]]) < 0.03 || mean(dsub[[tg]]) > 0.97) return(tibble(tag = tg, b = NA))
+    f <- as.formula(paste("persuader_success ~", tg, "+ truth + conf_pre_z + (1 | question_id)"))
+    fit <- tryCatch(glmer(f, data = dsub, family = binomial,
+                          control = glmerControl(optimizer = "bobyqa", calc.derivs = FALSE)),
+                    error = function(e) NULL)
+    if (is.null(fit)) return(tibble(tag = tg, b = NA))
+    co <- summary(fit)$coefficients
+    tibble(tag = tg, b = co[tg, "Estimate"], se = co[tg, "Std. Error"], p = co[tg, "Pr(>|z|)"])
+  }) %>% mutate(persuader = pt)
+}) %>%
+  filter(!is.na(b), se < 5) %>%
+  left_join(tag_info %>% select(tag, label, type), by = "tag") %>%
+  mutate(type = factor(type, levels = TYPE_LV))
+
+ggplot(res_within, aes(exp(b), fct_reorder(label, b), colour = persuader)) +
+  geom_vline(xintercept = 1, linetype = "dashed", colour = "grey65") +
+  geom_pointrange(aes(xmin = exp(b - 1.96 * se), xmax = exp(b + 1.96 * se)),
+                  position = position_dodge(width = .55), size = .4) +
+  scale_x_log10() +
+  scale_colour_manual(values = PAL_TYPE, name = "Persuader") +
+  facet_grid(type ~ ., scales = "free_y", space = "free_y", switch = "y") +
+  labs(x = "Odds ratio for persuader success", y = NULL,
+       title = "Within-type strategy payoffs (E4 disagreement trials)") +
+  theme(strip.text.y.left = element_text(angle = 0, hjust = 1, size = 7.5),
+        strip.placement = "outside", panel.grid.minor = element_blank())
+```
+
+```{r success-type-ixn, fig.height=4}
+res_ixn <- map_dfr(persuader_tags, function(tg) {
+  f <- as.formula(paste("persuader_success ~", tg, "* persuader_type",
+    "+ truth + conf_pre_z + (1 | question_id) + (1 | participant_id)"))
+  fit <- tryCatch(glmer(f, data = dd4, family = binomial,
+          control = glmerControl(optimizer = "bobyqa", calc.derivs = FALSE)),
+    error = function(e) NULL)
+  if (is.null(fit)) return(tibble(tag = tg, b = NA))
+  co <- summary(fit)$coefficients
+  row <- paste0(tg, ":persuader_typeHuman")
+  if (!row %in% rownames(co)) return(tibble(tag = tg, b = NA))
+  tibble(tag = tg, b = co[row, "Estimate"], se = co[row, "Std. Error"],
+         stat = co[row, "z value"], p = co[row, "Pr(>|z|)"], singular = isSingular(fit))
+}) %>%
+  mutate(p_bh = p.adjust(p, method = "BH")) %>%
+  left_join(tag_info %>% select(tag, label, role, type, kappa), by = "tag")
+
+or_forest(res_ixn %>% filter(!is.na(b), se < 5),
+          "Tag x persuader-type interaction (OR > 1 = strategy pays off MORE for humans)")
+
+fmt_res(res_ixn %>% mutate(term = tag) %>% filter(!is.na(b), se < 100)) %>%
+  kable(caption = "Tag x persuader-type interactions on success (E4 disagreement trials; separated/failed models omitted)") %>%
+  kable_styling(full_width = FALSE)
+```
+
+### Can the human/LLM success gap be decomposed into strategy? Mostly no.
+
+```{r human-llm-gap-decomposition}
+gap <- function(extra, lab) {
+  f <- as.formula(paste0("persuader_success ~ persuader_type", extra,
+                         " + truth + conf_pre_z + (1 | question_id)"))
+  m <- glmer(f, data = dd4, family = binomial,
+             control = glmerControl(optimizer = "bobyqa", calc.derivs = FALSE))
+  co <- summary(m)$coefficients
+  r <- grep("persuader_typeHuman$", rownames(co), value = TRUE)[1]
+  tibble(model = lab, b_human = co[r, 1], OR_human = exp(co[r, 1]), p = co[r, 4])
+}
+bind_rows(
+  gap("", "raw human-vs-LLM gap"),
+  gap(" + persuader_gave_up", "+ giving up"),
+  gap(paste0(" + ", paste(setdiff(persuader_tags, "persuader_gave_up"), collapse = " + ")),
+      "+ all other persuader tags"),
+  gap(paste0(" + ", paste(persuader_tags, collapse = " + ")), "+ all persuader tags")
+) %>%
+  kable(digits = 3, caption = "Human-vs-LLM success gap, before and after holding strategy constant (OR < 1 = humans worse)") %>%
+  kable_styling(full_width = FALSE)
+```
+
+# Causal probes for the strategy-success findings
+
+```{r focal-tags}
+focal_tags <- c("persuader_flattery", "persuader_personal", "deception_misleading",
+                "persuader_authority", "persuader_acknowledge")
+```
+
+## Probe A: opening-move strategies (temporal precedence)
+
+```{r probe-a-data}
+fm <- read.csv("../data/tags/first_message_ratings.csv")
+ddf <- dd %>% inner_join(fm, by = "conversation_id")
+cat(nrow(ddf), "disagreement trials with first-message tags\n")
+```
+
+```{r probe-a-init}
+# How often is the full-conversation tag already present in the opening move?
+map_dfr(focal_tags, function(tg) {
+  tibble(tag = tg,
+         full_prev = mean(ddf[[tg]]),
+         fm_prev = mean(ddf[[paste0("fm_", tg)]]),
+         p_initiated = mean(ddf[[paste0("fm_", tg)]][ddf[[tg]] == 1]))
+}) %>%
+  left_join(tag_info %>% select(tag, label), by = "tag") %>%
+  select(Category = label, full_prev, fm_prev, p_initiated) %>%
+  kable(digits = 2, caption = "Tag prevalence: full conversation vs opening move; p_initiated = P(opening move | tagged in full conversation)") %>%
+  kable_styling(full_width = FALSE)
+```
+
+```{r probe-a-models, fig.height=4.5}
+res_fm <- map_dfr(focal_tags, function(tg) {
+  map_dfr(c(full = tg, opening = paste0("fm_", tg)), function(v) {
+    f <- as.formula(paste("persuader_success ~", v,
+      "+ truth + conf_pre_z + experiment + (1 | question_id) + (1 | participant_id)"))
+    fit <- tryCatch(glmer(f, data = ddf %>% filter(persuader_type == "LLM"),
+                          family = binomial,
+                          control = glmerControl(optimizer = "bobyqa", calc.derivs = FALSE)),
+                    error = function(e) NULL)
+    if (is.null(fit)) return(tibble(b = NA))
+    co <- summary(fit)$coefficients
+    tibble(b = co[v, "Estimate"], se = co[v, "Std. Error"],
+           z = co[v, "z value"], p = co[v, "Pr(>|z|)"])
+  }, .id = "version") %>% mutate(tag = tg)
+}) %>% left_join(tag_info %>% select(tag, label), by = "tag")
+
+res_fm %>%
+  mutate(version = factor(version, levels = c("full", "opening"))) %>%
+  ggplot(aes(x = exp(b), y = label, color = version)) +
+  geom_vline(xintercept = 1, linetype = "dashed", color = "grey60") +
+  geom_pointrange(aes(xmin = exp(b - 1.96 * se), xmax = exp(b + 1.96 * se)),
+                  position = position_dodge(width = 0.4)) +
+  scale_x_log10() +
+  scale_color_manual(values = c(full = "grey40", opening = "#CC3311")) +
+  labs(x = "OR for persuasion success (LLM disagreement trials)", y = NULL,
+       color = "Tag version",
+       title = "Full-conversation vs opening-move tags")
+```
+
+```{r probe-a-table}
+res_fm %>%
+  transmute(Category = label, Version = version, OR = round(exp(b), 2),
+            b = round(b, 2), SE = round(se, 2), z = round(z, 2), p = signif(p, 2)) %>%
+  kable(caption = "Success models: full-conversation vs opening-move tag versions") %>%
+  kable_styling(full_width = FALSE)
+```
+
+### Is opening-move flattery just elicited by the opener?
+
+```{r probe-a-opener-controls}
+messages_all <- read.csv(file.path(data_dir, "conversation_Message.csv"))
+opener <- messages_all %>%
+  arrange(conversation_id, id) %>%
+  group_by(conversation_id) %>% slice_head(n = 1) %>% ungroup() %>%
+  transmute(conversation_id, opener_len = nchar(content))
+ddfl <- ddf %>% filter(persuader_type == "LLM") %>%
+  left_join(opener, by = "conversation_id") %>%
+  mutate(opener_len_z = as.numeric(scale(log1p(opener_len))))
+
+m_fm_elicit <- glmer(fm_persuader_flattery ~ fm_target_question + fm_target_statement +
+                       fm_target_disagreement + fm_target_probe + opener_len_z + conf_pre_z +
+                       truth + experiment + (1 | question_id) + (1 | participant_id),
+                     data = ddfl, family = binomial, control = glmerControl(optimizer = "bobyqa"))
+coef_tab(m_fm_elicit) %>% kable(caption = "What predicts opening-move flattery (LLM)?") %>%
+  kable_styling(full_width = FALSE)
+
+fm_other <- paste0("fm_", setdiff(persuader_tags, c("persuader_flattery", "persuader_gave_up", "deception_provably_false")))
+m_fm_ctrl <- glmer(as.formula(paste(
+  "persuader_success ~ fm_persuader_flattery +", paste(fm_other, collapse = " + "),
+  "+ fm_target_question + fm_target_statement + fm_target_disagreement + fm_target_probe + opener_len_z",
+  "+ truth + conf_pre_z + experiment + (1 | question_id) + (1 | participant_id)")),
+  data = ddfl, family = binomial, control = glmerControl(optimizer = "bobyqa", optCtrl = list(maxfun = 2e5)))
+coef_tab(m_fm_ctrl) %>% kable(caption = "Opening-move flattery -> success, controlling opener features + all other opening-move tags") %>%
+  kable_styling(full_width = FALSE)
+
+# Per-tag opening-move models with the opener controls (this is what Fig 6c shows):
+# same covariates as the per-tag success models, plus the target's opening
+# message (type, disagreement, probing, log length).
+res_fm_ctrl <- map_dfr(focal_tags, function(tg) {
+  v <- paste0("fm_", tg)
+  f <- as.formula(paste("persuader_success ~", v,
+    "+ fm_target_question + fm_target_statement + fm_target_disagreement + fm_target_probe + opener_len_z",
+    "+ truth + conf_pre_z + experiment + (1 | question_id) + (1 | participant_id)"))
+  fit <- tryCatch(glmer(f, data = ddfl, family = binomial,
+                        control = glmerControl(optimizer = "bobyqa")), error = function(e) NULL)
+  if (is.null(fit)) return(tibble(tag = tg, b = NA))
+  co <- summary(fit)$coefficients
+  tibble(tag = tg, version = "opening_ctrl", b = co[v, "Estimate"], se = co[v, "Std. Error"],
+         z = co[v, "z value"], p = co[v, "Pr(>|z|)"])
+}) %>% left_join(tag_info %>% select(tag, label), by = "tag")
+res_fm_ctrl %>% transmute(Category = label, OR = round(exp(b), 2), SE = round(se, 2), p = signif(p, 2)) %>%
+  kable(caption = "Opening-move tags -> success, per tag, controlling for the target's opening message (Fig 6c)") %>%
+  kable_styling(full_width = FALSE)
+```
+
+## Flattery audit: what is actually inside the tag?
+
+```{r flattery-decomposition}
+first_p <- read.csv(file.path(data_dir, "conversation_Message.csv")) %>%
+  filter(sender_role == "P") %>%
+  group_by(conversation_id) %>% arrange(id) %>% slice(1) %>% ungroup() %>%
+  select(conversation_id, first_msg = content)
+
+# Compliments the TARGET (their reasoning / intelligence / answer)
+COMPL <- paste0(
+  "(?i)you'?re (absolutely |totally |exactly |so |really )?(right|correct|sharp|spot[- ]on|onto|close)|",
+  "spot[- ]on|you'?ve got (it|great)|you'?re doing great|you nailed|well reasoned|impressive|",
+  "(good|great|nice|smart|sharp|excellent) (intuition|instinct|instincts|thinking|logic|reasoning|",
+  "catch|call|guess|eye|job|work|point|observation)|(smart|clever) (way|approach)|",
+  "good (thought|thinking)|nice (one|catch)")
+# Praises the QUESTION -- a discourse formula, not target-directed
+QPRAISE <- "(?i)(great|good|excellent|interesting|fair) question"
+
+flat <- ddf %>%                      # ddf = dd joined to the first-message tags
+  filter(persuader_type == "LLM") %>%
+  left_join(first_p, by = "conversation_id") %>%
+  filter(!is.na(fm_persuader_flattery), !is.na(first_msg)) %>%
+  mutate(compl_target = as.integer(grepl(COMPL, first_msg, perl = TRUE)),
+         praise_q = as.integer(grepl(QPRAISE, first_msg, perl = TRUE)))
+
+flat %>%
+  group_by(`opening flattery tag` = fm_persuader_flattery) %>%
+  summarize(n = n(),
+            `target compliment` = sprintf("%.0f%%", 100 * mean(compl_target)),
+            `"Great question!"` = sprintf("%.0f%%", 100 * mean(praise_q)),
+            neither = sprintf("%.0f%%", 100 * mean(!compl_target & !praise_q)),
+            .groups = "drop") %>%
+  kable(caption = "Composition of the opening-move flattery tag") %>%
+  kable_styling(full_width = FALSE)
+```
+
+```{r flattery-decomposition-models}
+fit_probeA <- function(term, lab) {
+  f <- as.formula(paste("persuader_success ~", term,
+    "+ truth + conf_pre_z + experiment + (1 | question_id) + (1 | participant_id)"))
+  m <- glmer(f, data = flat, family = binomial,
+             control = glmerControl(optimizer = "bobyqa", calc.derivs = FALSE))
+  co <- summary(m)$coefficients
+  tibble(predictor = lab, n_positive = sum(flat[[term]]), OR = exp(co[term, 1]),
+         CI = sprintf("[%.2f, %.2f]", exp(co[term, 1] - 1.96 * co[term, 2]),
+                      exp(co[term, 1] + 1.96 * co[term, 2])),
+         p = co[term, 4])
+}
+bind_rows(
+  fit_probeA("fm_persuader_flattery", "tagger: opening flattery"),
+  fit_probeA("compl_target", "target-directed compliment"),
+  fit_probeA("praise_q", "\"Great question!\" formula")
+) %>%
+  kable(digits = 3, caption = "Probe-A spec applied to each component of the flattery tag") %>%
+  kable_styling(full_width = FALSE)
+
+m_race <- glmer(persuader_success ~ compl_target + praise_q + truth + conf_pre_z +
+                  experiment + (1 | question_id) + (1 | participant_id),
+                data = flat, family = binomial,
+                control = glmerControl(optimizer = "bobyqa", calc.derivs = FALSE))
+coef_tab(summary(m_race)$coefficients[2:3, ], 4) %>%
+  kable(caption = "Both components entered together") %>%
+  kable_styling(full_width = FALSE)
+```
+
+## Probe B: within-persuader style (E4 human persuaders)
+
+```{r probe-b}
+hp <- dc %>%
+  filter(persuader_type == "Human", !is.na(human_persuader_id), human_persuader_id != "") %>%
+  group_by(human_persuader_id) %>%
+  mutate(n_games = n()) %>%
+  filter(n_games >= 3) %>%
+  ungroup()
+
+loo <- hp %>%
+  group_by(human_persuader_id) %>%
+  mutate(across(all_of(focal_tags),
+                ~ (sum(.x) - .x) / (n() - 1), .names = "loo_{.col}")) %>%
+  ungroup() %>%
+  filter(disagree)
+cat(nrow(loo), "disagreement trials;", n_distinct(loo$human_persuader_id), "persuaders\n")
+
+res_loo <- map_dfr(focal_tags, function(tg) {
+  v <- paste0("loo_", tg)
+  f <- as.formula(paste("persuader_success ~", v,
+    "+ truth + conf_pre_z + (1 | question_id)"))
+  fit <- tryCatch(glmer(f, data = loo, family = binomial,
+                        control = glmerControl(optimizer = "bobyqa")),
+                  error = function(e) NULL)
+  if (is.null(fit)) return(tibble(tag = tg, b = NA))
+  co <- summary(fit)$coefficients
+  tibble(tag = tg, b = co[v, "Estimate"], se = co[v, "Std. Error"],
+         z = co[v, "z value"], p = co[v, "Pr(>|z|)"])
+}) %>% left_join(tag_info %>% select(tag, label), by = "tag")
+
+# Binary version (Fig 6d): did the persuader use the tag in ANY of their other
+# games? Puts the estimate on the same odds-ratio-for-success scale as 6b/6c.
+loo <- loo %>% mutate(across(all_of(paste0("loo_", focal_tags)), ~ as.numeric(.x > 0), .names = "any_{.col}"))
+res_loo_any <- map_dfr(focal_tags, function(tg) {
+  v <- paste0("any_loo_", tg)
+  f <- as.formula(paste("persuader_success ~", v, "+ truth + conf_pre_z + (1 | question_id)"))
+  fit <- tryCatch(glmer(f, data = loo, family = binomial, control = glmerControl(optimizer = "bobyqa")),
+                  error = function(e) NULL)
+  if (is.null(fit)) return(tibble(tag = tg, b = NA))
+  co <- summary(fit)$coefficients
+  tibble(tag = tg, n_users = sum(loo[[v]]), b = co[v, "Estimate"], se = co[v, "Std. Error"],
+         z = co[v, "z value"], p = co[v, "Pr(>|z|)"])
+}) %>% left_join(tag_info %>% select(tag, label), by = "tag")
+res_loo_any %>% transmute(Category = label, `trials with habitual user` = n_users, OR = round(exp(b), 2),
+                          SE = round(se, 2), p = signif(p, 2)) %>%
+  kable(caption = "Focal-game success ~ persuader used the tag in at least one OTHER game (E4 humans, disagreement trials)") %>%
+  kable_styling(full_width = FALSE)
+
+res_loo %>%
+  transmute(Category = label, `b (0-1 habitual rate)` = round(b, 2), SE = round(se, 2),
+            OR = round(exp(b), 2), z = round(z, 2), p = signif(p, 2)) %>%
+  kable(caption = "Focal-game success ~ persuader's leave-one-out habitual strategy rate (E4 humans, disagreement trials). Low power - directional evidence only.") %>%
+  kable_styling(full_width = FALSE)
+```
+
+## Probe C: robustness ladder (added controls + within centering)
+
+```{r probe-c, fig.height=4.5}
+ladder_specs <- list(
+  M1_baseline = "%s + truth + conf_pre_z + experiment",
+  M2_target_behavior = "%s + target_disagreement + target_probe + truth + conf_pre_z + experiment",
+  M3_trial_position = "%s + trial_index + trial_type + truth + conf_pre_z + experiment",
+  M4_mundlak = "%s + ppt_mean + q_mean + truth + conf_pre_z + experiment"
+)
+
+res_ladder <- map_dfr(focal_tags, function(tg) {
+  dat <- ddl %>%
+    group_by(participant_id) %>% mutate(ppt_mean = mean(.data[[tg]])) %>%
+    group_by(question_id) %>% mutate(q_mean = mean(.data[[tg]])) %>%
+    ungroup()
+  map_dfr(names(ladder_specs), function(sp) {
+    f <- as.formula(paste("persuader_success ~", sprintf(ladder_specs[[sp]], tg),
+                          "+ (1 | question_id) + (1 | participant_id)"))
+    fit <- tryCatch(glmer(f, data = dat, family = binomial,
+                          control = glmerControl(optimizer = "bobyqa", calc.derivs = FALSE)),
+                    error = function(e) NULL)
+    if (is.null(fit)) return(tibble(spec = sp, b = NA))
+    co <- summary(fit)$coefficients
+    tibble(spec = sp, b = co[tg, "Estimate"], se = co[tg, "Std. Error"],
+           z = co[tg, "z value"], p = co[tg, "Pr(>|z|)"])
+  }) %>% mutate(tag = tg)
+}) %>% left_join(tag_info %>% select(tag, label), by = "tag")
+
+res_ladder %>%
+  filter(!is.na(b)) %>%
+  ggplot(aes(x = exp(b), y = label, color = spec)) +
+  geom_vline(xintercept = 1, linetype = "dashed", color = "grey60") +
+  geom_pointrange(aes(xmin = exp(b - 1.96 * se), xmax = exp(b + 1.96 * se)),
+                  position = position_dodge(width = 0.6)) +
+  scale_x_log10() +
+  labs(x = "OR for persuasion success", y = NULL, color = "Specification",
+       title = "Robustness ladder (LLM disagreement trials)")
+
+res_ladder %>%
+  transmute(Category = label, Spec = spec, OR = round(exp(b), 2), b = round(b, 2),
+            SE = round(se, 2), p = signif(p, 2)) %>%
+  pivot_wider(id_cols = Category, names_from = Spec, values_from = c(OR, p)) %>%
+  kable(caption = "OR and p by specification") %>%
+  kable_styling(full_width = FALSE)
+```
+
+## Probe D: E-values (sensitivity to unmeasured confounding)
+
+```{r probe-d}
+evalue <- function(or) {
+  rr <- sqrt(or); rr <- ifelse(rr < 1, 1 / rr, rr)
+  rr + sqrt(rr * (rr - 1))
+}
+res_succ %>%
+  filter(tag %in% focal_tags) %>%
+  mutate(
+    ci_lo = exp(b - 1.96 * se), ci_hi = exp(b + 1.96 * se),
+    ci_near = ifelse(exp(b) > 1, ci_lo, ci_hi),
+    `E-value (point)` = round(evalue(exp(b)), 2),
+    `E-value (CI)` = ifelse((ci_lo - 1) * (ci_hi - 1) < 0, 1, round(evalue(ci_near), 2))
+  ) %>%
+  transmute(Category = label, OR = round(exp(b), 2),
+            CI = sprintf("[%.2f, %.2f]", ci_lo, ci_hi),
+            `E-value (point)`, `E-value (CI)`) %>%
+  kable(caption = "E-values for focal strategy-success associations (M1 baseline)") %>%
+  kable_styling(full_width = FALSE)
+```
+
+# Giving up
+
+## How often, and by whom?
+
+```{r gaveup-prevalence}
+dc %>%
+  group_by(experiment, persuader_type) %>%
+  summarize(n = n(), gave_up = sum(persuader_gave_up),
+            pct = sprintf("%.1f%%", 100 * mean(persuader_gave_up)), .groups = "drop") %>%
+  kable(caption = "Giving up by experiment and persuader type") %>%
+  kable_styling(full_width = FALSE)
+```
+
+```{r gaveup-condition, fig.height=4}
+p1 <- dc %>%
+  ggplot(aes(x = truth, y = persuader_gave_up, fill = truth)) +
+  stat_summary(geom = "bar", fun = mean) +
+  stat_summary(geom = "errorbar", fun.data = mean_cl_boot, width = 0.2) +
+  scale_fill_manual(values = PAL_TRUTH) +
+  facet_grid(. ~ persuader_type) +
+  scale_y_continuous(labels = scales::percent) +
+  labs(x = "Assigned position", y = "P(gave up)") +
+  theme(legend.position = "none")
+
+p2 <- dc %>%
+  filter(!is.na(intro_condition)) %>%
+  ggplot(aes(x = intro_condition, y = persuader_gave_up, fill = intro_condition)) +
+  stat_summary(geom = "bar", fun = mean) +
+  stat_summary(geom = "errorbar", fun.data = mean_cl_boot, width = 0.2) +
+  scale_fill_manual(values = PAL_HELP) +
+  scale_y_continuous(labels = scales::percent) +
+  labs(x = "Helpfulness condition", y = NULL) +
+  theme(legend.position = "none")
+
+p1 + p2
+```
+
+```{r gaveup-models}
+m_gu_truth <- glmer(
+  persuader_gave_up ~ truth + disagree + experiment + (1 | question_id) + (1 | participant_id),
+  data = dc %>% filter(persuader_type == "LLM"), family = binomial,
+  control = glmerControl(optimizer = "bobyqa"))
+coef_tab(m_gu_truth, 3) %>%
+  kable(caption = "LLM giving up ~ assigned position + disagreement + experiment") %>%
+  kable_styling(full_width = FALSE)
+
+m_gu_type <- glmer(
+  persuader_gave_up ~ persuader_type + truth + (1 | question_id) + (1 | participant_id),
+  data = dc %>% filter(experiment == "E4"), family = binomial,
+  control = glmerControl(optimizer = "bobyqa"))
+coef_tab(m_gu_type, 3) %>%
+  kable(caption = "E4: giving up ~ persuader type + truth") %>%
+  kable_styling(full_width = FALSE)
+```
+
+## By item
+
+```{r gaveup-items}
+dc %>%
+  filter(persuader_type == "LLM", !persuader_correct) %>%
+  group_by(q_name) %>%
+  summarize(n = n(), pct_gave_up = mean(persuader_gave_up), .groups = "drop") %>%
+  arrange(-pct_gave_up) %>%
+  head(12) %>%
+  kable(digits = 2, caption = "Items with highest LLM give-up rates (when arguing falsehood)") %>%
+  kable_styling(full_width = FALSE)
+```
+
+## By trial position, target resistance, and item concentration
+
+```{r gaveup-trial}
+llm_c <- dc %>% filter(persuader_type == "LLM")
+conc_trial <- llm_c %>%
+  group_by(trial_index) %>%
+  summarize(n = n(), n_false = sum(!persuader_correct), k = sum(persuader_gave_up),
+            pct_all = 100 * mean(persuader_gave_up),
+            pct_false = 100 * mean(persuader_gave_up[!persuader_correct]), .groups = "drop")
+conc_trial %>% kable(digits = 1, caption = "LLM concession by trial position (all / falsehood-assigned)") %>%
+  kable_styling(full_width = FALSE)
+
+# Trial 5 is the final trial, whose design differs (E1/E2: low-confidence items; E3:
+# confident-correct targets, always falsehood). The intro-only model separates the
+# trial-order trend from that design change.
+m_conc_trial <- glmer(persuader_gave_up ~ trial_index + disagree + experiment + (1 | question_id),
+                      data = llm_c %>% filter(experiment != "E4", !persuader_correct, trial_type == "intro"),
+                      family = binomial, control = glmerControl(optimizer = "bobyqa"))
+coef_tab(m_conc_trial, 3) %>%
+  kable(caption = "LLM concession ~ trial position (E1-E3 falsehood-assigned INTRO trials only)") %>%
+  kable_styling(full_width = FALSE)
+
+# Concession is a response to resistance: disagreement trials, and E3 (confident targets)
+llm_c %>% group_by(truth, disagree) %>%
+  summarize(n = n(), k = sum(persuader_gave_up), pct = 100 * mean(persuader_gave_up), .groups = "drop") %>%
+  kable(digits = 1, caption = "LLM concession by assigned position x prior disagreement") %>%
+  kable_styling(full_width = FALSE)
+llm_c %>% filter(experiment == "E3") %>%
+  group_by(trial_type, intro_condition, feedback_condition) %>%
+  summarize(n = n(), k = sum(persuader_gave_up), pct = 100 * mean(persuader_gave_up), .groups = "drop") %>%
+  kable(digits = 1, caption = "E3 LLM concession by trial type and condition (finals: confident-correct targets, always falsehood)") %>%
+  kable_styling(full_width = FALSE)
+m_conc_e3 <- glmer(persuader_gave_up ~ experiment + disagree + (1 | question_id),
+                   data = llm_c %>% filter(experiment != "E4", !persuader_correct),
+                   family = binomial, control = glmerControl(optimizer = "bobyqa"))
+coef_tab(m_conc_e3, 3) %>%
+  kable(caption = "Is E3's higher concession rate explained by disagreement and items? (falsehood-assigned LLM trials)") %>%
+  kable_styling(full_width = FALSE)
+```
+
+```{r gaveup-item-concentration}
+conc_items <- llm_c %>%
+  group_by(q_name) %>%
+  summarize(n = n(), n_false = sum(!persuader_correct), k = sum(persuader_gave_up),
+            pct_false = 100 * k / pmax(n_false, 1), .groups = "drop") %>%
+  arrange(-k) %>%
+  mutate(share = 100 * k / sum(k), cum_share = cumsum(share))
+conc_items %>% kable(digits = 1, caption = "LLM concessions by item (share of all concessions)") %>%
+  kable_styling(full_width = FALSE)
+cat(sprintf("%d of %d items account for zero concessions; sourdough alone = %.0f%% of all LLM concessions\n",
+            sum(conc_items$k == 0), nrow(conc_items), conc_items$share[conc_items$q_name == "sourdough"]))
+```
+
+## Consequences: does giving up forfeit the game?
+
+```{r gaveup-success}
+dd %>%
+  group_by(persuader_type, truth, gave_up = ifelse(persuader_gave_up == 1, "Gave up", "Didn't")) %>%
+  summarize(n = n(), persuader_success = mean(persuader_success), .groups = "drop") %>%
+  pivot_wider(names_from = gave_up, values_from = c(n, persuader_success)) %>%
+  kable(digits = 2, caption = "Success by giving up (disagreement trials)") %>%
+  kable_styling(full_width = FALSE)
+
+m_gu_succ <- glmer(
+  persuader_success ~ persuader_gave_up + truth + conf_pre_z + experiment +
+    (1 | question_id) + (1 | participant_id),
+  data = ddl, family = binomial, control = glmerControl(optimizer = "bobyqa"))
+coef_tab(m_gu_succ, 3) %>%
+  kable(caption = "Success ~ gave up (LLM disagreement trials)") %>%
+  kable_styling(full_width = FALSE)
+```
+
+## Does giving up explain the truth advantage?
+
+```{r truth-mediation}
+mixed12 <- dc %>%
+  filter(experiment %in% c("E1", "E2"), trial_type == "intro",
+         intro_condition == "Mixed", disagree)
+
+# 1) Replicate the pooled truth effect on the tagged sample
+m_cc_base <- lmer(confidence_change ~ persuader_correct + (1 | participant_id) + (1 | question_id),
+                  data = mixed12)
+# 2) Add gave-up as covariate
+m_cc_gu <- lmer(confidence_change ~ persuader_correct + persuader_gave_up +
+                  (1 | participant_id) + (1 | question_id), data = mixed12)
+# 3) Exclude gave-up conversations entirely
+m_cc_excl <- lmer(confidence_change ~ persuader_correct + (1 | participant_id) + (1 | question_id),
+                  data = mixed12 %>% filter(persuader_gave_up == 0))
+
+extract_pc <- function(m, lab) {
+  co <- summary(m)$coefficients
+  tibble(model = lab, b = co["persuader_correctTRUE", "Estimate"],
+         se = co["persuader_correctTRUE", "Std. Error"],
+         stat = co["persuader_correctTRUE", ncol(co) - 1],
+         p = co["persuader_correctTRUE", ncol(co)])
+}
+bind_rows(
+  extract_pc(m_cc_base, "CC ~ truth (tagged sample)"),
+  extract_pc(m_cc_gu,   "CC ~ truth + gave_up"),
+  extract_pc(m_cc_excl, "CC ~ truth (excluding gave-up convos)")
+) %>%
+  kable(digits = 3, caption = "Pooled E1+E2 Mixed: truth coefficient with/without giving-up adjustment") %>%
+  kable_styling(full_width = FALSE)
+```
+
+```{r truth-mediation-ps}
+ps_models <- list(
+  `PS ~ truth (tagged sample)` =
+    persuader_success ~ persuader_correct + (1 | participant_id) + (1 | question_id),
+  `PS ~ truth + gave_up` =
+    persuader_success ~ persuader_correct + persuader_gave_up + (1 | participant_id) + (1 | question_id)
+)
+res_ps <- imap_dfr(ps_models, function(f, lab) {
+  m <- glmer(f, data = mixed12, family = binomial, control = glmerControl(optimizer = "bobyqa"))
+  co <- summary(m)$coefficients
+  tibble(model = lab, b = co["persuader_correctTRUE", "Estimate"],
+         se = co["persuader_correctTRUE", "Std. Error"],
+         z = co["persuader_correctTRUE", "z value"], p = co["persuader_correctTRUE", "Pr(>|z|)"])
+})
+m_ps_excl <- glmer(persuader_success ~ persuader_correct + (1 | participant_id) + (1 | question_id),
+                   data = mixed12 %>% filter(persuader_gave_up == 0), family = binomial,
+                   control = glmerControl(optimizer = "bobyqa"))
+co <- summary(m_ps_excl)$coefficients
+res_ps <- bind_rows(res_ps, tibble(
+  model = "PS ~ truth (excluding gave-up convos)",
+  b = co["persuader_correctTRUE", "Estimate"], se = co["persuader_correctTRUE", "Std. Error"],
+  z = co["persuader_correctTRUE", "z value"], p = co["persuader_correctTRUE", "Pr(>|z|)"]))
+res_ps %>% kable(digits = 3, caption = "Same decomposition for persuader success") %>%
+  kable_styling(full_width = FALSE)
+```
+
+```{r truth-mediation-robust}
+decomp <- function(data, label) {
+  m1 <- glmer(persuader_success ~ persuader_correct + conf_pre_z + (1 | participant_id) + (1 | question_id),
+              data = data, family = binomial, control = glmerControl(optimizer = "bobyqa"))
+  m2 <- glmer(persuader_success ~ persuader_correct + persuader_gave_up + conf_pre_z +
+                (1 | participant_id) + (1 | question_id),
+              data = data, family = binomial, control = glmerControl(optimizer = "bobyqa"))
+  map2_dfr(list(m1, m2), paste(label, c("base", "+ gave_up")), function(m, lab) {
+    co <- summary(m)$coefficients
+    tibble(model = lab, b_truth = co["persuader_correctTRUE", "Estimate"],
+           se = co["persuader_correctTRUE", "Std. Error"],
+           z = co["persuader_correctTRUE", "z value"], p = co["persuader_correctTRUE", "Pr(>|z|)"])
+  })
+}
+bind_rows(
+  decomp(dd %>% filter(persuader_type == "LLM"), "LLM, all disagreement trials:"),
+  decomp(dd %>% filter(persuader_type == "Human"), "Human (E4), disagreement trials:")
+) %>%
+  kable(digits = 3, caption = "Truth coefficient before/after adjusting for giving up") %>%
+  kable_styling(full_width = FALSE)
+```
+
+### Warning: the `+ gave_up` PS model is fitted under complete separation
+
+```{r truth-mediation-ps-separation}
+print(table(gave_up = mixed12$persuader_gave_up, success = mixed12$persuader_success))
+print(fisher.test(table(mixed12$persuader_correct, mixed12$persuader_gave_up)))
+
+m_sep <- glmer(persuader_success ~ persuader_correct + persuader_gave_up +
+                 (1 | participant_id) + (1 | question_id),
+               data = mixed12, family = binomial, control = glmerControl(optimizer = "bobyqa"))
+cat("\ngave_up coefficient from the '+ gave_up' model (note the SE):\n")
+print(round(summary(m_sep)$coefficients, 3))
+cat(sprintf("\ntruth coefficient: '+ gave_up' = %.3f vs 'excluding' = %.3f -- identical by construction\n",
+            fixef(m_sep)["persuader_correctTRUE"], fixef(m_ps_excl)["persuader_correctTRUE"]))
+```
+
+```{r truth-mediation-jackknife}
+gu_ids <- mixed12$conversation_id[mixed12$persuader_gave_up == 1]
+jk <- map_dfr(gu_ids, function(cid) {
+  m <- lmer(confidence_change ~ persuader_correct + persuader_gave_up +
+              (1 | participant_id) + (1 | question_id),
+            data = mixed12 %>% filter(conversation_id != cid))
+  extract_pc(m, paste0("drop ", cid))
+})
+cat(sprintf("adjusted CC b ranges %.2f to %.2f across %d leave-one-out fits (min p = %.3f)\n",
+            min(jk$b), max(jk$b), nrow(jk), min(jk$p)))
+```
+
+### Is the truth advantage really killed by giving up? Larger samples say no.
+
+```{r truth-advantage-samples}
+ta_samples <- list(
+  `E1+E2 Mixed intro disagree (prereg slice)` =
+    dc %>% filter(experiment %in% c("E1","E2"), trial_type == "intro",
+                  intro_condition == "Mixed", disagree),
+  `All LLM Mixed disagree` =
+    dc %>% filter(persuader_type == "LLM", intro_condition == "Mixed", disagree),
+  `All LLM disagree (E1-E4)` = dc %>% filter(persuader_type == "LLM", disagree),
+  `E4 LLM disagree (GPT-5: zero forfeits)` =
+    dc %>% filter(persuader_type == "LLM", experiment == "E4", disagree)
+)
+imap_dfr(ta_samples, function(s, lab) {
+  ff <- function(d) {
+    m <- try(glmer(persuader_success ~ persuader_correct + (1 | question_id) + (1 | participant_id),
+                   data = d, family = binomial, control = glmerControl(optimizer = "bobyqa")),
+             silent = TRUE)
+    if (inherits(m, "try-error")) return(c(NA, NA))
+    co <- summary(m)$coefficients; c(co[2, 1], co[2, 4])
+  }
+  a <- ff(s); e <- ff(s %>% filter(persuader_gave_up == 0))
+  tibble(sample = lab, n = nrow(s), n_gave_up = sum(s$persuader_gave_up),
+         b_all = a[1], p_all = a[2], b_excl = e[1], p_excl = e[2])
+}) %>%
+  kable(digits = 4, caption = "LLM truth advantage, all trials vs excluding gave-up conversations") %>%
+  kable_styling(full_width = FALSE)
+```
+
+### Condition-controlled samples: first trials and randomized-truth trials
+
+```{r truth-advantage-clean}
+rand_truth <- function(d) d$trial_type == "final" & d$experiment != "E3"
+ddl_all <- dd %>% filter(persuader_type == "LLM")
+ta_clean <- list(
+  `LLM first trials, E1-E4` = list(d = ddl_all %>% filter(trial_index == 0), rhs = "experiment"),
+  `LLM first trials, E4` = list(d = ddl_all %>% filter(trial_index == 0, experiment == "E4"), rhs = "1"),
+  `LLM randomized-truth, E1+E2+E4` = list(d = ddl_all %>% filter(experiment != "E3", rand_truth(ddl_all)), rhs = "experiment + trial_type + intro_condition"),
+  `LLM randomized-truth, E4` = list(d = ddl_all %>% filter(experiment == "E4", rand_truth(ddl_all)), rhs = "trial_type + intro_condition"),
+  `LLM clean set (randomized OR first), E1-E4` = list(d = ddl_all %>% filter(rand_truth(ddl_all) | trial_index == 0), rhs = "experiment + trial_type + intro_condition"),
+  `LLM clean set, E4` = list(d = ddl_all %>% filter(experiment == "E4", rand_truth(ddl_all) | trial_index == 0), rhs = "trial_type + intro_condition"),
+  `Human clean set, E4` = list(d = dd %>% filter(persuader_type == "Human", rand_truth(dd) | trial_index == 0), rhs = "trial_type + intro_condition")
+)
+fit_truth <- function(dat, rhs) {
+  f <- as.formula(paste("persuader_success ~ persuader_correct +", rhs, "+ (1 | question_id) + (1 | participant_id)"))
+  m <- try(glmer(f, data = dat, family = binomial, control = glmerControl(optimizer = "bobyqa")), silent = TRUE)
+  if (inherits(m, "try-error")) return(c(b = NA, se = NA, p = NA))
+  co <- summary(m)$coefficients; c(b = co[2, 1], se = co[2, 2], p = co[2, 4])
+}
+res_truth_clean <- imap_dfr(ta_clean, function(s, lab) {
+  a <- fit_truth(s$d, s$rhs); e <- fit_truth(s$d %>% filter(persuader_gave_up == 0), s$rhs)
+  tibble(sample = lab, n = nrow(s$d), n_truth = sum(s$d$persuader_correct),
+         n_concede = sum(s$d$persuader_gave_up),
+         succ_truth = mean(s$d$persuader_success[s$d$persuader_correct]),
+         succ_false = mean(s$d$persuader_success[!s$d$persuader_correct]),
+         b_all = a["b"], se_all = a["se"], p_all = a["p"],
+         b_excl = e["b"], se_excl = e["se"], p_excl = e["p"])
+})
+res_truth_clean %>%
+  mutate(across(c(succ_truth, succ_false, b_all, se_all, b_excl, se_excl), ~ round(.x, 2)),
+         across(c(p_all, p_excl), ~ signif(.x, 2))) %>%
+  kable(caption = "LLM truth advantage (persuader success) on condition-controlled samples, all trials vs excluding concessions") %>%
+  kable_styling(full_width = FALSE)
+```
+
+### The pooled truth advantage across all truth-randomized pools
+
+```{r truth-pools}
+clean_llm <- ddl_all %>%
+  filter(rand_truth(ddl_all) | trial_index == 0) %>%
+  mutate(pool = factor(ifelse(trial_index == 0, "first", "final"), levels = c("final", "first")),
+         confidence_pre_10 = confidence_pre / 10,
+         conf_c = (confidence_pre - mean(confidence_pre)) / 10)   # centered, per 10 pp
+paper_llm <- clean_llm
+
+truth_pool_cells <- clean_llm %>%
+  group_by(pool) %>%
+  summarize(n = n(), n_truth = sum(persuader_correct), n_concede = sum(persuader_gave_up),
+            mean_conf = mean(confidence_pre),
+            succ_truth = mean(persuader_success[persuader_correct]),
+            succ_false = mean(persuader_success[!persuader_correct]), .groups = "drop")
+truth_pool_cells %>%
+  kable(digits = 2, caption = "LLM truth-randomized pools (disagreement trials)") %>%
+  kable_styling(full_width = FALSE)
+clean_llm %>% count(pool, experiment) %>%
+  pivot_wider(names_from = experiment, values_from = n, values_fill = 0) %>%
+  kable(caption = "Pool x experiment") %>% kable_styling(full_width = FALSE)
+
+fit_tp <- function(f, dat) {
+  glmer(f, data = dat, family = binomial, control = glmerControl(optimizer = "bobyqa", optCtrl = list(maxfun = 1e5)))
+}
+tp_row <- function(m, lab, term = "persuader_correctTRUE") {
+  co <- summary(m)$coefficients
+  tibble(model = lab, term = term, n = nobs(m), b = co[term, 1], se = co[term, 2],
+         z = co[term, 3], p = co[term, 4],
+         succ_truth = mean(m@frame$persuader_success[m@frame$persuader_correct]),
+         succ_false = mean(m@frame$persuader_success[!m@frame$persuader_correct]),
+         conv_warn = length(m@optinfo$conv$lme4$messages))
+}
+RE <- "(1 | question_id) + (1 | participant_id)"
+f_main <- as.formula(paste("persuader_success ~ persuader_correct + pool + experiment +", RE))
+f_conf <- as.formula(paste("persuader_success ~ persuader_correct * conf_c + pool + experiment +", RE))
+f_pool <- as.formula(paste("persuader_success ~ persuader_correct * pool + experiment +", RE))
+f_cov  <- as.formula(paste("persuader_success ~ persuader_correct + persuader_gave_up + pool + experiment +", RE))
+# single-pool fits: one first / one final trial per participant, so the participant
+# intercept is unidentified (convergence warnings) -- question intercept only
+RE1 <- "(1 | question_id)"
+f_one  <- as.formula(paste("persuader_success ~ persuader_correct + experiment + intro_condition +", RE1))
+f_first <- as.formula(paste("persuader_success ~ persuader_correct + experiment +", RE1))
+TC <- "persuader_correctTRUE:conf_c"
+
+res_truth_pooled <- bind_rows(
+  tp_row(fit_tp(f_first, paper_llm %>% filter(pool == "first")), "first trials"),
+  tp_row(fit_tp(f_first, paper_llm %>% filter(pool == "first", persuader_gave_up == 0)), "first trials, concessions excluded"),
+  tp_row(fit_tp(f_one,   paper_llm %>% filter(pool == "final")), "final trials"),
+  tp_row(fit_tp(f_one,   paper_llm %>% filter(pool == "final", persuader_gave_up == 0)), "final trials, concessions excluded"),
+  tp_row(fit_tp(f_main, paper_llm), "first + final"),
+  tp_row(fit_tp(f_conf, paper_llm), "first + final, truth x confidence", TC),
+  tp_row(fit_tp(f_pool, paper_llm), "first + final, pool x truth (first vs final)", "persuader_correctTRUE:poolfirst"),
+  tp_row(fit_tp(f_cov,  paper_llm), "first + final + concession covariate"),
+  tp_row(fit_tp(f_cov,  paper_llm), "first + final + concession covariate (concession effect)", "persuader_gave_up"),
+  tp_row(fit_tp(f_main, paper_llm %>% filter(persuader_gave_up == 0)), "first + final, concessions excluded"),
+  tp_row(fit_tp(f_conf, paper_llm %>% filter(persuader_gave_up == 0)), "concessions excluded, truth x confidence", TC)
+)
+res_truth_pooled %>%
+  kable(digits = 3, caption = "Pooled LLM truth advantage (persuader success): first + final trials (paper set)") %>%
+  kable_styling(full_width = FALSE)
+
+```
+
+### Truth x confidence in interpretable units
+
+```{r truth-conf-preds}
+tcd <- paper_llm %>% mutate(c50 = (confidence_pre - 50) / 10)
+f_add  <- as.formula(paste("persuader_success ~ persuader_correct + c50 + pool + experiment +", RE))
+f_ixn  <- as.formula(paste("persuader_success ~ persuader_correct * c50 + pool + experiment +", RE))
+m_add  <- fit_tp(f_add, tcd); m_ixn <- fit_tp(f_ixn, tcd)
+mc_tr  <- lmer(as.formula(paste("confidence_change ~ persuader_correct + pool + experiment +", RE)), data = tcd)
+mc_add <- lmer(as.formula(paste("confidence_change ~ persuader_correct + c50 + pool + experiment +", RE)), data = tcd)
+mc_ixn <- lmer(as.formula(paste("confidence_change ~ persuader_correct * c50 + pool + experiment +", RE)), data = tcd)
+co_row <- function(m, lab, term) {
+  co <- summary(m)$coefficients
+  tibble(model = lab, term = term, b = co[term, 1], se = co[term, 2],
+         stat = co[term, ncol(co) - 1], p = co[term, ncol(co)])
+}
+res_truth_conf <- bind_rows(
+  co_row(m_add, "PS additive", "c50"),
+  co_row(m_add, "PS additive", "persuader_correctTRUE"),
+  co_row(m_ixn, "PS interaction", "persuader_correctTRUE:c50"),
+  co_row(m_ixn, "PS interaction (confidence slope, falsehood)", "c50"),
+  co_row(mc_tr, "CC truth only", "persuader_correctTRUE"),
+  co_row(mc_add, "CC additive", "c50"),
+  co_row(mc_ixn, "CC interaction", "persuader_correctTRUE:c50"),
+  co_row(mc_ixn, "CC interaction (confidence slope, falsehood)", "c50")
+)
+res_truth_conf %>% mutate(across(where(is.numeric), ~ signif(.x, 3))) %>% as.data.frame()
+
+set.seed(20260927)
+B <- MASS::mvrnorm(2000, fixef(m_ixn), vcov(m_ixn))
+Xm <- function(dd) model.matrix(~ persuader_correct * c50 + pool + experiment, dd)
+re_part <- predict(m_ixn, type = "link") - drop(Xm(tcd) %*% fixef(m_ixn))
+bc <- fixef(mc_ixn); Vc <- vcov(mc_ixn)
+ANCHORS <- c(0, 25, 50, 75, 90, 100)
+truth_conf_preds <- bind_rows(lapply(ANCHORS, function(cv) {
+  XT <- Xm(tcd %>% mutate(persuader_correct = TRUE,  c50 = (cv - 50) / 10))
+  XF <- Xm(tcd %>% mutate(persuader_correct = FALSE, c50 = (cv - 50) / 10))
+  pr <- function(X, b) mean(plogis(drop(X %*% b) + re_part))
+  sims <- apply(B, 1, function(b) pr(XT, b) - pr(XF, b))
+  k <- (cv - 50) / 10
+  g <- bc["persuader_correctTRUE"] + k * bc["persuader_correctTRUE:c50"]
+  se <- sqrt(Vc["persuader_correctTRUE", "persuader_correctTRUE"] +
+             k^2 * Vc["persuader_correctTRUE:c50", "persuader_correctTRUE:c50"] +
+             2 * k * Vc["persuader_correctTRUE", "persuader_correctTRUE:c50"])
+  tibble(confidence = cv,
+         ps_truth = 100 * pr(XT, fixef(m_ixn)), ps_false = 100 * pr(XF, fixef(m_ixn)),
+         ps_gap_pp = 100 * (pr(XT, fixef(m_ixn)) - pr(XF, fixef(m_ixn))),
+         ps_gap_lo = 100 * quantile(sims, .025), ps_gap_hi = 100 * quantile(sims, .975),
+         cc_gap = unname(g), cc_gap_lo = unname(g - 1.96 * se), cc_gap_hi = unname(g + 1.96 * se))
+}))
+truth_conf_preds %>% mutate(across(where(is.numeric), ~ round(.x, 1))) %>% as.data.frame()
+
+# Full curves for the asymmetry figure (fig: xp_truth_asym): predicted PS and CC
+# by initial confidence, separately for the two sides of a disagreement trial.
+# persuader argues truth  <=> participant initially INCORRECT
+# persuader argues false  <=> participant initially CORRECT
+# CIs: 2,000 fixed-effect draws for both models (random-effect contributions held
+# at their conditional modes).
+Bc <- MASS::mvrnorm(2000, fixef(mc_ixn), as.matrix(vcov(mc_ixn)))
+re_cc <- predict(mc_ixn) - drop(Xm(tcd) %*% fixef(mc_ixn))
+truth_conf_curves <- bind_rows(lapply(seq(0, 100, 5), function(cv) {
+  bind_rows(lapply(c(TRUE, FALSE), function(tv) {
+    X <- Xm(tcd %>% mutate(persuader_correct = tv, c50 = (cv - 50) / 10))
+    ps_s <- apply(B,  1, function(b) mean(plogis(drop(X %*% b) + re_part)))
+    cc_s <- apply(Bc, 1, function(b) mean(drop(X %*% b) + re_cc))
+    tibble(confidence = cv, persuader_correct = tv,
+           ps = 100 * mean(plogis(drop(X %*% fixef(m_ixn)) + re_part)),
+           ps_lo = 100 * quantile(ps_s, .025), ps_hi = 100 * quantile(ps_s, .975),
+           cc = mean(drop(X %*% fixef(mc_ixn)) + re_cc),
+           cc_lo = quantile(cc_s, .025), cc_hi = quantile(cc_s, .975))
+  }))
+}))
+truth_conf_curves %>% filter(confidence %in% c(0, 50, 90, 100)) %>%
+  mutate(across(where(is.numeric), ~ round(.x, 1))) %>% as.data.frame()
+# slope of PS on confidence for each side (log-odds per 10 points)
+co_i <- fixef(m_ixn); V_i <- vcov(m_ixn)
+slope_true <- co_i["c50"] + co_i["persuader_correctTRUE:c50"]
+se_true <- sqrt(V_i["c50", "c50"] + V_i["persuader_correctTRUE:c50", "persuader_correctTRUE:c50"] +
+                2 * V_i["c50", "persuader_correctTRUE:c50"])
+res_truth_conf <- bind_rows(res_truth_conf,
+  tibble(model = "PS interaction (confidence slope, truth = participant incorrect)",
+         term = "c50 + ixn", b = unname(slope_true), se = unname(se_true),
+         stat = unname(slope_true / se_true), p = unname(2 * pnorm(-abs(slope_true / se_true)))))
+res_truth_conf %>% tail(3) %>% as.data.frame()
+```
+
+### The exclusion analysis, stated simply
+
+```{r truth-exclusion-simple}
+mixed12 %>%
+  mutate(set = "all trials") %>%
+  bind_rows(mixed12 %>% filter(persuader_gave_up == 0) %>% mutate(set = "forfeits removed")) %>%
+  group_by(set, truth) %>%
+  summarize(n = n(), success = mean(persuader_success),
+            conf_change = mean(confidence_change), .groups = "drop") %>%
+  pivot_wider(names_from = truth, values_from = c(n, success, conf_change)) %>%
+  mutate(gap_success = success_Truth - success_Falsehood,
+         gap_cc = conf_change_Truth - conf_change_Falsehood) %>%
+  kable(digits = 3, caption = "Truth-vs-falsehood gap before and after removing forfeits (E1+E2 Mixed intro disagree)") %>%
+  kable_styling(full_width = FALSE)
+```
+
+### Does position compliance change the picture?
+
+```{r truth-advantage-compliance, eval = file.exists("../data/tags/position_compliance.csv")}
+pcm <- read.csv("../data/tags/position_compliance.csv") %>%
+  filter(status == "good") %>%
+  mutate(non_compliant = compliance %in% c("never_advocated", "argued_opposite")) %>%
+  select(conversation_id, non_compliant)
+
+dd_pc <- dd %>% inner_join(pcm, by = "conversation_id")
+dd_pc %>%
+  group_by(persuader_type, experiment) %>%
+  summarize(n = n(), non_compliant = sum(non_compliant), .groups = "drop") %>%
+  kable(caption = "Compliance coverage of the disagreement-trial sample") %>%
+  kable_styling(full_width = FALSE)
+
+e4l <- dd_pc %>% filter(persuader_type == "LLM", experiment == "E4")
+bind_rows(
+  tibble(set = "E4 LLM, all", n = nrow(e4l)),
+  tibble(set = "E4 LLM, compliant only", n = sum(!e4l$non_compliant))
+) %>% kable(caption = "E4 LLM disagreement trials available for a compliance-adjusted truth test") %>%
+  kable_styling(full_width = FALSE)
+```
+
+## Within-item robustness (both-sided items)
+
+```{r truth-mediation-within-item}
+both_sided <- mixed12 %>%
+  group_by(question_id) %>%
+  filter(n_distinct(persuader_correct) == 2) %>%
+  ungroup()
+cat(sprintf("%d trials on %d both-sided items (of %d trials total)\n",
+            nrow(both_sided), n_distinct(both_sided$question_id), nrow(mixed12)))
+
+m_cc_bs <- lmer(confidence_change ~ persuader_correct + (1 | participant_id) + (1 | question_id),
+                data = both_sided)
+m_cc_bs_excl <- lmer(confidence_change ~ persuader_correct + (1 | participant_id) + (1 | question_id),
+                     data = both_sided %>% filter(persuader_gave_up == 0))
+m_ps_bs <- glmer(persuader_success ~ persuader_correct + (1 | participant_id) + (1 | question_id),
+                 data = both_sided, family = binomial, control = glmerControl(optimizer = "bobyqa"))
+
+bind_rows(
+  extract_pc(m_cc_bs, "CC ~ truth (both-sided items)"),
+  extract_pc(m_cc_bs_excl, "CC ~ truth (both-sided, excluding gave-up)")
+) %>%
+  kable(digits = 3, caption = "Within-item robustness: truth effect on items with both truth and falsehood trials") %>%
+  kable_styling(full_width = FALSE)
+
+co <- summary(m_ps_bs)$coefficients
+tibble(model = "PS ~ truth (both-sided items)",
+       b = co["persuader_correctTRUE", "Estimate"], se = co["persuader_correctTRUE", "Std. Error"],
+       z = co["persuader_correctTRUE", "z value"], p = co["persuader_correctTRUE", "Pr(>|z|)"]) %>%
+  kable(digits = 3) %>% kable_styling(full_width = FALSE)
+```
+
+## E3 concession
+
+```{r e3-concession}
+e3 <- dc %>% filter(experiment == "E3")
+cat(sprintf("E3 overall concession rate (new tag): %.1f%%\n", 100 * mean(e3$persuader_gave_up)))
+
+e3 %>%
+  filter(trial_type == "intro") %>%
+  group_by(intro_condition) %>%
+  summarize(n = n(), pct_gave_up = sprintf("%.1f%%", 100 * mean(persuader_gave_up)), .groups = "drop") %>%
+  kable(caption = "E3 intro-trial concession by helpfulness (new tag)") %>%
+  kable_styling(full_width = FALSE)
+
+m_e3_conc <- glmer(persuader_success ~ persuader_gave_up + (1 | question_id) + (1 | participant_id),
+                   data = e3 %>% filter(disagree), family = binomial,
+                   control = glmerControl(optimizer = "bobyqa"))
+coef_tab(m_e3_conc, 3) %>%
+  kable(caption = "E3: success ~ concession (disagreement trials, new tag)") %>%
+  kable_styling(full_width = FALSE)
+```
+
+# Deception
+
+## Who lies, and when?
+
+```{r deception-rates, fig.height=4}
+dc %>%
+  pivot_longer(c(deception_provably_false, deception_false, deception_misleading),
+               names_to = "tag", values_to = "present") %>%
+  left_join(tag_info, by = "tag") %>%
+  group_by(label, persuader_type, truth) %>%
+  summarize(prevalence = mean(present), .groups = "drop") %>%
+  ggplot(aes(x = truth, y = prevalence, fill = persuader_type)) +
+  geom_col(position = "dodge") +
+  facet_grid(. ~ label) +
+  scale_fill_manual(values = PAL_TYPE) +
+  scale_y_continuous(labels = scales::percent) +
+  labs(x = "Assigned position", y = "Prevalence", fill = "Persuader")
+```
+
+```{r deception-type-model}
+m_dec <- glmer(
+  deception_provably_false ~ persuader_type * truth + (1 | question_id) + (1 | participant_id),
+  data = dc %>% filter(experiment == "E4"), family = binomial,
+  control = glmerControl(optimizer = "bobyqa"))
+coef_tab(m_dec, 3) %>%
+  kable(caption = "E4: provably false ~ persuader type x assigned position") %>%
+  kable_styling(full_width = FALSE)
+
+m_dec_fs <- glmer(
+  deception_false ~ persuader_type * truth + (1 | question_id) + (1 | participant_id),
+  data = dc %>% filter(experiment == "E4"), family = binomial,
+  control = glmerControl(optimizer = "bobyqa"))
+coef_tab(m_dec_fs, 3) %>%
+  kable(caption = "E4: false statements ~ persuader type x assigned position") %>%
+  kable_styling(full_width = FALSE)
+
+dc %>% filter(experiment == "E4") %>%
+  group_by(persuader_type, truth) %>%
+  summarize(n = n(), k = sum(deception_false), pct = 100 * mean(deception_false), .groups = "drop") %>%
+  kable(digits = 1, caption = "E4: false-statement rate by persuader type and assigned position") %>%
+  kable_styling(full_width = FALSE)
+
+# Which items carry the LLM's false statements when arguing the truth?
+dc %>% filter(experiment == "E4", persuader_type == "LLM", truth == "Truth", deception_false == 1) %>%
+  count(q_name, sort = TRUE) %>%
+  kable(caption = "E4 LLM false statements while arguing the truth, by item") %>%
+  kable_styling(full_width = FALSE)
+```
+
+### Split by model generation
+
+```{r deception-by-model}
+dc %>%
+  filter(persuader_type == "LLM") %>%
+  mutate(model = ifelse(experiment == "E4", "GPT-5", "GPT-4.5"),
+         item_in_E4 = q_name %in% unique(q_name[experiment == "E4"])) %>%
+  filter(item_in_E4) %>%
+  group_by(model, truth) %>%
+  summarize(n = n(),
+            provably_false = mean(deception_provably_false),
+            false_statements = mean(deception_false),
+            misleading = mean(deception_misleading), .groups = "drop") %>%
+  kable(digits = 3, caption = "Deception by model generation, restricted to items both models argued") %>%
+  kable_styling(full_width = FALSE)
+```
+
+```{r misleading-without-false}
+dc %>%
+  group_by(persuader_type) %>%
+  summarize(n = n(),
+            false_stmt = 100 * mean(deception_false),
+            misleading = 100 * mean(deception_misleading),
+            misleading_without_false = sum(deception_misleading & !deception_false),
+            pct_misleading_without_false = 100 * mean(deception_misleading & !deception_false), .groups = "drop") %>%
+  kable(digits = 1, caption = "Misleading statements are rarer than false ones and almost never occur without them") %>%
+  kable_styling(full_width = FALSE)
+```
+
+## False positives when arguing truth
+
+```{r lying-while-right}
+dc %>%
+  filter(persuader_correct) %>%
+  group_by(experiment, persuader_type) %>%
+  summarize(n = n(), pct_provably_false = sprintf("%.1f%%", 100 * mean(deception_provably_false)),
+            .groups = "drop") %>%
+  kable(caption = "Provably-false rate when arguing the TRUE position") %>%
+  kable_styling(full_width = FALSE)
+```
+
+## Were the humans aware they were lying? (honesty, belief, and the debrief)
+
+```{r honesty-deception}
+h4 <- dc %>%
+  filter(persuader_type == "Human") %>%
+  mutate(believes_truth = (persuader_correct & persuader_honest) |
+                          (!persuader_correct & !persuader_honest))
+
+h4 %>%
+  group_by(truth, persuader_honest) %>%
+  summarize(n = n(),
+            provably_false = mean(deception_provably_false),
+            false_stmt = mean(deception_false),
+            misleading = mean(deception_misleading),
+            gave_up = mean(persuader_gave_up),
+            success = mean(persuader_success), .groups = "drop") %>%
+  mutate(across(provably_false:success, ~sprintf("%.1f%%", 100 * .x))) %>%
+  kable(caption = "E4 humans: deception by assigned position x honesty") %>%
+  kable_styling(full_width = FALSE)
+```
+
+```{r honesty-models}
+print(fisher.test(table(h4$persuader_honest[!h4$persuader_correct],
+                        h4$deception_provably_false[!h4$persuader_correct])))
+print(fisher.test(table(h4$persuader_honest[!h4$persuader_correct],
+                        h4$deception_false[!h4$persuader_correct])))
+
+m_hon <- glmer(deception_provably_false ~ truth * persuader_honest +
+                 (1 | question_id) + (1 | human_persuader_id),
+               data = h4, family = binomial, control = glmerControl(optimizer = "bobyqa"))
+coef_tab(m_hon, 4) %>%
+  kable(caption = "Provably false ~ assigned position x honesty (E4 humans)") %>%
+  kable_styling(full_width = FALSE)
+
+# Does private belief add over assigned position?
+m_b0 <- glmer(deception_provably_false ~ truth + (1 | question_id) + (1 | human_persuader_id),
+              data = h4, family = binomial, control = glmerControl(optimizer = "bobyqa"))
+m_b1 <- glmer(deception_provably_false ~ truth + believes_truth +
+                (1 | question_id) + (1 | human_persuader_id),
+              data = h4, family = binomial, control = glmerControl(optimizer = "bobyqa"))
+print(anova(m_b0, m_b1))
+```
+
+```{r bullshit-concentration}
+pp <- h4 %>%
+  filter(persuader_correct) %>%
+  group_by(human_persuader_id) %>%
+  summarize(n = n(), k = sum(deception_provably_false), .groups = "drop")
+p_bar <- sum(pp$k) / sum(pp$n)
+cat(sprintf("%d persuaders; %.1f%% have >=1 flagged truth-assigned conversation\n",
+            nrow(pp), 100 * mean(pp$k > 0)))
+cat(sprintf("mean p = %.3f; observed var(k/n) = %.4f; expected under homogeneity = %.4f\n",
+            p_bar, var(pp$k / pp$n), mean(p_bar * (1 - p_bar) / pp$n)))
+
+# Persuader pre-confidence does not predict false statements while arguing truth
+coef_tab(glmer(deception_provably_false ~ scale(persuader_confidence_pre) +
+                 (1 | question_id) + (1 | human_persuader_id),
+               data = h4 %>% filter(persuader_correct), family = binomial,
+               control = glmerControl(optimizer = "bobyqa")), 4) %>%
+  kable(caption = "Persuader pre-confidence does NOT predict false statements while arguing truth") %>%
+  kable_styling(full_width = FALSE)
+```
+
+### Direct evidence on awareness: the persuaders' own debrief text
+
+```{r debrief-quotes}
+participants <- read.csv(file.path(data_dir, "conversation_Participant.csv"))
+persuader_ids <- unique(na.omit(conv$human_persuader_id))
+deb <- participants %>%
+  filter(id %in% persuader_ids, !is.na(debrief), nchar(trimws(debrief)) > 3)
+
+lie_pat <- paste0("lie|lying|lied|fabricat|dishonest|deceiv|gaslight|",
+                  "guilt|bad about|uncomfortab|made it up")
+hits <- deb %>% filter(grepl(lie_pat, debrief, ignore.case = TRUE))
+cat(sprintf("%d human persuaders wrote debrief text; %d mention lying/discomfort\n",
+            nrow(deb), nrow(hits)))
+for (i in seq_len(nrow(hits))) cat(sprintf("\n[ppt %s] %s\n", hits$id[i], hits$debrief[i]))
+```
+
+### Do truth-side false statements track what the persuader knew?
+
+```{r item-difficulty}
+# Item difficulty = share of all pre-conversation answers to the item that were wrong.
+# Counted over every pre-conversation answer in the database, including pilots and
+# another study that are not released here; see data/README.md.
+item_diff <- read.csv(file.path(data_dir, "item_difficulty.csv")) %>%
+  mutate(p_wrong = 1 - n_correct / n_answers) %>%
+  select(question_id, p_wrong)
+```
+
+```{r truth-side-false-statements}
+h4_truth <- h4 %>% filter(persuader_correct) %>% left_join(item_diff, by = "question_id")
+m_ts <- glmer(deception_false ~ scale(p_wrong) + persuader_honest + scale(persuader_confidence_pre) +
+                (1 | question_id) + (1 | human_persuader_id),
+              data = h4_truth, family = binomial, control = glmerControl(optimizer = "bobyqa"))
+coef_tab(m_ts, 3) %>%
+  kable(caption = "E4 humans arguing the truth: false statements ~ difficulty + own belief + own confidence") %>%
+  kable_styling(full_width = FALSE)
+
+# The 89 vs 76 provably-false gap on the falsehood side is a concession artifact.
+h4_false <- h4 %>% filter(!persuader_correct)
+h4_false %>%
+  group_by(persuader_honest) %>%
+  summarize(n = n(), false_stmt = 100 * mean(deception_false),
+            false_stmt_no_concession = 100 * mean(deception_false[persuader_gave_up == 0]),
+            provably_false = 100 * mean(deception_provably_false),
+            concession = 100 * mean(persuader_gave_up), .groups = "drop") %>%
+  kable(digits = 1, caption = "E4 humans arguing falsehood, by whether they believed it") %>%
+  kable_styling(full_width = FALSE)
+coef_tab(glmer(deception_false ~ persuader_honest + persuader_gave_up + (1 | question_id) + (1 | human_persuader_id),
+               data = h4_false, family = binomial, control = glmerControl(optimizer = "bobyqa")), 3) %>%
+  kable(caption = "E4 humans arguing falsehood: false statements ~ own belief + concession") %>%
+  kable_styling(full_width = FALSE)
+```
+
+### Truth advantage by the two players' beliefs
+
+```{r dyad-beliefs}
+e4_drop <- c(3742, 3743, 3794, 4554, 4685, 4721)
+dy <- d %>%
+  filter(experiment == "E4", interaction_type == "human_human", disagree,
+         !human_persuader_id %in% e4_drop) %>%
+  left_join(item_diff, by = "question_id") %>%
+  mutate(persuader_right = persuader_correct == persuader_honest,
+         dyad = factor(paste0(ifelse(persuader_right, "T", "F"), ifelse(persuader_correct, "F", "T")),
+                       levels = c("TF", "FF", "FT", "TT")),
+         diff_z = as.numeric(scale(p_wrong)),
+         T_ = ifelse(persuader_correct, .5, -.5), H_ = ifelse(persuader_honest, .5, -.5),
+         P_ = ifelse(persuader_right, .5, -.5))
+dy_sets <- list("Final" = dy %>% filter(trial_type == "final"),
+                "First + final" = dy %>% filter(trial_type == "final" | trial_index == 0),
+                "All disagreement" = dy)
+
+imap_dfr(dy_sets, ~ .x %>% group_by(dyad) %>%
+           summarize(n = n(), success = 100 * mean(persuader_success), cc = mean(confidence_change),
+                     target_conf = mean(confidence_pre), item_wrong = 100 * mean(p_wrong), .groups = "drop") %>%
+           mutate(sample = .y, .before = 1)) %>%
+  kable(digits = 1, caption = "E4 human persuaders: outcomes by dyad (persuader belief, target belief)") %>%
+  kable_styling(full_width = FALSE)
+
+fit_dy <- function(f, data) {
+  co <- summary(glmer(f, data = data, family = binomial,
+                      control = glmerControl(optimizer = "bobyqa")))$coefficients
+  co[2, c(1, 2, 4)]
+}
+imap_dfr(dy_sets, function(s, nm) {
+  tibble(sample = nm,
+         contrast = c("FF vs TF (arguing truth)", "FT vs TT (arguing falsehood)",
+                      "TF vs FT (real disagreement)", "FF vs TT (feigned disagreement)"),
+         bind_rows(
+           fit_dy(persuader_success ~ I(!persuader_honest) + conf_pre_z + (1 | question_id), s %>% filter(persuader_correct)),
+           fit_dy(persuader_success ~ persuader_honest + conf_pre_z + (1 | question_id), s %>% filter(!persuader_correct)),
+           fit_dy(persuader_success ~ persuader_correct + conf_pre_z + (1 | question_id), s %>% filter(persuader_honest)),
+           fit_dy(persuader_success ~ persuader_correct + conf_pre_z + (1 | question_id), s %>% filter(!persuader_honest))
+         ))
+}) %>%
+  kable(digits = 3, caption = "Dyad contrasts, controlling target confidence (item random intercept)") %>%
+  kable_styling(full_width = FALSE)
+
+imap_dfr(dy_sets, function(s, nm) {
+  plain <- summary(glmer(persuader_success ~ T_ + H_ + P_ + conf_pre_z + (1 | question_id), data = s,
+                     family = binomial, control = glmerControl(optimizer = "bobyqa")))$coefficients
+  adj <- summary(glmer(persuader_success ~ T_ + H_ + P_ + conf_pre_z + diff_z + (1 | question_id), data = s,
+                     family = binomial, control = glmerControl(optimizer = "bobyqa")))$coefficients
+  tibble(sample = nm, term = c("Truth", "Honesty", "Persuader right"),
+         b = plain[2:4, 1], p = plain[2:4, 4], b_with_difficulty = adj[2:4, 1], p_with_difficulty = adj[2:4, 4])
+}) %>%
+  kable(digits = 3, caption = "Saturated T/H/P models, without and with item difficulty") %>%
+  kable_styling(full_width = FALSE)
+```
+
+### Item composition and the truth advantage
+
+```{r truth-item-composition}
+it_tf <- d %>%
+  filter(hint_condition == "Conversation", disagree,
+         (trial_type == "final" & experiment != "E3") | trial_index == 0) %>%
+  left_join(item_diff, by = "question_id") %>%
+  mutate(diff_z = as.numeric(scale(p_wrong)),
+         persuader_type = ifelse(interaction_type == "human_human", "Human", "LLM"))
+
+it_tf %>% group_by(persuader_type, truth) %>%
+  summarize(n = n(), success = 100 * mean(persuader_success), item_wrong = 100 * mean(p_wrong), .groups = "drop") %>%
+  kable(digits = 1, caption = "First + randomized final trials: item difficulty by assigned side") %>%
+  kable_styling(full_width = FALSE)
+
+fin <- it_tf %>% filter(experiment == "E4", trial_type == "final")
+map_dfr(c("Human", "LLM"), function(ty) {
+  s <- fin %>% filter(persuader_type == ty)
+  both <- s %>% group_by(question_id) %>% filter(n_distinct(persuader_correct) == 2) %>% ungroup()
+  plain <- fit_dy(persuader_success ~ persuader_correct + conf_pre_z + (1 | question_id), s)
+  adj <- fit_dy(persuader_success ~ persuader_correct + conf_pre_z + diff_z + (1 | question_id), s)
+  w <- summary(glm(persuader_success ~ persuader_correct + conf_pre_z + factor(question_id),
+                   data = both, family = binomial))$coefficients[2, ]
+  tibble(persuader = ty, n = nrow(s), b = plain[[1]], p = plain[[3]], b_with_difficulty = adj[[1]], p_with_difficulty = adj[[3]],
+         n_two_sided = nrow(both), b_item_fe = w[[1]], p_item_fe = w[[4]])
+}) %>%
+  kable(digits = 3, caption = "E4 finals: truth effect, with difficulty, and with item fixed effects") %>%
+  kable_styling(full_width = FALSE)
+
+it_both <- it_tf %>% group_by(question_id) %>% filter(n_distinct(persuader_correct) == 2) %>% ungroup()
+rbind(PS = summary(glm(persuader_success ~ persuader_correct + conf_pre_z + experiment + factor(question_id),
+                       data = it_both, family = binomial))$coefficients[2, ],
+      CC = summary(lm(confidence_change ~ persuader_correct + conf_pre_z + experiment + factor(question_id),
+                      data = it_both))$coefficients[2, ]) %>%
+  coef_tab(3) %>%
+  kable(caption = sprintf("Pooled truth effect with item fixed effects (%d trials, %d items)",
+                          nrow(it_both), n_distinct(it_both$question_id))) %>%
+  kable_styling(full_width = FALSE)
+
+e3_nf <- d %>%
+  filter(experiment == "E3", feedback_condition == "No Feedback", trial_type == "intro", disagree) %>%
+  left_join(item_diff, by = "question_id") %>%
+  mutate(diff_z = as.numeric(scale(p_wrong)))
+e3_nf %>% group_by(hint_condition, truth) %>%
+  summarize(n = n(), success = 100 * mean(persuader_success), item_wrong = 100 * mean(p_wrong), .groups = "drop") %>%
+  kable(digits = 1, caption = "E3 No-Feedback intros: same item composition in both modes") %>%
+  kable_styling(full_width = FALSE)
+coef_tab(glmer(persuader_success ~ persuader_correct * hint_condition + diff_z * hint_condition + conf_pre_z +
+                 (1 | question_id), data = e3_nf, family = binomial,
+               control = glmerControl(optimizer = "bobyqa")), 3) %>%
+  kable(caption = "E3 No-Feedback intros: Truth x Mode with difficulty and confidence") %>%
+  kable_styling(full_width = FALSE)
+```
+
+### The full design: agreement as well as disagreement
+
+```{r full-design}
+fd <- d %>%
+  filter(experiment %in% c("E1", "E2", "E4"), trial_type == "intro", intro_condition == "Mixed") %>%
+  mutate(persuader_type = ifelse(interaction_type == "human_human", "Human", "LLM"),
+         target_right = ifelse(disagree, !persuader_correct, persuader_correct),
+         truth_end = as.numeric(persuader_success == persuader_correct),
+         stayed = ifelse(disagree, !persuader_success, persuader_success),
+         agree_c = ifelse(disagree, -.5, .5))
+
+fd %>% group_by(persuader_type, target_right, persuader_correct) %>%
+  summarize(n = n(), truth_end = 100 * mean(truth_end), .groups = "drop") %>%
+  kable(digits = 1, caption = "Mixed intros: % of targets ending on the truth") %>%
+  kable_styling(full_width = FALSE)
+
+fd %>% group_by(experiment, persuader_type) %>%
+  summarize(n = n(), pre = 100 * mean(target_right), post = 100 * mean(truth_end), .groups = "drop") %>%
+  kable(digits = 1, caption = "Mixed intros: accuracy before and after the conversation") %>%
+  kable_styling(full_width = FALSE)
+
+# Pull toward truth = intercept minus .5; agree_c = agreement minus disagreement.
+fit_pull <- function(s) {
+  co <- summary(lmer(truth_end ~ agree_c + (1 | participant_id) + (1 | question_id), data = s))$coefficients
+  tibble(n = nrow(s), pull_pp = 100 * (co[1, 1] - .5), se = 100 * co[1, 2],
+         p = 2 * pnorm(-abs((co[1, 1] - .5) / co[1, 2])),
+         agree_minus_disagree_pp = 100 * co[2, 1], se_diff = 100 * co[2, 2])
+}
+bind_rows(All = fit_pull(fd), LLM = fit_pull(fd %>% filter(persuader_type == "LLM")),
+          `E2 (no feedback)` = fit_pull(fd %>% filter(experiment == "E2")),
+          Human = fit_pull(fd %>% filter(persuader_type == "Human")), .id = "sample") %>%
+  kable(digits = 3, caption = "Pull toward truth in the balanced design") %>%
+  kable_styling(full_width = FALSE)
+
+# Leaving an answer the persuader backs, by whether that answer was right.
+fd_ag <- fd %>% filter(!disagree)
+rbind(Human = summary(glmer(stayed ~ target_right + conf_pre_z + (1 | question_id),
+                            data = fd_ag %>% filter(persuader_type == "Human"), family = binomial,
+                            control = glmerControl(optimizer = "bobyqa")))$coefficients[2, ],
+      LLM = summary(glmer(stayed ~ target_right + conf_pre_z + experiment + (1 | question_id),
+                          data = fd_ag %>% filter(persuader_type == "LLM"), family = binomial,
+                          control = glmerControl(optimizer = "bobyqa")))$coefficients[2, ]) %>%
+  coef_tab(3) %>%
+  kable(caption = "Agreement trials: staying on own answer ~ answer was right") %>%
+  kable_styling(full_width = FALSE)
+
+# The persuader-independent term and the additive structure, in pp.
+map_dfr(c("LLM", "Human"), function(ty) {
+  co <- summary(lmer(truth_end ~ target_right * persuader_correct + (1 | participant_id) + (1 | question_id),
+                     data = fd %>% filter(persuader_type == ty)))$coefficients
+  tibble(persuader = ty, term = rownames(co)[-1], pp = 100 * co[-1, 1], p = co[-1, 5])
+}) %>%
+  kable(digits = 3, caption = "Mixed intros: linear model of ending on the truth") %>%
+  kable_styling(full_width = FALSE)
+```
+
+### Strategy use by the human persuaders' own attitude (sincerity, confidence)
+
+```{r human-attitude-strategy}
+h_att <- dc %>% filter(persuader_type == "Human", !is.na(persuader_honest)) %>%
+  mutate(sincere = factor(ifelse(persuader_honest, "Sincere", "Insincere"), c("Sincere", "Insincere")),
+         pconf_z = as.numeric(scale(persuader_confidence_pre)))
+res_att <- map_dfr(persuader_tags, function(tg) {
+  f <- as.formula(paste(tg, "~ sincere + pconf_z + truth + (1 | question_id) + (1 | human_persuader_id)"))
+  m <- try(glmer(f, data = h_att, family = binomial, control = glmerControl(optimizer = "bobyqa")), silent = TRUE)
+  if (inherits(m, "try-error")) return(tibble(tag = tg))
+  co <- summary(m)$coefficients
+  tibble(tag = tg, prevalence = mean(h_att[[tg]]),
+         OR_insincere = exp(co["sincereInsincere", 1]), p_insincere = co["sincereInsincere", 4],
+         OR_confidence = exp(co["pconf_z", 1]), p_confidence = co["pconf_z", 4],
+         singular = isSingular(m))
+}) %>%
+  mutate(p_bh_insincere = p.adjust(p_insincere, "BH"), p_bh_confidence = p.adjust(p_confidence, "BH")) %>%
+  left_join(tag_info %>% select(tag, label), by = "tag") %>% relocate(label)
+res_att %>% mutate(across(where(is.numeric), ~ signif(.x, 3))) %>%
+  kable(caption = "Human persuader tags ~ sincerity + own confidence + truth (E4; (1|item) + (1|persuader))") %>%
+  kable_styling(full_width = FALSE)
+
+h_att %>% group_by(sincere, truth) %>%
+  summarize(n = n(), across(c(persuader_math, persuader_acknowledge, persuader_gave_up,
+                              deception_provably_false, deception_misleading, persuader_flattery), mean),
+            .groups = "drop") %>%
+  kable(digits = 3, caption = "Raw rates by sincerity x assigned truth") %>%
+  kable_styling(full_width = FALSE)
+```
+
+# Does deception work?
+
+```{r deception-success}
+dd_false <- ddl %>% filter(!persuader_correct)
+
+m_dec_succ <- glmer(
+  persuader_success ~ deception_provably_false + deception_misleading + persuader_gave_up +
+    conf_pre_z + experiment + (1 | question_id) + (1 | participant_id),
+  data = dd_false, family = binomial, control = glmerControl(optimizer = "bobyqa"))
+coef_tab(m_dec_succ) %>%
+  kable(caption = "Success ~ deception profile (LLM, arguing falsehood, disagreement trials)") %>%
+  kable_styling(full_width = FALSE)
+```
+
+### Marginal value of each deception type: the full profile decomposition
+
+```{r deception-profile}
+prof <- dd_false %>%
+  mutate(profile = paste0(ifelse(deception_provably_false == 1, "PF+", ""),
+                          ifelse(deception_false == 1, "FS+", ""),
+                          ifelse(deception_misleading == 1, "MS+", "")),
+         profile = ifelse(profile == "", "none", sub("\\+$", "", profile)))
+
+prof %>%
+  group_by(profile) %>%
+  summarize(n = n(), prevalence = n() / nrow(prof), success = mean(persuader_success),
+            gave_up = mean(persuader_gave_up), .groups = "drop") %>%
+  arrange(desc(n)) %>%
+  kable(digits = 3, caption = "Deception profile: prevalence, success and forfeit rate") %>%
+  kable_styling(full_width = FALSE)
+
+prof %>%
+  filter(persuader_gave_up == 0) %>%
+  group_by(profile) %>%
+  summarize(n = n(), success = mean(persuader_success), .groups = "drop") %>%
+  arrange(desc(n)) %>%
+  kable(digits = 3, caption = "Same, excluding forfeits (removes the mechanical link between 'none' and failure)") %>%
+  kable_styling(full_width = FALSE)
+```
+
+# Target behavior
+
+## Do targets scrutinize humans and LLMs differently?
+
+```{r target-by-type, fig.height=4}
+dc %>%
+  filter(experiment == "E4") %>%
+  pivot_longer(all_of(target_tags), names_to = "tag", values_to = "present") %>%
+  left_join(tag_info, by = "tag") %>%
+  group_by(label, persuader_type) %>%
+  summarize(prevalence = mean(present), .groups = "drop") %>%
+  ggplot(aes(x = label, y = prevalence, fill = persuader_type)) +
+  geom_col(position = "dodge") +
+  scale_fill_manual(values = PAL_TYPE) +
+  scale_y_continuous(labels = scales::percent) +
+  labs(x = NULL, y = "Prevalence", fill = "Persuader",
+       title = "Target behavior by persuader type (E4)")
+```
+
+### What does "controlling for truth" give you here?
+
+```{r target-tag-truth-check}
+map_dfr(target_tags, function(v) {
+  f_add <- as.formula(paste("persuader_success ~", v,
+    "+ truth + conf_pre_z + (1 | question_id) + (1 | participant_id)"))
+  f_ixn <- as.formula(paste("persuader_success ~", v,
+    "* truth + conf_pre_z + (1 | question_id) + (1 | participant_id)"))
+  g <- function(f, d) glmer(f, data = d, family = binomial,
+                            control = glmerControl(optimizer = "bobyqa", calc.derivs = FALSE))
+  m_add <- g(f_add, ddl); m_ixn <- g(f_ixn, ddl)
+  m_T <- g(as.formula(paste("persuader_success ~", v,
+             "+ conf_pre_z + (1 | question_id) + (1 | participant_id)")), ddl %>% filter(persuader_correct))
+  m_F <- g(as.formula(paste("persuader_success ~", v,
+             "+ conf_pre_z + (1 | question_id) + (1 | participant_id)")), ddl %>% filter(!persuader_correct))
+  ci <- summary(m_ixn)$coefficients
+  tibble(tag = v,
+         OR_pooled = exp(summary(m_add)$coefficients[v, 1]),
+         p_pooled = summary(m_add)$coefficients[v, 4],
+         OR_truth_only = exp(summary(m_T)$coefficients[v, 1]),
+         OR_falsehood_only = exp(summary(m_F)$coefficients[v, 1]),
+         p_interaction = ci[nrow(ci), 4])
+}) %>%
+  left_join(tag_info %>% select(tag, label), by = "tag") %>%
+  select(label, OR_pooled, p_pooled, OR_truth_only, OR_falsehood_only, p_interaction) %>%
+  kable(digits = 3, caption = "Pooled (truth-controlled) vs subset estimates for the target tags") %>%
+  kable_styling(full_width = FALSE)
+```
+
+## Scrutiny and resistance
+
+```{r target-success}
+res_target <- map_dfr(target_tags, function(tg) {
+  f <- as.formula(paste("persuader_success ~", tg,
+    "+ truth + conf_pre_z + experiment + (1 | question_id) + (1 | participant_id)"))
+  fit <- tryCatch(glmer(f, data = ddl, family = binomial,
+          control = glmerControl(optimizer = "bobyqa", calc.derivs = FALSE)),
+    error = function(e) NULL)
+  if (is.null(fit)) return(tibble(tag = tg, b = NA))
+  co <- summary(fit)$coefficients
+  tibble(tag = tg, b = co[tg, "Estimate"], se = co[tg, "Std. Error"],
+         stat = co[tg, "z value"], p = co[tg, "Pr(>|z|)"], singular = isSingular(fit))
+}) %>%
+  mutate(p_bh = p.adjust(p, method = "BH")) %>%
+  left_join(tag_info %>% select(tag, label, role, type, kappa), by = "tag")
+
+fmt_res(res_target %>% mutate(term = tag)) %>%
+  kable(caption = "Success ~ target tag (LLM disagreement trials)") %>%
+  kable_styling(full_width = FALSE)
+```
+
+## Does scrutiny help targets find the truth?
+
+```{r target-accuracy}
+res_target_acc <- map_dfr(target_tags, function(tg) {
+  f <- as.formula(paste("accuracy ~", tg,
+    "+ conf_pre_z + experiment + (1 | question_id) + (1 | participant_id)"))
+  fit <- tryCatch(glmer(f, data = dcl, family = binomial,
+          control = glmerControl(optimizer = "bobyqa", calc.derivs = FALSE)),
+    error = function(e) NULL)
+  if (is.null(fit)) return(tibble(tag = tg, b = NA))
+  co <- summary(fit)$coefficients
+  tibble(tag = tg, b = co[tg, "Estimate"], se = co[tg, "Std. Error"],
+         stat = co[tg, "z value"], p = co[tg, "Pr(>|z|)"], singular = isSingular(fit))
+}) %>%
+  mutate(p_bh = p.adjust(p, method = "BH")) %>%
+  left_join(tag_info %>% select(tag, label, role, type, kappa), by = "tag")
+
+fmt_res(res_target_acc %>% mutate(term = tag)) %>%
+  kable(caption = "Post-conversation accuracy ~ target tag (LLM conversation trials)") %>%
+  kable_styling(full_width = FALSE)
+```
+
+# Model generation: GPT-4.5 (E1--E3) vs GPT-5 (E4)
+
+```{r model-gen-calibration}
+dc %>%
+  filter(persuader_type == "LLM") %>%
+  mutate(model = ifelse(experiment == "E4", "GPT-5", "GPT-4.5")) %>%
+  group_by(model, experiment, truth) %>%
+  summarize(n = n(),
+            gave_up = sprintf("%.1f%%", 100 * mean(persuader_gave_up)),
+            flattery = sprintf("%.1f%%", 100 * mean(persuader_flattery)),
+            misleading = sprintf("%.1f%%", 100 * mean(deception_misleading)),
+            provably_false = sprintf("%.1f%%", 100 * mean(deception_provably_false)),
+            .groups = "drop") %>%
+  arrange(truth, model, experiment) %>%
+  kable(caption = "LLM behaviour by experiment and assigned position (E1-E3 = GPT-4.5/SONA, E4 = GPT-5/Prolific)") %>%
+  kable_styling(full_width = FALSE)
+```
+
+```{r model-gen-item-matched}
+inE4 <- unique(dc$q_name[dc$experiment == "E4" & dc$persuader_type == "LLM"])
+cat(sprintf("E4 uses %d of %d items. Dropped: %s\n", length(inE4),
+            n_distinct(dc$q_name[dc$persuader_type == "LLM"]),
+            paste(setdiff(unique(dc$q_name[dc$persuader_type == "LLM"]), inE4), collapse = ", ")))
+
+dc %>%
+  filter(persuader_type == "LLM") %>%
+  mutate(model = ifelse(experiment == "E4", "GPT-5", "GPT-4.5"),
+         items = ifelse(q_name %in% inE4, "matched to E4 item set", "all items")) %>%
+  bind_rows(dc %>% filter(persuader_type == "LLM") %>%
+              mutate(model = ifelse(experiment == "E4", "GPT-5", "GPT-4.5"), items = "all items")) %>%
+  filter(items == "all items" | q_name %in% inE4) %>%
+  group_by(items, model, truth) %>%
+  summarize(n = n(), gave_up = mean(persuader_gave_up), flattery = mean(persuader_flattery),
+            misleading = mean(deception_misleading), false_stmt = mean(deception_false),
+            .groups = "drop") %>%
+  arrange(truth, items, model) %>%
+  kable(digits = 3, caption = "Model comparison with and without matching E4's item set") %>%
+  kable_styling(full_width = FALSE)
+```
+
+```{r model-gen-tests}
+llm <- dc %>% filter(persuader_type == "LLM") %>%
+  mutate(model = factor(ifelse(experiment == "E4", "GPT-5", "GPT-4.5"), levels = c("GPT-4.5", "GPT-5")))
+llm_f <- llm %>% filter(!persuader_correct)
+
+cat("Falsehood-side giving up, GPT-4.5 vs GPT-5:\n")
+print(table(model = llm_f$model, gave_up = llm_f$persuader_gave_up))
+print(fisher.test(table(llm_f$model, llm_f$persuader_gave_up)))
+
+# restricted to items BOTH models argued on the falsehood side
+common <- intersect(unique(llm_f$q_name[llm_f$model == "GPT-4.5"]),
+                    unique(llm_f$q_name[llm_f$model == "GPT-5"]))
+llm_fc <- llm_f %>% filter(q_name %in% common)
+cat(sprintf("\nRestricted to the %d items both models argued (n = %d):\n", length(common), nrow(llm_fc)))
+print(llm_fc %>% group_by(model) %>%
+        summarize(n = n(), gave_up = sum(persuader_gave_up),
+                  rate = sprintf("%.1f%%", 100 * mean(persuader_gave_up)), .groups = "drop"))
+```
+
+# Position compliance
+
+```{r position-compliance, eval = file.exists("../data/tags/position_compliance.csv")}
+pc <- read.csv("../data/tags/position_compliance.csv") %>%
+  filter(status == "good") %>%
+  mutate(compliance = factor(compliance,
+           levels = c("advocated", "abandoned", "never_advocated", "argued_opposite")),
+         disclosed_assignment = as.character(disclosed_assignment) %in% c("True", "TRUE"),
+         non_compliant = compliance %in% c("never_advocated", "argued_opposite"))
+
+pc %>%
+  count(persuader_type, compliance) %>%
+  group_by(persuader_type) %>%
+  mutate(pct = sprintf("%.1f%%", 100 * n / sum(n))) %>%
+  ungroup() %>%
+  kable(caption = "Position compliance by persuader type") %>%
+  kable_styling(full_width = FALSE)
+
+pc %>%
+  group_by(persuader_type) %>%
+  summarize(n = n(),
+            n_non_compliant = sum(non_compliant),
+            rate = sprintf("%.1f%%", 100 * mean(non_compliant)),
+            disclosed = sum(disclosed_assignment, na.rm = TRUE), .groups = "drop") %>%
+  kable(caption = "Never advocated the assigned position (+ explicit disclosure of the assignment)") %>%
+  kable_styling(full_width = FALSE)
+
+print(fisher.test(table(pc$persuader_type, pc$non_compliant)))
+```
+
+## How much does `gave_up` miss, and does it bias anything?
+
+```{r compliance-vs-gaveup, eval = file.exists("../data/tags/position_compliance.csv")}
+pcd <- dc %>% inner_join(pc, by = "conversation_id")
+
+# Overlap: how many non-compliant conversations does gave_up catch?
+pcd %>%
+  count(persuader_type.x, non_compliant, gave_up = persuader_gave_up) %>%
+  kable(caption = "Position non-compliance x gave_up") %>%
+  kable_styling(full_width = FALSE)
+
+pcd %>%
+  filter(non_compliant) %>%
+  group_by(persuader_type.x) %>%
+  summarize(n = n(), caught_by_gave_up = sprintf("%.0f%%", 100 * mean(persuader_gave_up)),
+            .groups = "drop") %>%
+  kable(caption = "Share of non-compliant conversations that gave_up catches") %>%
+  kable_styling(full_width = FALSE)
+
+# Mis-scored trials: persuader argued the OTHER answer but the trial counts as a success
+pcd %>%
+  filter(non_compliant) %>%
+  count(persuader_type.x, scored_success = persuader_success) %>%
+  kable(caption = "Non-compliant trials by scored outcome (successes here are artefacts of scoring against the assigned answer)") %>%
+  kable_styling(full_width = FALSE)
+
+# Direction of bias: which side do defectors defect FROM?
+pcd %>%
+  filter(non_compliant) %>%
+  count(persuader_type.x, assigned = truth) %>%
+  kable(caption = "Non-compliance by assigned position (falsehood-side defection inflates the apparent truth advantage)") %>%
+  kable_styling(full_width = FALSE)
+```
+
+## Does the E4 human truth advantage survive dropping non-compliant trials?
+
+```{r compliance-robustness, eval = file.exists("../data/tags/position_compliance.csv")}
+e4h <- pcd %>% filter(persuader_type.x == "Human", disagree)
+
+fit_e4 <- function(dat, lab) {
+  m <- glmer(persuader_success ~ persuader_correct + (1 | question_id) + (1 | human_persuader_id),
+             data = dat, family = binomial, control = glmerControl(optimizer = "bobyqa"))
+  co <- summary(m)$coefficients
+  tibble(model = lab, n = nrow(dat), b = co["persuader_correctTRUE", "Estimate"],
+         se = co["persuader_correctTRUE", "Std. Error"],
+         z = co["persuader_correctTRUE", "z value"], p = co["persuader_correctTRUE", "Pr(>|z|)"])
+}
+bind_rows(
+  fit_e4(e4h, "E4 human truth advantage (all disagreement trials)"),
+  fit_e4(e4h %>% filter(!non_compliant), "compliant trials only")
+) %>%
+  kable(digits = 3, caption = "E4 human truth advantage before/after dropping non-compliant trials") %>%
+  kable_styling(full_width = FALSE)
+```
+
+## Non-compliance across experiments, and the truth advantage without it
+
+```{r compliance-by-experiment, eval = file.exists("../data/tags/position_compliance.csv")}
+pcd %>%
+  group_by(persuader_type.x, experiment, truth) %>%
+  summarize(n = n(), k = sum(non_compliant), pct = 100 * mean(non_compliant), .groups = "drop") %>%
+  kable(digits = 1, caption = "Non-compliance by persuader type x experiment x assigned position") %>%
+  kable_styling(full_width = FALSE)
+
+m_nc_truth <- glmer(non_compliant ~ truth + disagree + experiment + (1 | question_id) + (1 | participant_id),
+                    data = pcd %>% filter(persuader_type.x == "LLM"), family = binomial,
+                    control = glmerControl(optimizer = "bobyqa"))
+coef_tab(m_nc_truth, 3) %>%
+  kable(caption = "LLM non-compliance ~ assigned position + disagreement + experiment") %>%
+  kable_styling(full_width = FALSE)
+
+# Consequence for success (disagreement trials)
+pcd %>% filter(disagree) %>%
+  group_by(persuader_type.x, non_compliant) %>%
+  summarize(n = n(), success = 100 * mean(persuader_success), .groups = "drop") %>%
+  kable(digits = 1, caption = "Persuader success by non-compliance (disagreement trials)") %>%
+  kable_styling(full_width = FALSE)
+m_nc_succ <- glmer(persuader_success ~ non_compliant + persuader_correct + experiment +
+                     (1 | question_id) + (1 | participant_id),
+                   data = pcd %>% filter(disagree, persuader_type.x == "LLM"), family = binomial,
+                   control = glmerControl(optimizer = "bobyqa"))
+coef_tab(m_nc_succ, 3) %>%
+  kable(caption = "LLM success ~ non-compliance (disagreement trials)") %>%
+  kable_styling(full_width = FALSE)
+```
+
+```{r compliance-truth-pools, eval = file.exists("../data/tags/position_compliance.csv")}
+# The pooled truth-advantage models (truth-pools chunk) with non-compliant trials
+# removed, and with both concessions and non-compliant trials removed.
+paper_pc <- paper_llm %>% left_join(pcm, by = "conversation_id")
+cat(sprintf("compliance coded for %d of %d paper-set LLM conversations\n",
+            sum(!is.na(paper_pc$non_compliant)), nrow(paper_pc)))
+paper_pc <- paper_pc %>% filter(!is.na(non_compliant))
+res_truth_compliance <- bind_rows(
+  tp_row(fit_tp(f_main, paper_pc), "coded subset, all"),
+  tp_row(fit_tp(f_main, paper_pc %>% filter(!non_compliant)), "non-compliant excluded"),
+  tp_row(fit_tp(f_main, paper_pc %>% filter(!non_compliant, persuader_gave_up == 0)), "non-compliant and concessions excluded"),
+  tp_row(fit_tp(f_conf, paper_pc %>% filter(!non_compliant, persuader_gave_up == 0)), "both excluded, truth x confidence", TC),
+  tp_row(fit_tp(f_first, paper_pc %>% filter(pool == "first", !non_compliant, persuader_gave_up == 0)), "first trials, both excluded"),
+  tp_row(fit_tp(f_one,   paper_pc %>% filter(pool == "final", !non_compliant, persuader_gave_up == 0)), "final trials, both excluded")
+)
+res_truth_compliance %>%
+  kable(digits = 3, caption = "Pooled LLM truth advantage (first + final) with non-compliant trials removed") %>%
+  kable_styling(full_width = FALSE)
+
+# The E1+E2 Mixed slice and the E4 human set (first + final), same treatment
+mixed12_pc <- mixed12 %>% left_join(pcm, by = "conversation_id") %>% filter(!is.na(non_compliant))
+hum_pc <- dd %>% filter(persuader_type == "Human", trial_type == "final" | trial_index == 0) %>%
+  mutate(pool = factor(ifelse(trial_index == 0, "first", "final"), levels = c("final", "first")),
+         conf_c = (confidence_pre - mean(confidence_pre)) / 10) %>%
+  left_join(pcm, by = "conversation_id") %>% filter(!is.na(non_compliant))
+f_hum <- as.formula(paste("persuader_success ~ persuader_correct + pool + intro_condition +", RE))
+f_hum_conf <- as.formula(paste("persuader_success ~ persuader_correct * conf_c + pool + intro_condition +", RE))
+f_m12 <- as.formula(paste("persuader_success ~ persuader_correct +", RE))
+res_truth_compliance_slices <- bind_rows(
+  tp_row(fit_tp(f_m12, mixed12_pc), "E1+E2 Mixed intro, all"),
+  tp_row(fit_tp(f_m12, mixed12_pc %>% filter(!non_compliant)), "E1+E2 Mixed intro, non-compliant excluded"),
+  tp_row(fit_tp(f_m12, mixed12_pc %>% filter(!non_compliant, persuader_gave_up == 0)), "E1+E2 Mixed intro, both excluded"),
+  tp_row(fit_tp(f_hum, hum_pc), "E4 human first + final, all"),
+  tp_row(fit_tp(f_hum_conf, hum_pc), "E4 human first + final, truth x confidence", TC),
+  tp_row(fit_tp(f_hum, hum_pc %>% filter(persuader_gave_up == 0)), "E4 human first + final, concessions excluded"),
+  tp_row(fit_tp(f_hum, hum_pc %>% filter(!non_compliant)), "E4 human first + final, non-compliant excluded"),
+  tp_row(fit_tp(f_hum, hum_pc %>% filter(!non_compliant, persuader_gave_up == 0)), "E4 human first + final, both excluded")
+)
+res_truth_compliance_slices %>%
+  kable(digits = 3, caption = "Truth advantage in the E1+E2 Mixed slice and for E4 human persuaders, with non-compliant trials removed") %>%
+  kable_styling(full_width = FALSE)
+```
+
+### Paper table: truth advantage by sample
+
+```{r truth-table, eval = file.exists("../data/tags/position_compliance.csv")}
+hum_all <- dd %>% filter(persuader_type == "Human", trial_type == "final" | trial_index == 0) %>%
+  mutate(pool = factor(ifelse(trial_index == 0, "first", "final"), levels = c("final", "first"))) %>%
+  left_join(pcm, by = "conversation_id")
+tt_row <- function(dat, lab, rhs, re = RE) {
+  dat <- dat %>% mutate(conf_c = (confidence_pre - mean(confidence_pre)) / 10)
+  f0 <- as.formula(paste("persuader_success ~ persuader_correct +", rhs, "+", re))
+  f1 <- as.formula(paste("persuader_success ~ persuader_correct * conf_c +", rhs, "+", re))
+  a <- tp_row(fit_tp(f0, dat), lab); i <- tp_row(fit_tp(f1, dat), lab, TC)
+  tibble(sample = lab, n = nrow(dat), n_concede = sum(dat$persuader_gave_up),
+         n_noncompliant = sum(dat$non_compliant %in% TRUE),
+         mean_conf = mean(dat$confidence_pre),
+         succ_truth = a$succ_truth, succ_false = a$succ_false,
+         b = a$b, z = a$z, p = a$p, b_conf = i$b, z_conf = i$z, p_conf = i$p,
+         conv_warn = a$conv_warn + i$conv_warn)
+}
+excl <- function(d, both = FALSE) d %>% filter(persuader_gave_up == 0, !(both & non_compliant %in% TRUE))
+llm_tt <- clean_llm %>% left_join(pcm, by = "conversation_id")
+res_truth_table <- bind_rows(
+  tt_row(llm_tt %>% filter(pool == "first"), "LLM: first trials (E1-4)", "experiment", RE1),
+  tt_row(llm_tt %>% filter(pool == "final"), "LLM: final trials (E1, 2, 4)", "experiment + intro_condition", RE1),
+  tt_row(llm_tt, "LLM: first + final", "pool + experiment"),
+  tt_row(excl(llm_tt), "LLM: first + final, excl. concessions", "pool + experiment"),
+  tt_row(excl(llm_tt, TRUE), "LLM: first + final, excl. concessions + non-compliance", "pool + experiment"),
+  tt_row(hum_all %>% filter(pool == "first"), "Human: first trials (E4)", "intro_condition", RE1),
+  tt_row(hum_all %>% filter(pool == "final"), "Human: final trials (E4)", "intro_condition", RE1),
+  tt_row(hum_all, "Human: first + final", "pool + intro_condition"),
+  tt_row(excl(hum_all), "Human: first + final, excl. concessions", "pool + intro_condition"),
+  tt_row(excl(hum_all, TRUE), "Human: first + final, excl. concessions + non-compliance", "pool + intro_condition")
+)
+res_truth_table %>%
+  kable(digits = 3, caption = "Truth advantage by sample (tab:truth-full)") %>%
+  kable_styling(full_width = FALSE)
+# first vs final difference (cited in prose)
+tp_row(fit_tp(f_pool, clean_llm), "LLM first + final, pool x truth (first vs final)", "persuader_correctTRUE:poolfirst")
+```
+
+## Example non-compliant conversations
+
+```{r compliance-examples, eval = file.exists("../data/tags/position_compliance.csv")}
+pc %>%
+  filter(non_compliant, nchar(evidence) > 0) %>%
+  arrange(persuader_type, compliance) %>%
+  group_by(persuader_type, compliance) %>%
+  slice_head(n = 4) %>%
+  ungroup() %>%
+  select(conversation_id, persuader_type, compliance, final_position, evidence) %>%
+  kable(caption = "Coder's verbatim evidence quotes for non-compliant conversations") %>%
+  kable_styling(full_width = FALSE)
+
+pc %>%
+  filter(disclosed_assignment) %>%
+  select(conversation_id, persuader_type, compliance, evidence) %>%
+  kable(caption = "Conversations where the persuader disclosed the assignment to the target") %>%
+  kable_styling(full_width = FALSE)
+```
+
+# By-item variation in strategy (LLM)
+
+```{r item-variation}
+dcl <- dc %>% filter(persuader_type == "LLM")
+item_re <- map_dfr(persuader_tags, function(tg) {
+  m1 <- try(glmer(as.formula(paste(tg, "~ truth + experiment + (1 | question_id) + (1 | participant_id)")),
+                  data = dcl, family = binomial, control = glmerControl(optimizer = "bobyqa")), silent = TRUE)
+  if (inherits(m1, "try-error")) return(tibble(tag = tg))
+  vc <- as.data.frame(VarCorr(m1))
+  tibble(tag = tg, sd_item = vc$sdcor[vc$grp == "question_id"], sd_ppt = vc$sdcor[vc$grp == "participant_id"])
+}) %>% left_join(tag_info %>% select(tag, label, type), by = "tag") %>% arrange(-sd_item)
+kable(item_re, digits = 2, caption = "Item vs participant random-intercept SD per persuader tag (LLM)") %>%
+  kable_styling(full_width = FALSE)
+
+item_cells <- dcl %>%
+  pivot_longer(all_of(persuader_tags), names_to = "tag", values_to = "present") %>%
+  group_by(tag, truth, q_name, q_subcategory) %>%
+  summarize(n = n(), k = sum(present), .groups = "drop") %>%
+  group_by(tag, truth) %>%
+  mutate(pool_p = sum(k) / sum(n)) %>% ungroup() %>%
+  filter(n >= 10) %>%
+  mutate(p = k / n)
+item_cells$p_binom <- mapply(function(k, n, pp) binom.test(k, n, p = pp)$p.value,
+                             item_cells$k, item_cells$n, item_cells$pool_p)
+item_cells <- item_cells %>%
+  mutate(p_bh = p.adjust(p_binom, method = "BH"),
+         log_or = log((p + 0.005) / (1 - p + 0.005)) - log((pool_p + 0.005) / (1 - pool_p + 0.005))) %>%
+  left_join(tag_info %>% select(tag, label, type), by = "tag")
+cat(sprintf("%d item x tag x position cells (n >= 10); %d significant at BH .05\n",
+            nrow(item_cells), sum(item_cells$p_bh < .05)))
+item_cells %>% filter(p_bh < .05) %>% count(label, truth, direction = ifelse(log_or > 0, "over", "under")) %>%
+  pivot_wider(names_from = direction, values_from = n, values_fill = 0) %>%
+  kable(caption = "Number of items on which each tag is significantly over-/under-represented") %>%
+  kable_styling(full_width = FALSE)
+```
+
+# Tag co-occurrence
+
+```{r cooccurrence, fig.height=6}
+tag_mat <- dc %>% select(all_of(tag_info$tag))
+cm <- cor(tag_mat)
+dimnames(cm) <- list(tag_info$label[match(rownames(cm), tag_info$tag)],
+                     tag_info$label[match(colnames(cm), tag_info$tag)])
+as.data.frame(as.table(cm)) %>%
+  ggplot(aes(Var1, Var2, fill = Freq)) +
+  geom_tile() +
+  geom_text(aes(label = sprintf("%.2f", Freq)), size = 2.5) +
+  scale_fill_gradient2(low = "#CC3311", mid = "white", high = "#4477AA", limits = c(-1, 1)) +
+  theme(axis.text.x = element_text(angle = 45, hjust = 1)) +
+  labs(x = NULL, y = NULL, fill = "phi", title = "Tag co-occurrence (phi coefficients)")
+```
+
+# Paper-figure stats export
+
+```{r export-paper-fig-stats}
+qexp <- function(df, name) {
+  write.csv(df, file.path(stats_dir, name), row.names = FALSE)
+  cat("wrote", name, ":", nrow(df), "rows\n")
+  invisible(df)
+}
+
+# 1) Tag prevalence by persuader type x experiment x assigned position
+#    (figure aggregates over whichever margins it needs)
+dc %>%
+  pivot_longer(all_of(paper_tags), names_to = "tag", values_to = "present") %>%
+  group_by(tag, persuader_type, experiment, truth) %>%
+  summarize(n = n(), k = sum(present), .groups = "drop") %>%
+  left_join(tag_info, by = "tag") %>%
+  qexp("qual_prevalence.csv")
+
+# 2) Per-tag ORs: the four contrasts the figures use
+bind_rows(
+  res_truth   %>% mutate(contrast = "truth_llm"),    # falsehood vs truth, LLM E1-E4
+  res_truth_h %>% mutate(contrast = "truth_human"),  # falsehood vs truth, human E4
+  res_type    %>% mutate(contrast = "type_e4"),      # human vs LLM, E4
+  res_dis     %>% mutate(contrast = "disagree_llm"), # target disagrees vs agrees, LLM
+  res_succ    %>% mutate(contrast = "success_llm"),  # success ~ tag, LLM disagree
+  res_adj     %>% mutate(contrast = "success_llm_adj") # adjusted joint model (all tags + target behaviour)
+) %>%
+  select(contrast, tag, label, role, type, kappa, b, se, stat, p, p_bh, singular) %>%
+  qexp("qual_tag_ors.csv")
+
+# 3) Causal probes (focal tags)
+bind_rows(
+  res_ladder %>% transmute(probe = "ladder", variant = spec, tag, label, b, se, p),
+  res_fm     %>% transmute(probe = "opening", variant = as.character(version),
+                           tag, label, b, se, p),
+  res_loo    %>% transmute(probe = "loo", variant = "loo", tag, label, b, se, p),
+  res_loo_any %>% transmute(probe = "loo", variant = "loo_any", tag, label, b, se, p),
+  res_fm_ctrl %>% transmute(probe = "opening", variant = "opening_ctrl", tag, label, b, se, p)
+) %>%
+  filter(!is.na(b)) %>%
+  qexp("qual_probes.csv")
+
+# 4) Giving up: occurrence cells + consequence cells
+dc %>%
+  group_by(experiment, persuader_type, truth) %>%
+  summarize(n = n(), k = sum(persuader_gave_up), .groups = "drop") %>%
+  qexp("qual_gaveup_rates.csv")
+
+dd %>%
+  group_by(persuader_type, truth, gave_up = persuader_gave_up) %>%
+  summarize(n = n(), k = sum(persuader_success), .groups = "drop") %>%
+  qexp("qual_gaveup_success.csv")
+
+# 5) Deception prevalence cells (tag x experiment x type x assignment)
+dc %>%
+  pivot_longer(c(deception_provably_false, deception_false, deception_misleading),
+               names_to = "tag", values_to = "present") %>%
+  group_by(tag, experiment, persuader_type, truth) %>%
+  summarize(n = n(), k = sum(present), .groups = "drop") %>%
+  qexp("qual_deception.csv")
+
+# 6) Condition-controlled truth-advantage samples (sec:qualitative numbers)
+res_truth_clean %>% qexp("qual_truth_samples.csv")
+
+truth_pool_cells %>% qexp("qual_truth_pools.csv")
+res_truth_pooled %>% qexp("qual_truth_pooled_models.csv")
+res_truth_table %>% qexp("qual_truth_table.csv")
+res_truth_conf %>% qexp("qual_truth_conf_models.csv")
+truth_conf_preds %>% qexp("qual_truth_conf_preds.csv")
+truth_conf_curves %>% qexp("qual_truth_conf_curves.csv")
+conc_trial %>% qexp("qual_concession_trial.csv")
+conc_items %>% qexp("qual_concession_items.csv")
+
+# 7) By-item variation (appendix figure)
+item_re %>% qexp("qual_item_re.csv")
+item_cells %>% select(tag, label, type, truth, q_name, q_subcategory, n, k, p, pool_p, log_or, p_binom, p_bh) %>%
+  qexp("qual_item_cells.csv")
+
+# 8) Position compliance (if coded)
+if (exists("pc")) {
+  pc %>%
+    count(persuader_type, compliance, disclosed_assignment) %>%
+    qexp("qual_compliance.csv")
+  pcd %>%
+    group_by(persuader_type = persuader_type.x, experiment, truth) %>%
+    summarize(n = n(), k = sum(non_compliant), k_gave_up = sum(persuader_gave_up),
+              k_both = sum(non_compliant & persuader_gave_up == 1), .groups = "drop") %>%
+    qexp("qual_compliance_cells.csv")
+  bind_rows(res_truth_compliance %>% mutate(set = "llm_pooled"),
+            res_truth_compliance_slices %>% mutate(set = "slices")) %>%
+    qexp("qual_truth_compliance.csv")
+}
+```

@@ -1,0 +1,146 @@
+
+
+        {% block content %}
+        {% endblock %}
+
+        {% block footer %}
+        <!-- Footer -->
+        <footer id="footer" class="navbar">
+            <div class="footer-text">&copy; The authors</div>
+            <div class="footer-text"><a href="mailto:REDACTED">Contact</a></div>
+            <div class="footer-text"><a href="/privacy">Privacy</a></div>
+            <div class="footer-text"><a href="/sitemap.xml">Sitemap</a></div>
+    </div>
+    </footer>
+
+    {% endblock %}
+
+    <!-- Cookie Consent Banner -->
+    <div id="cookie-consent-banner" style="display: none;">
+        <p>We use cookies on this site to enhance your user experience.</p>
+        <div id="cookie-consent-buttons" class="button-container">
+            <button id="accept-essential" class="button-dark button-cookie">Accept essential</button>
+            <button id="accept-all" class="button-selected button-cookie">Accept all</button>
+        </div>
+    </div>
+
+    <!-- Toast -->
+    <div id="toast">
+        <div id="toast-header">
+            <span id="toast-title">Something went wrong</span>
+            <span id="close-toast" onclick="hideToast()">&times;</span>
+        </div>
+        <div id="toast-body">
+            <span id="toast-message">
+                Sorry, you've been disconnected from the game.
+                You will be redirected to the homepage
+            </span>
+            <button id="toast-button" class="button-dark" onclick="hideToast()">OK</button>
+        </div>
+    </div>
+
+    </div>
+
+    <script>
+
+        function showToast(title, message, buttonText, buttonFunction = hideToast) {
+            var toast = document.getElementById("toast");
+            var toastTitle = document.getElementById("toast-title");
+            var toastMessage = document.getElementById("toast-message");
+            var toastButton = document.getElementById("toast-button");
+
+            toastTitle.innerHTML = title;
+            toastMessage.innerHTML = message;
+            toastButton.innerHTML = buttonText;
+            toastButton.onclick = buttonFunction;
+
+            toast.style.display = "flex";
+        }
+
+        function hideToast() {
+            var toast = document.getElementById("toast");
+            toast.style.display = "none";
+        }
+
+        function setupGA() {
+            // Check if the 'cookie-consent' is 'all'
+            if (document.cookie.split('; ').find(row => row.startsWith('cookie-consent='))?.split('=')[1] === 'all') {
+                // Load Google Analytics script
+                window.dataLayer = window.dataLayer || [];
+                function gtag() { dataLayer.push(arguments); }
+                gtag('js', new Date());
+
+                gtag('config', 'G-PCN705Q9E1');
+            }
+        }
+
+        // Replace placeholder images with high res versions
+        function progressiveLoadImg() {
+            document.querySelectorAll('img').forEach(img => {
+                let highResSrc = img.src.replace('_placeholder', '');
+                img.src = highResSrc;
+            });
+        }
+
+        // Replace placeholder images with high res versions
+        function progressiveLoadImg() {
+            document.querySelectorAll('picture img').forEach(img => {
+                let highResSrc = img.src.replace(/_placeholder/g, '');
+                img.src = highResSrc;
+
+                let highResSrcset = img.getAttribute('srcset').replace(/_placeholder/g, '');
+                img.setAttribute('srcset', highResSrcset);
+            });
+
+            document.querySelectorAll('picture source').forEach(source => {
+                let highResSrcset = source.getAttribute('srcset').replace(/_placeholder/g, '');
+                source.setAttribute('srcset', highResSrcset);
+            });
+        }
+
+        window.onload = function () {
+
+            setupGA();
+            progressiveLoadImg();
+
+            var banner = document.getElementById("cookie-consent-banner");
+            var acceptAll = document.getElementById("accept-all");
+            var acceptEssential = document.getElementById("accept-essential");
+
+            function hasConsentCookie() {
+                return document.cookie.split(';').some(function (item) {
+                    return item.trim().startsWith('cookie-consent=')
+                });
+            }
+
+            function setCookie(cname, cvalue, exdays) {
+                var d = new Date();
+                d.setTime(d.getTime() + (exdays * 24 * 60 * 60 * 1000));
+                var expires = "expires=" + d.toUTCString();
+                document.cookie = cname + "=" + cvalue + ";" + expires + ";path=/";
+            }
+
+            if (!hasConsentCookie()) {
+                banner.style.display = "flex";
+            }
+
+            acceptAll.addEventListener("click", function () {
+                setCookie('cookie-consent', 'all', 365);
+                banner.style.display = "none";
+                setupGA();
+            });
+
+            acceptEssential.addEventListener("click", function () {
+                setCookie('cookie-consent', 'essential', 365);
+                banner.style.display = "none";
+            });
+        };
+
+    </script>
+
+    {% block scripts %}
+    {% endblock %}
+
+</body>
+
+</html>

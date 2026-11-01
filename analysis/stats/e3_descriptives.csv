@@ -1,0 +1,10 @@
+"experiment","feedback_condition","hint_condition","intro_condition","persuader_success","confidence_change","n"
+"E3","Feedback","Conversation","Unhelpful",0.213114754098361,23.7868852459016,61
+"E3","Feedback","Conversation","Helpful",0.666666666666667,61.0444444444444,45
+"E3","Feedback","Hint","Unhelpful",0.0638297872340425,8.95744680851064,47
+"E3","Feedback","Hint","Helpful",0.25,26.5357142857143,56
+"E3","No Feedback","Conversation","Unhelpful",0.482758620689655,41.6551724137931,58
+"E3","No Feedback","Conversation","Helpful",0.384615384615385,35.0769230769231,39
+"E3","No Feedback","Hint","Unhelpful",0.163636363636364,20.3545454545455,55
+"E3","No Feedback","Hint","Helpful",0.186440677966102,20.635593220339,59
+"E3",NA,NA,NA,0.292857142857143,29.1095238095238,420

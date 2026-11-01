@@ -1,0 +1,532 @@
+---
+title: "Cross-Experiment Analyses"
+output:
+  html_document:
+    toc: yes
+    toc_float: true
+    theme: flatly
+    highlight: kate
+    code_folding: hide
+date: "2026-09-22"
+---
+
+# Setup
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+library(tidyverse)
+library(lmerTest)
+obj_is_vector = function(x){TRUE}
+
+all.stats <- bind_rows(lapply(paste0("stats/e", 1:4, "_stats.csv"), read.csv))
+all.descriptives <- bind_rows(lapply(paste0("stats/e", 1:4, "_descriptives.csv"), read.csv))
+trials <- bind_rows(lapply(paste0("stats/e", 1:4, "_trials.csv"), read.csv))
+survey <- bind_rows(lapply(paste0("stats/e", 1:4, "_survey.csv"), read.csv))
+
+```
+
+# Hypothesis table
+
+```{r}
+
+hypothesis.table <- all.stats %>%
+  filter(grepl("^H", hypothesis), stat_type %in% c("t", "z")) %>%  # drops LRT sensitivity rows
+  mutate(
+    stat_fmt = ifelse(stat_type == "t",
+                      sprintf("b = %.1f, t(%.0f) = %.2f", b, df, stat),
+                      sprintf("b = %.2f, z = %.2f", b, stat)),
+    p_fmt = ifelse(p < 0.001, "p < .001", sprintf("p = %.3f", p))
+  ) %>%
+  select(experiment, hypothesis, measure, stat_fmt, p_fmt, n)
+
+hypothesis.table
+
+write.csv(hypothesis.table, "stats/hypothesis_table.csv", row.names = FALSE)
+
+```
+
+# Final-trial descriptives
+
+```{r}
+
+all.descriptives
+
+```
+
+# Pooled truth advantage (E1 + E2 first trials)
+
+```{r}
+
+first.disagree <- trials %>%
+  filter(experiment %in% c("E1", "E2"), trial_type == "intro",
+         trial_index == 0, participant_persuader_disagree == TRUE)
+
+first.disagree %>%
+  group_by(experiment, persuader_correct) %>%
+  summarize(
+    persuader_success = mean(persuader_success),
+    confidence_change = mean(confidence_change),
+    n = n(),
+    .groups = "drop"
+  )
+
+first.disagree %>%
+  group_by(persuader_correct) %>%
+  summarize(
+    persuader_success = mean(persuader_success),
+    confidence_change = mean(confidence_change),
+    n = n()
+  )
+
+```
+
+```{r}
+
+m.truth.pooled.cc <- lmer(confidence_change ~ persuader_correct + experiment + (1 | question_id),
+            data = first.disagree)
+summary(m.truth.pooled.cc)
+
+```
+
+```{r}
+
+m.truth.pooled.ps <- glmer(persuader_success ~ persuader_correct + experiment + (1 | question_id),
+            family = "binomial",
+            data = first.disagree)
+summary(m.truth.pooled.ps)
+
+```
+
+# Persuasion with and without feedback
+
+```{r}
+
+trials %>%
+  filter(trial_type == "final", participant_persuader_disagree == TRUE,
+         hint_condition == "Conversation", interaction_type == "human_ai") %>%
+  group_by(experiment, feedback_condition) %>%
+  summarize(
+    persuader_success = mean(persuader_success),
+    confidence_change = mean(confidence_change),
+    n = n(),
+    .groups = "drop"
+  )
+
+```
+
+```{r}
+
+trials %>%
+  filter(trial_type == "final", participant_persuader_disagree == TRUE,
+         hint_condition == "Conversation", interaction_type == "human_ai") %>%
+  mutate(experiment_group = ifelse(experiment %in% c("E1", "E2"), "E1+E2", experiment)) %>%
+  filter(experiment_group %in% c("E1+E2", "E3")) %>%
+  group_by(experiment_group) %>%
+  summarize(
+    persuader_success = mean(persuader_success),
+    n = n()
+  )
+
+```
+
+# Confidence and persuasion across experiments
+
+```{r}
+
+all.stats %>%
+  filter(hypothesis == "confidence_ps") %>%
+  select(experiment, b, se, stat, p, n)
+
+```
+
+# High-confidence answers in the initial survey
+
+```{r}
+
+survey %>%
+  group_by(experiment) %>%
+  summarize(
+    mean_confidence = mean(confidence),
+    share_conf90 = mean(confidence >= 90),
+    n = n()
+  )
+
+```
+
+```{r}
+
+survey %>%
+  summarize(
+    mean_confidence = mean(confidence),
+    share_conf90 = mean(confidence >= 90)
+  )
+
+```
+
+```{r}
+
+survey %>%
+  filter(confidence >= 90) %>%
+  summarize(
+    accuracy = mean(accuracy),
+    share_incorrect = mean(1 - accuracy),
+    n = n()
+  )
+
+```
+
+# Confidence change benchmarks
+
+```{r}
+
+trials %>%
+  filter(experiment == "E3", hint_condition == "Hint",
+         feedback_condition == "No Feedback", trial_type == "final",
+         participant_persuader_disagree == TRUE) %>%
+  summarize(confidence_change = mean(confidence_change), n = n())
+
+```
+
+```{r}
+
+trials %>%
+  filter(experiment == "E4", interaction_type == "human_human",
+         intro_condition == "Mixed", trial_type == "final",
+         persuader_correct == FALSE) %>%
+  summarize(confidence_change = mean(confidence_change), n = n())
+
+```
+
+```{r}
+
+trials %>%
+  filter(experiment == "E3", trial_type == "intro", hint_condition == "Conversation") %>%
+  group_by(participant_persuader_disagree) %>%
+  summarize(confidence_change = mean(confidence_change), n = n())
+
+```
+
+```{r}
+
+bind_rows(
+  trials %>%
+    filter(experiment == "E3", trial_type == "intro", hint_condition == "Conversation",
+           feedback_condition == "No Feedback") %>%
+    summarize(group = "LLM conversation (E3, No Feedback)", confidence_change = mean(confidence_change), n = n()),
+  trials %>%
+    filter(trial_type == "intro", interaction_type == "human_human",
+           intro_condition == "Mixed") %>%
+    summarize(group = "Human persuader (E4, Mixed)", confidence_change = mean(confidence_change), n = n()),
+  trials %>%
+    filter(trial_type == "intro", hint_condition == "Hint",
+           feedback_condition == "No Feedback") %>%
+    summarize(group = "Hint (E3, No Feedback)", confidence_change = mean(confidence_change), n = n())
+)
+
+```
+
+# Individual differences
+
+## Susceptibility to Persuasion (StP-II), Experiments 1--3
+
+```{r id-covariates}
+id_cov <- function(d) d %>% mutate(
+  confidence_pre_10 = confidence_pre / 10,
+  cell = droplevels(interaction(experiment, intro_condition,
+                                coalesce(as.character(feedback_condition), "none"),
+                                coalesce(as.character(hint_condition), "none"),
+                                coalesce(as.character(interaction_type), "llm"), drop = TRUE)))
+ID_RHS_BASE <- "persuader_correct + confidence_pre_10 + trial_type"   # single-experiment fits
+ID_RHS <- paste(ID_RHS_BASE, "+ experiment")                           # pooled fits
+ID_RHS_CELL <- paste(ID_RHS_BASE, "+ cell")                            # participant-variance model only
+GL_CTRL <- glmerControl(optimizer = "bobyqa", optCtrl = list(maxfun = 2e5))
+# bobyqa first; if lme4 flags non-convergence, refit with Nelder-Mead and keep
+# whichever fit has no convergence messages (else the lower deviance)
+glmer_safe <- function(f, data) {
+  m1 <- glmer(f, data = data, family = binomial, control = GL_CTRL)
+  if (length(m1@optinfo$conv$lme4$messages) == 0) return(m1)
+  m2 <- glmer(f, data = data, family = binomial,
+              control = glmerControl(optimizer = "Nelder_Mead", optCtrl = list(maxfun = 2e5)))
+  if (length(m2@optinfo$conv$lme4$messages) == 0 || deviance(m2) < deviance(m1)) m2 else m1
+}
+```
+
+```{r stp-pooled}
+stp_resp <- read.csv("../data/conversation_PersuadabilityResponse.csv")
+stp_q <- read.csv("../data/conversation_PersuadabilityQuestion.csv")
+stp_keep <- stp_resp %>%
+  group_by(participant_id) %>% summarize(rt = mean(reaction_time)) %>%
+  filter(rt > 4000) %>% pull(participant_id)
+stp_total <- stp_resp %>%
+  filter(participant_id %in% stp_keep) %>%
+  left_join(stp_q %>% select(item_id, category), by = c("question_id" = "item_id")) %>%
+  group_by(participant_id, category) %>%
+  summarize(score = mean(scoring * response), .groups = "drop") %>%
+  group_by(participant_id) %>% summarize(stp = mean(score))
+
+stp.disagree <- trials %>%
+  filter(experiment %in% c("E1", "E2", "E3"), participant_persuader_disagree) %>%
+  id_cov() %>%
+  inner_join(stp_total, by = "participant_id") %>%
+  mutate(stp_z = as.numeric(scale(stp)))
+cat(sprintf("%d disagreement trials from %d participants (SD of StP = %.2f)\n",
+            nrow(stp.disagree), n_distinct(stp.disagree$participant_id), sd(stp_total$stp[stp_total$participant_id %in% stp.disagree$participant_id])))
+table(stp.disagree$experiment)
+
+# PAPER models: standard covariates (see id-covariates)
+m.stp.ps <- glmer(as.formula(paste("persuader_success ~ stp_z +", ID_RHS, "+ (1 | participant_id) + (1 | question_id)")),
+                  family = "binomial", data = stp.disagree, control = GL_CTRL)
+summary(m.stp.ps)$coefficients["stp_z", ]
+m.stp.cc <- lmer(as.formula(paste("confidence_change ~ stp_z +", ID_RHS, "+ (1 | participant_id) + (1 | question_id)")),
+                 data = stp.disagree)
+summary(m.stp.cc)$coefficients["stp_z", ]
+```
+
+```{r stp-pooled-unadjusted}
+m.stp.ps.raw <- glmer(persuader_success ~ stp_z + (1 | participant_id) + (1 | question_id),
+                      family = "binomial", data = stp.disagree, control = GL_CTRL)
+summary(m.stp.ps.raw)$coefficients["stp_z", ]
+m.stp.cc.raw <- lmer(confidence_change ~ stp_z + (1 | participant_id) + (1 | question_id), data = stp.disagree)
+summary(m.stp.cc.raw)$coefficients["stp_z", ]
+```
+
+```{r stp-by-experiment}
+stp.by.exp <- bind_rows(lapply(c("E1", "E2", "E3"), function(e) {
+  d <- stp.disagree %>% filter(experiment == e)
+  m <- glmer(as.formula(paste("persuader_success ~ stp_z +", ID_RHS_BASE, "+ (1 | participant_id) + (1 | question_id)")),
+             family = "binomial", data = d, control = GL_CTRL)
+  co <- summary(m)$coefficients
+  data.frame(experiment = e, n = nrow(d), b = co["stp_z", 1], se = co["stp_z", 2], z = co["stp_z", 3], p = co["stp_z", 4])
+}))
+stp.by.exp
+```
+
+## StP-II subscales, and persuader success in percentage points
+
+```{r stp-subscales}
+STP_LABELS <- c(
+  "total" = "Total StP-II",
+  "attitudes towards advertising" = "Positive attitude to advertising",
+  "consistency" = "Need for consistency",
+  "need for cognition" = "Low need for cognition",
+  "need for unique choice" = "Need for unique choice",
+  "premeditation" = "Low premeditation",
+  "risk preferences" = "Risk preference",
+  "self-control" = "Low self-control",
+  "sensation seeking" = "Sensation seeking",
+  "similarity" = "Need for similarity",
+  "social influence" = "Susceptibility to social influence")
+stp_sub <- stp_resp %>%
+  filter(participant_id %in% stp_keep) %>%
+  left_join(stp_q %>% select(item_id, category), by = c("question_id" = "item_id")) %>%
+  group_by(participant_id, category) %>%
+  summarize(score = mean(scoring * response), .groups = "drop")
+ame_scale <- function(m) { f <- fitted(m); 100 * mean(f * (1 - f)) }
+fit_stp <- function(d, lab, set) {
+  d <- d %>% mutate(z = as.numeric(scale(score)))
+  d <- d %>% mutate(cell = droplevels(cell))
+  mp <- glmer_safe(as.formula(paste("persuader_success ~ z +", ID_RHS, "+ (1 | participant_id) + (1 | question_id)")), d)
+  ma <- mp
+  mc <- lmer(as.formula(paste("confidence_change ~ z +", ID_RHS, "+ (1 | participant_id) + (1 | question_id)")), data = d)
+  cp <- summary(mp)$coefficients["z", ]; ca <- summary(ma)$coefficients["z", ]
+  cc <- summary(mc)$coefficients["z", ]; k <- ame_scale(mp); ka <- ame_scale(ma)
+  tibble(set = set, label = lab, n = nrow(d), n_ppt = n_distinct(d$participant_id),
+         ps_b = cp[1], ps_se = cp[2], ps_z = cp[3], ps_p = cp[4],
+         ps_pp = cp[1] * k, ps_pp_lo = (cp[1] - 1.96 * cp[2]) * k, ps_pp_hi = (cp[1] + 1.96 * cp[2]) * k,
+         ps_adj_b = ca[1], ps_adj_p = ca[4], ps_adj_pp = ca[1] * ka,
+         cc_b = cc[1], cc_lo = cc[1] - 1.96 * cc[2], cc_hi = cc[1] + 1.96 * cc[2],
+         cc_t = cc[4], cc_p = cc[5],
+         conv_warn = length(mp@optinfo$conv$lme4$messages) + length(ma@optinfo$conv$lme4$messages))
+}
+base <- trials %>%
+  filter(experiment %in% c("E1", "E2", "E3"), participant_persuader_disagree) %>%
+  id_cov()
+sub_rows <- bind_rows(lapply(names(STP_LABELS)[-1], function(cat) {
+  d <- base %>% inner_join(stp_sub %>% filter(category == cat) %>% select(participant_id, score),
+                           by = "participant_id")
+  fit_stp(d, STP_LABELS[[cat]], "subscale")
+})) %>%
+  mutate(ps_p_bh = p.adjust(ps_p, "BH"), cc_p_bh = p.adjust(cc_p, "BH"))
+# total (pooled + per experiment; common z over the pooled sample, as in stp-by-experiment)
+tot <- base %>% inner_join(stp_total %>% rename(score = stp), by = "participant_id")
+tot_rows <- bind_rows(
+  fit_stp(tot, "Pooled", "experiment") %>% mutate(ps_p_bh = NA, cc_p_bh = NA),
+  bind_rows(lapply(c("E1", "E2", "E3"), function(e) {
+    zc <- tot %>% mutate(score = as.numeric(scale(score)))   # pooled scaling
+    d <- zc %>% filter(experiment == e)
+    # keep the pooled SD: refit with z = pooled-z (scale() inside fit_stp would re-standardize)
+    d <- d %>% mutate(cell = droplevels(cell))
+    mp <- glmer_safe(as.formula(paste("persuader_success ~ score +", ID_RHS_BASE, "+ (1 | participant_id) + (1 | question_id)")), d)
+    mc <- lmer(as.formula(paste("confidence_change ~ score +", ID_RHS_BASE, "+ (1 | participant_id) + (1 | question_id)")), data = d)
+    cp <- summary(mp)$coefficients["score", ]; cc <- summary(mc)$coefficients["score", ]; k <- ame_scale(mp)
+    tibble(set = "experiment", label = e, n = nrow(d), n_ppt = n_distinct(d$participant_id),
+           ps_b = cp[1], ps_se = cp[2], ps_z = cp[3], ps_p = cp[4],
+           ps_pp = cp[1] * k, ps_pp_lo = (cp[1] - 1.96 * cp[2]) * k, ps_pp_hi = (cp[1] + 1.96 * cp[2]) * k,
+           cc_b = cc[1], cc_lo = cc[1] - 1.96 * cc[2], cc_hi = cc[1] + 1.96 * cc[2],
+           cc_t = cc[4], cc_p = cc[5], conv_warn = length(mp@optinfo$conv$lme4$messages))
+  })))
+stp_coefs <- bind_rows(tot_rows, sub_rows %>% bind_rows(
+  fit_stp(tot, "Total StP-II", "subscale") %>% mutate(ps_p_bh = NA, cc_p_bh = NA)))
+stp_coefs %>%
+  select(set, label, n_ppt, ps_b, ps_p, ps_pp, ps_pp_lo, ps_pp_hi, ps_p_bh, ps_adj_pp, ps_adj_p,
+         cc_b, cc_p, cc_p_bh, conv_warn) %>%
+  mutate(across(where(is.numeric), ~ signif(.x, 3))) %>%
+  as.data.frame()
+write.csv(stp_coefs, "stats/stp_coefs.csv", row.names = FALSE)
+
+# Subscale intercorrelations (participant level) -- are the top subscales one factor?
+stp_sub %>% pivot_wider(names_from = category, values_from = score) %>%
+  select(-participant_id) %>% cor(use = "pairwise") %>% round(2)
+```
+
+```{r stp-nfc-truth}
+nfc <- stp_sub %>% filter(category == "need for cognition") %>% select(participant_id, nfc = score)
+nfc_d <- base %>% inner_join(nfc, by = "participant_id") %>% mutate(nfc_z = as.numeric(scale(nfc)))
+clean_nfc <- nfc_d %>% filter(trial_index == 0 | (trial_type == "final" & experiment != "E3"))
+m.nfc.truth.clean <- glmer(as.formula(paste("persuader_success ~ nfc_z * persuader_correct +", ID_RHS, "+ (1 | participant_id) + (1 | question_id)")),
+                           family = "binomial", data = clean_nfc %>% mutate(cell = droplevels(cell)), control = GL_CTRL)
+m.nfc.truth.all <- glmer(as.formula(paste("persuader_success ~ nfc_z * persuader_correct +", ID_RHS, "+ (1 | participant_id) + (1 | question_id)")),
+                         family = "binomial", data = nfc_d, control = GL_CTRL)
+round(summary(m.nfc.truth.clean)$coefficients, 3)
+round(summary(m.nfc.truth.all)$coefficients, 3)
+# does low NFC go with lower initial confidence / accuracy? (participant-level)
+nfc_d %>% group_by(participant_id) %>%
+  summarize(nfc = first(nfc), conf = mean(confidence_pre)) %>%
+  with(cor.test(nfc, conf))
+```
+
+## Self-rated domain expertise, Experiments 1--4
+
+```{r expertise-pooled}
+questions.sub <- read.csv("../data/conversation_Question.csv") %>% select(question_id = id, subcategory)
+expertise.ratings <- read.csv("../data/conversation_Participant.csv") %>%
+  select(participant_id = id, physics, logic, probability)
+add_expertise <- function(d) {
+  d %>%
+    left_join(questions.sub, by = "question_id") %>%
+    left_join(expertise.ratings, by = "participant_id") %>%
+    mutate(expertise = case_when(subcategory == "physics" ~ physics,
+                                 subcategory == "logic" ~ logic,
+                                 subcategory == "probability" ~ probability)) %>%
+    filter(!is.na(expertise))
+}
+
+expertise.final <- trials %>%
+  filter(trial_type == "final", participant_persuader_disagree) %>%
+  add_expertise() %>%
+  id_cov()
+cat(sprintf("%d final disagreement trials with a matching expertise rating\n", nrow(expertise.final)))
+table(expertise.final$experiment)
+
+# Final disagreement trials, pooled (experiment as covariate; question random intercept as in e1.Rmd)
+# PAPER models: standard covariates minus trial_type (finals only; one per participant,
+# so no participant intercept)
+EXP_RHS <- "persuader_correct + confidence_pre_10 + experiment + interaction_type"  # E4 includes human persuaders
+m.exp.ps <- glmer(as.formula(paste("persuader_success ~ expertise +", EXP_RHS, "+ (1 | question_id)")),
+                  family = "binomial", data = expertise.final, control = GL_CTRL)
+summary(m.exp.ps)$coefficients["expertise", ]
+m.exp.cc <- lmer(as.formula(paste("confidence_change ~ expertise +", EXP_RHS, "+ (1 | question_id)")), data = expertise.final)
+summary(m.exp.cc)$coefficients["expertise", ]
+# reference only (not reported): experiment-only fit
+m.exp.ps.raw <- glmer(persuader_success ~ expertise + experiment + (1 | question_id),
+                      family = "binomial", data = expertise.final, control = GL_CTRL)
+summary(m.exp.ps.raw)$coefficients["expertise", ]
+```
+
+```{r expertise-pooled-all}
+expertise.all <- trials %>%
+  filter(participant_persuader_disagree) %>%
+  add_expertise() %>%
+  id_cov()
+m.exp.ps.all <- glmer(as.formula(paste("persuader_success ~ expertise + interaction_type +", ID_RHS, "+ (1 | question_id) + (1 | participant_id)")),
+                      family = "binomial", data = expertise.all, control = GL_CTRL)
+summary(m.exp.ps.all)$coefficients["expertise", ]
+cat(sprintf("%d disagreement trials, %d participants\n", nrow(expertise.all), n_distinct(expertise.all$participant_id)))
+```
+
+```{r expertise-by-domain}
+exp_dom <- bind_rows(lapply(c("physics", "logic", "probability"), function(dom) {
+  d <- expertise.all %>% filter(subcategory == dom) %>% mutate(cell = droplevels(cell))
+  m <- glmer_safe(as.formula(paste("persuader_success ~ expertise + interaction_type +", ID_RHS, "+ (1 | participant_id) + (1 | question_id)")), d)
+  mc <- lmer(as.formula(paste("confidence_change ~ expertise + interaction_type +", ID_RHS, "+ (1 | participant_id) + (1 | question_id)")), data = d)
+  co <- summary(m)$coefficients["expertise", ]; cc <- summary(mc)$coefficients["expertise", ]; f <- fitted(m)
+  tibble(domain = dom, n = nrow(d), n_ppt = n_distinct(d$participant_id),
+         ps_b = co[1], ps_z = co[3], ps_p = co[4], ps_pp = 100 * co[1] * mean(f * (1 - f)),
+         cc_b = cc[1], cc_p = cc[5], conv_warn = length(m@optinfo$conv$lme4$messages))
+}))
+as.data.frame(exp_dom)
+m.dom1 <- glmer_safe(as.formula(paste("persuader_success ~ expertise * subcategory + interaction_type +", ID_RHS, "+ (1 | participant_id) + (1 | question_id)")), expertise.all)
+m.dom0 <- glmer_safe(as.formula(paste("persuader_success ~ expertise + subcategory + interaction_type +", ID_RHS, "+ (1 | participant_id) + (1 | question_id)")), expertise.all)
+anova(m.dom0, m.dom1)
+write.csv(exp_dom, "stats/expertise_by_domain.csv", row.names = FALSE)
+```
+
+```{r expertise-accuracy}
+survey.expertise <- survey %>% add_expertise()
+m.exp.acc <- glmer(accuracy ~ expertise + experiment + (1 | question_id) + (1 | participant_id),
+                   family = "binomial", data = survey.expertise, control = glmerControl(optimizer = "bobyqa"))
+summary(m.exp.acc)
+bind_rows(lapply(c("E1", "E2", "E3", "E4"), function(e) {
+  m <- glmer(accuracy ~ expertise + (1 | question_id) + (1 | participant_id),
+             family = "binomial", data = survey.expertise %>% filter(experiment == e),
+             control = glmerControl(optimizer = "bobyqa"))
+  co <- summary(m)$coefficients
+  data.frame(experiment = e, b = co["expertise", 1], se = co["expertise", 2], z = co["expertise", 3], p = co["expertise", 4])
+}))
+m.exp.conf <- lmer(confidence ~ expertise + experiment + (1 | question_id) + (1 | participant_id), data = survey.expertise)
+summary(m.exp.conf)
+```
+
+## How much do participants differ? Variance and demographics
+
+```{r id-variance}
+p.demo <- read.csv("../data/conversation_Participant.csv") %>%
+  transmute(participant_id = id, age = 2025 - as.numeric(birth_year), gender, native_english)
+iv <- trials %>%
+  filter(participant_persuader_disagree, is.na(hint_condition) | hint_condition != "Hint",
+         is.na(interaction_type) | interaction_type != "human_human") %>%
+  id_cov() %>% left_join(p.demo, by = "participant_id")
+cat(sprintf("%d trials, %d participants; trials per participant:\n", nrow(iv), n_distinct(iv$participant_id)))
+print(summary(as.vector(table(iv$participant_id))))
+f.iv <- as.formula(paste("persuader_success ~", ID_RHS_CELL, "+ (1 | participant_id) + (1 | question_id)"))
+m.iv1 <- glmer(f.iv, data = iv, family = binomial, control = GL_CTRL)
+m.iv0 <- glmer(update(f.iv, . ~ . - (1 | participant_id)), data = iv, family = binomial, control = GL_CTRL)
+print(VarCorr(m.iv1)); print(anova(m.iv0, m.iv1))
+sd.p <- attr(VarCorr(m.iv1)$participant_id, "stddev"); sd.q <- attr(VarCorr(m.iv1)$question_id, "stddev")
+eta.q <- predict(m.iv1, re.form = ~ (1 | question_id))
+id_variance <- tibble(
+  sd_participant = sd.p, sd_question = sd.q,
+  icc_participant = sd.p^2 / (sd.p^2 + sd.q^2 + pi^2 / 3),
+  icc_question = sd.q^2 / (sd.p^2 + sd.q^2 + pi^2 / 3),
+  lrt_chisq = anova(m.iv0, m.iv1)$Chisq[2], lrt_p = anova(m.iv0, m.iv1)$`Pr(>Chisq)`[2],
+  ps_minus1sd = 100 * mean(plogis(eta.q - sd.p)), ps_mean = 100 * mean(plogis(eta.q)),
+  ps_plus1sd = 100 * mean(plogis(eta.q + sd.p)),
+  n = nrow(iv), n_ppt = n_distinct(iv$participant_id))
+as.data.frame(id_variance)
+
+ame <- function(m, term) { f <- fitted(m); co <- summary(m)$coefficients[term, ]
+  tibble(term = term, b = co[1], se = co[2], z = co[3], p = co[4], pp = 100 * co[1] * mean(f * (1 - f))) }
+m.gender <- glmer(as.formula(paste("persuader_success ~ female +", ID_RHS, "+ (1 | participant_id) + (1 | question_id)")),
+                  data = iv %>% filter(gender %in% c("f", "m")) %>% mutate(female = gender == "f", cell = droplevels(cell)),
+                  family = binomial, control = GL_CTRL)
+m.native <- glmer(as.formula(paste("persuader_success ~ native +", ID_RHS, "+ (1 | participant_id) + (1 | question_id)")),
+                  data = iv %>% mutate(native = native_english == "True"), family = binomial, control = GL_CTRL)
+iv4 <- trials %>% filter(experiment == "E4", participant_persuader_disagree) %>% id_cov() %>%
+  left_join(p.demo, by = "participant_id") %>% mutate(age10 = age / 10)
+m.age <- glmer(as.formula(paste("persuader_success ~ age10 + interaction_type +", ID_RHS_BASE, "+ (1 | participant_id) + (1 | question_id)")),
+               data = iv4, family = binomial, control = GL_CTRL)
+m.age.cc <- lmer(as.formula(paste("confidence_change ~ age10 + interaction_type +", ID_RHS_BASE, "+ (1 | participant_id) + (1 | question_id)")), data = iv4)
+m.gender.cc <- lmer(as.formula(paste("confidence_change ~ female +", ID_RHS, "+ (1 | participant_id) + (1 | question_id)")),
+                    data = iv %>% filter(gender %in% c("f", "m")) %>% mutate(female = gender == "f", cell = droplevels(cell)))
+id_demographics <- bind_rows(
+  ame(m.gender, "femaleTRUE") %>% mutate(sample = "E1-E4 LLM, women vs men"),
+  ame(m.native, "nativeTRUE") %>% mutate(sample = "E1-E4 LLM, native English"),
+  ame(m.age, "age10") %>% mutate(sample = "E4 (LLM + human), per decade of age"))
+as.data.frame(id_demographics)
+summary(m.gender.cc)$coefficients["femaleTRUE", ]
+summary(m.age.cc)$coefficients["age10", ]
+iv %>% filter(gender %in% c("f", "m")) %>% group_by(experiment, gender) %>%
+  summarize(ps = mean(persuader_success), n = n(), .groups = "drop")
+write.csv(id_variance, "stats/id_variance.csv", row.names = FALSE)
+write.csv(id_demographics, "stats/id_demographics.csv", row.names = FALSE)
+```

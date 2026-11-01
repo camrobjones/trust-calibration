@@ -1,0 +1,21 @@
+name: pt_env
+channels:
+  - conda-forge
+  - pytorch
+dependencies:
+  - python=3.10.19
+  - pytorch=2.10.0
+  - numpy=2.2.6
+  - pandas=2.3.3
+  - scikit-learn=1.7.2
+  - seaborn=0.13.2
+  - matplotlib=3.10.8
+  - jupyterlab=4.5.3
+  - ipykernel=7.1.0
+  - scipy=1.15.2
+  - pip
+  - pip:
+      - krippendorff
+      - irrCAC
+      - openai
+      - python-dotenv      

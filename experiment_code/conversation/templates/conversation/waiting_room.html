@@ -1,0 +1,249 @@
+{% load static %}
+<!doctype html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <title>Waiting Room</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link href="{% static 'conversation/chat_interface.css' %}" rel="stylesheet">
+    <style>
+        .waiting-container {
+            max-width: 600px;
+            margin: 0 auto;
+            padding: 2rem;
+            text-align: center;
+        }
+        
+        .waiting-title {
+            font-size: 2.5rem;
+            font-weight: 300;
+            margin-bottom: 1rem;
+            color: #333;
+        }
+        
+        .waiting-message {
+            font-size: 1.2rem;
+            font-weight: 300;
+            margin-bottom: 2rem;
+            color: #666;
+        }
+        
+        .spinner-container {
+            margin: 2rem 0;
+            display: flex;
+            justify-content: center;
+        }
+        
+        .custom-spinner {
+            width: 4rem;
+            height: 4rem;
+            border: 0.4rem solid #f3f3f3;
+            border-top: 0.4rem solid #1d8bff;
+            border-radius: 50%;
+            animation: spin 1s linear infinite;
+        }
+        
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+        
+        .timeout-warning {
+            background-color: #fff3cd;
+            border: 1px solid #ffeaa7;
+            border-radius: 8px;
+            padding: 1rem;
+            margin: 1.5rem 0;
+            color: #856404;
+            display: none;
+        }
+        
+        .timeout-warning.show {
+            display: block;
+        }
+        
+        .timeout-counter {
+            font-weight: 600;
+            color: #d63384;
+        }
+        
+        .timeout-message {
+            background-color: #f8d7da;
+            border: 1px solid #f5c6cb;
+            border-radius: 8px;
+            padding: 1.5rem;
+            margin: 1.5rem 0;
+            color: #721c24;
+            display: none;
+        }
+        
+        .timeout-message.show {
+            display: block;
+        }
+        
+        .redirect-spinner {
+            width: 2rem;
+            height: 2rem;
+            border: 0.2rem solid #f3f3f3;
+            border-top: 0.2rem solid #1d8bff;
+            border-radius: 50%;
+            animation: spin 1s linear infinite;
+            margin: 1rem auto;
+        }
+    </style>
+</head>
+<body class="d-flex align-items-center justify-content-center" style="height:100vh; background-color: #f8f9fa;">
+    <div class="waiting-container">
+        <h2 class="waiting-title">Waiting for another participant…</h2>
+        <p class="waiting-message">We're looking for someone to pair you with. This usually takes less than a minute. If no match is found in 5 minutes, you will be redirected to continue with the study.</p>
+        
+        <div class="spinner-container">
+            <div class="custom-spinner"></div>
+        </div>
+        
+        <div id="timeout-warning" class="timeout-warning">
+            <strong>Still searching...</strong><br>
+            We're having trouble finding a match. The search will timeout in <span id="timeout-counter" class="timeout-counter">60</span> seconds.
+        </div>
+        
+        <div id="timeout-message" class="timeout-message">
+            <strong>No match found</strong><br>
+            We couldn't find another participant within the time limit. You will now be redirected to continue with the study.
+            <div class="redirect-spinner"></div>
+            <p><small>Redirecting in <span id="redirect-counter">3</span> seconds...</small></p>
+        </div>
+    </div>
+
+    <script>
+        (function() {
+            const pptId = "{{ ppt_id }}";
+            const scheme = window.location.protocol === "https:" ? "wss" : "ws";
+            let socket = null;
+            let timeoutWarningShown = false;
+            let timeoutReached = false;
+            
+            // 3 minutes = 180 seconds
+            const TOTAL_TIMEOUT = 180; // 3 minutes
+            
+            let startTime = Date.now();
+            let warningTimer = null;
+            let timeoutTimer = null;
+            let countdownTimer = null;
+            let redirectTimer = null;
+            
+            function connectWebSocket() {
+                // Guard: pptId must be present and numeric
+                if (!pptId || isNaN(parseInt(pptId))) {
+                    console.error("Invalid ppt_id; redirecting to survey");
+                    window.location.href = "/conversation/survey/";
+                    return;
+                }
+                socket = new WebSocket(`${scheme}://${window.location.host}/ws/lobby/`);
+                
+                socket.onopen = () => {
+                    console.log("Connected to lobby");
+                    socket.send(JSON.stringify({action: "join", ppt_id: pptId}));
+                    startTimers();
+                };
+
+                socket.onmessage = (event) => {
+                    const data = JSON.parse(event.data);
+                    if (data.type === "paired") {
+                        clearAllTimers();
+                        window.location.href = `/conversation/conversation/?ppt_id=${pptId}`;
+                    } else if (data.type === "error") {
+                        console.error("Lobby error:", data.message);
+                        handleTimeout();
+                    }
+                };
+
+                socket.onclose = () => {
+                    console.log("Disconnected from lobby");
+                    if (!timeoutReached) {
+                        // Reconnect if not intentionally closed
+                        setTimeout(connectWebSocket, 2000);
+                    }
+                };
+                
+                socket.onerror = (error) => {
+                    console.error("WebSocket error:", error);
+                };
+            }
+            
+            function startTimers() {
+                // Clear any existing timers
+                clearAllTimers();
+                
+                // Timer to show warning at 4 minutes
+                // warningTimer = setTimeout(() => {
+                //     showTimeoutWarning();
+                // }, WARNING_TIME * 1000);
+                
+                // Timer to timeout at 5 minutes
+                timeoutTimer = setTimeout(() => {
+                    handleTimeout();
+                }, TOTAL_TIMEOUT * 1000);
+            }
+            
+            function showTimeoutWarning() {
+                if (timeoutReached) return;
+                
+                timeoutWarningShown = true;
+                document.getElementById('timeout-warning').classList.add('show');
+                
+                // Start countdown for remaining time
+                let remainingTime = 60; // 60 seconds left
+                const counterElement = document.getElementById('timeout-counter');
+                
+                countdownTimer = setInterval(() => {
+                    remainingTime--;
+                    counterElement.textContent = remainingTime;
+                    
+                    if (remainingTime <= 0) {
+                        clearInterval(countdownTimer);
+                    }
+                }, 1000);
+            }
+            
+            function handleTimeout() {
+                timeoutReached = true;
+                clearAllTimers();
+                
+                if (socket) {
+                    socket.close();
+                }
+                
+                // Hide spinner and warning, show timeout message
+                // document.querySelector('.spinner-container').style.display = 'none';
+                // document.getElementById('timeout-warning').classList.remove('show');
+                // document.getElementById('timeout-message').classList.add('show');
+                
+                // Start redirect countdown
+                let redirectTime = 3;
+                const redirectCounterElement = document.getElementById('redirect-counter');
+                
+                redirectTimer = setInterval(() => {
+                    redirectTime--;
+                    redirectCounterElement.textContent = redirectTime;
+                    
+                    if (redirectTime <= 0) {
+                        clearInterval(redirectTimer);
+                        // Redirect to exit survey
+                        window.location.href = `/conversation/waiting_room_timeout/?ppt_id=${pptId}`;
+                    }
+                }, 1000);
+            }
+            
+            function clearAllTimers() {
+                if (warningTimer) clearTimeout(warningTimer);
+                if (timeoutTimer) clearTimeout(timeoutTimer);
+                if (countdownTimer) clearInterval(countdownTimer);
+                if (redirectTimer) clearInterval(redirectTimer);
+            }
+            
+            // Initial connection
+            connectWebSocket();
+        })();
+    </script>
+</body>
+</html> 

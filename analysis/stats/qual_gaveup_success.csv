@@ -1,0 +1,9 @@
+"persuader_type","truth","gave_up","n","k"
+"LLM","Truth",0,831,661
+"LLM","Truth",1,1,0
+"LLM","Falsehood",0,839,517
+"LLM","Falsehood",1,104,8
+"Human","Truth",0,239,137
+"Human","Truth",1,16,4
+"Human","Falsehood",0,100,40
+"Human","Falsehood",1,13,1

@@ -1,0 +1,327 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+
+<script src="https://cdn.jsdelivr.net/gh/jspsych/jsPsych@6.3.1/jspsych.js"></script>
+
+<script src="https://cdn.jsdelivr.net/gh/jspsych/jsPsych@6.3.1/plugins/jspsych-html-keyboard-response.js"></script>
+<script src="https://cdn.jsdelivr.net/gh/jspsych/jsPsych@6.3.1/plugins/jspsych-html-button-response.js"></script>
+<script src="https://cdn.jsdelivr.net/gh/jspsych/jsPsych@6.3.1/plugins/jspsych-html-slider-response.js"></script>
+<script src="https://cdn.jsdelivr.net/gh/jspsych/jsPsych@6.3.1/plugins/jspsych-instructions.js"></script>
+<script src="https://cdn.jsdelivr.net/gh/jspsych/jsPsych@6.3.1/plugins/jspsych-survey-html-form.js"></script>
+
+<!-- Css -->
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/jspsych/jsPsych@6.3.1/css/jspsych.css">
+<link rel="stylesheet" href="{% static 'conversation/conversation.css' %}">
+
+
+<!-- Cookies -->
+<script src="https://cdnjs.cloudflare.com/ajax/libs/js-cookie/2.0.4/js.cookie.min.js"
+    integrity="sha512-Nonc2AqL1+VEN+97F3n4YxucBOAL5BgqNwEVc2uUjdKOWAmzwj5ChdJQvN2KldAxkCxE4OenuJ/RL18bWxGGzA=="
+    crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+
+<!-- Axios -->
+<script src="https://cdnjs.cloudflare.com/ajax/libs/axios/1.7.8/axios.min.js"
+    integrity="sha512-v8+bPcpk4Sj7CKB11+gK/FnsbgQ15jTwZamnBf/xDmiQDcgOIYufBo6Acu1y30vrk8gg5su4x0CG3zfPaq5Fcg=="
+    crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+
+{% csrf_token %}
+
+<body>
+    <!--<h1>Stroop Test - Example Title</h1>-->
+    <div id="jspsych-target"></div>
+</body>
+
+{{ conf | json_script:"conf"}}
+
+<script>
+
+    const conf = JSON.parse(document.getElementById('conf')
+        .textContent);
+    console.log(conf)
+    const noTrials = conf.n_trials;
+    console.log(noTrials)
+    const pptId = conf.ppt_id;
+    console.log(pptId)
+
+    const questions = conf.survey_questions;
+
+
+</script>
+
+<script>
+
+    function saveResults() {
+        // POST user data to server
+        let url = `/conversation/save_survey_results/`;
+        let csrftoken = Cookies.get('csrftoken');
+        let headers = { "X-CSRFToken": csrftoken };
+        let results = jsPsych.data.get().values();
+        let data = { results: results };
+        data.ppt_id = pptId;
+        axios.post(url, data, { headers: headers })
+            .then(response => {
+                console.log(response)
+            });
+    }
+
+</script>
+
+<script>
+
+    // Build intro pages conditionally based on source/study
+    const welcomeHTML = "<h2>Welcome</h2><p>Thank you for your interest in participating in our experiment.</p><p>The experiment is split into three parts and the entire experiment will last around forty minutes.</p>";
+    const sonaWarningHTML = "<h2>Only participate during the time window</h2><p>If you have signed up to complete the study during a specific time window on SONA (as a videoconference) you MUST complete it during that time window. Do not complete it early or you may not be granted credit.</p>";
+    const consentHTML = `<h2>Consent Form</h2>
+        <p>By continuing, you indicate that you have read the consent form below and consent
+    to participate in the study.</p>
+    <object
+      data="/static/survey/pdf/info_sheet_pd.pdf#toolbar=0&navpanes=0&scrollbar=0"
+      type="application/pdf"
+      width="100%"
+      height="600px"
+      style="border: 1px solid #ccc">
+      <p>
+        It looks like your browser doesn't support inline PDFs.
+        No worries—you can
+        <a href="/static/survey/pdf/info_sheet_pd.pdf" target="_blank">
+          click here to download the PDF
+        </a>.
+      </p>
+    </object>
+    </p>`;
+    const instructionsHTML = "<h2>Instructions</h2><p>In the first part of this experiment you will be presented with a question, to which you can respond by pressing buttons on the screen.</p> <p>Please select your response and provide your confidence on a scale of 0% (total guess) to 100% (totally confident).</p>";
+    const noExternalSourcesHTML = `<h2> Please do not use external sources</h2>
+        <p>Please take as long as you like to answer each question. However, we ask that you answer all questions based on your own knowledge, 
+     without using Google, textbooks, or any other external resources. 
+     This is important to help us get accurate results.</p>
+     <p>You won't be penalized for incorrect answers, 
+     so please just answer honestly based on what you already know.</p>`;
+
+    const introPages = [welcomeHTML];
+    if (conf.source && conf.source.toLowerCase() === 'sona' && String(conf.study) === '4') {
+        introPages.push(sonaWarningHTML);
+    }
+    introPages.push(consentHTML, instructionsHTML, noExternalSourcesHTML);
+
+    var instructionsPage1 = {
+        type: 'instructions',
+        pages: introPages,
+        //key_forward: ' ',
+        show_clickable_nav: true,
+        //allow_backward: true
+    }
+
+    var example = {
+        type: 'survey-html-form',
+        html: function () {
+            let questionHTML = `
+      <div class="q-container">
+        <p class="question">Severance is a great TV show</p>
+      </div>
+    `;
+
+            let answersHTML = `
+      <div class="a-container">
+        <div class="answer-box">
+          <label for="answer1">True</label>
+          <input type="radio" name="answer" id="answer1" value="true" required>
+        </div>
+        <div class="answer-box">
+          <label for="answer2">False</label>
+          <input type="radio" name="answer" id="answer2" value="false" required>
+        </div>
+      </div>
+    `;
+
+            // confidence slider
+            let confidenceSliderHTML = `
+      <div class="c-container">
+        <p>How confident are you in your answer?</p>
+        <div class="confidence-labels">
+          <span id="confidenceValue">50</span><span>%</span>
+        </div>
+        <input type="hidden" name="confidenceTouched" id="confidenceTouched" value="false">
+        <input
+          type="range"
+          id="confidence"
+          name="confidence"
+          min="0"
+          max="100"
+          value="50"
+          oninput="document.getElementById('confidenceValue').innerText = this.value"
+          onchange="document.getElementById('confidenceTouched').value='true'"
+        >
+        <br>
+      </div>
+    `;
+
+            return "<h2>Example</h2>" + questionHTML + answersHTML + confidenceSliderHTML;
+        },
+
+        on_load: function () {
+            // The plugin creates a button (class .jspsych-btn). We'll capture its click
+            let nextButton = document.querySelector('#jspsych-survey-html-form-next');
+            console.log(nextButton);
+            if (nextButton) {
+                nextButton.addEventListener('click', function (e) {
+                    console.log('Next button clicked');
+                    if (
+                        document.getElementById('confidenceTouched').value !== 'true'
+                    ) {
+                        e.preventDefault();
+                        alert("Please adjust the confidence slider least once before continuing.");
+                    }
+                });
+                console.log('Event listener added');
+            }
+        }
+    };
+
+
+    var instructionsPage2 = {
+        type: 'instructions',
+        pages: [
+            `<p>The experiment will begin on the next page.</p> <p> You will be presented with ${questions.length} questions.</p> <p>Press the 'Next' button to begin.</p>`,
+        ],
+        //key_forward: ' ',
+        show_clickable_nav: true,
+        //allow_backward: true
+    }
+
+    var trial = {
+        type: 'survey-html-form',
+        data: function () {
+            var item_id = jsPsych.timelineVariable('id');
+            return {
+                "item_type": "critical",
+                "item_id": item_id
+            };
+        },
+        html: function () {
+            let answerA, answerB;
+
+            // Randomly decide which option is "answer1" vs "answer2":
+            if (Math.random() < 0.5) {
+                answerA = jsPsych.timelineVariable('answer1');
+                answerB = jsPsych.timelineVariable('answer2');
+            } else {
+                answerA = jsPsych.timelineVariable('answer2');
+                answerB = jsPsych.timelineVariable('answer1');
+            }
+
+            let questionHTML = `
+    <div class="q-container">
+    <p class="question">${jsPsych.timelineVariable('question')}</p>
+    </div>
+`;
+
+            let answersHTML = `
+    <div class="a-container">
+    <div class="answer-box">
+        <label for="answer1">${answerA}</label>
+        <input type="radio" name="answer" id="answer1" value="${answerA}" required>
+    </div>
+    <div class="answer-box">
+        <label for="answer2">${answerB}</label>
+        <input type="radio" name="answer" id="answer2" value="${answerB}" required>
+    </div>
+    </div>
+`;
+
+            let confidenceSliderHTML = `
+    <div class="c-container">
+    <p>How confident are you in your answer?</p>
+    <div class="confidence-labels">
+        <span id="confidenceValue">50</span><span>%</span>
+    </div>
+    <input type="hidden" name="confidenceTouched" id="confidenceTouched" value="false">
+    <input
+        type="range"
+        id="confidence"
+        name="confidence"
+        min="0"
+        max="100"
+        value="50"
+        oninput="document.getElementById('confidenceValue').innerText = this.value"
+        onchange="document.getElementById('confidenceTouched').value='true'"
+    >
+    <br>
+    </div>
+`;
+
+            return questionHTML + answersHTML + confidenceSliderHTML;
+        },
+
+        on_load: function () {
+            // The plugin creates a button (class .jspsych-btn). We'll capture its click
+            let nextButton = document.querySelector('#jspsych-survey-html-form-next');
+
+            if (nextButton) {
+                nextButton.addEventListener('click', function (e) {
+                    if (
+                        document.getElementById('confidenceTouched').value !== 'true'
+                    ) {
+                        e.preventDefault();
+                        alert("Please adjust the confidence slider at least once before continuing.");
+                    }
+                });
+            }
+        }
+    };
+
+    var ending = {
+        type: 'html-keyboard-response',
+        choices: "NO_KEYS",
+        stimulus: function () {
+            return `<h3>Survey Complete</h3>
+    <p>Thank you for completing the survey.</p>
+    <p>The experiment continues on the next page</p>
+    <button onclick="window.location.href='/conversation/conversation_instructions/?ppt_id={{ conf.ppt_id }}'">Continue</button>
+    `
+        },
+        on_load: saveResults,
+    }
+
+
+    var procedure = {
+        timeline: [trial],
+        timeline_variables: questions,
+        randomize_order: true,
+    }
+
+    var trials = [instructionsPage1, example, instructionsPage2];
+
+    trials.push(procedure);
+    // trials.push(demographics);
+    // trials.push(expertiseSurvey);
+    // trials.push(debrief);
+    trials.push(ending);
+
+    jsPsych.init({
+        display_element: 'jspsych-target',
+        timeline: trials,        // your array of trials/timelines
+        show_progress_bar: true, // turn on the progress bar
+        auto_update_progress_bar: false,
+        message_progress_bar: 'Questions | Part 1 of 3',
+
+        on_trial_finish: function () {
+            // Count how many "real" trials have been completed so far.
+            // This is just an example: you can filter by plugin type, or
+            // increment a global counter, etc.
+
+            // e.g., let's define 'real trials' as any with data.item_type = "critical"
+            let realTrialsCompleted = jsPsych.data.get().filter({ item_type: 'critical' }).count();
+            let totalRealTrials = questions.length;
+
+            // fraction for the progress bar (0.0 to 1.0)
+            let fractionDone = realTrialsCompleted / totalRealTrials;
+
+            // update the progress bar
+            jsPsych.setProgressBar(fractionDone);
+        }
+    });
+
+</script>
+
+</html>
