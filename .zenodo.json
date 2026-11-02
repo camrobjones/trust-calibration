@@ -1,0 +1,15 @@
+{
+  "title": "Data, code, and materials for \"Do People Trust AI Assistants Even When They Are Consistently Wrong?\"",
+  "upload_type": "dataset",
+  "access_right": "open",
+  "license": "cc-by-4.0",
+  "description": "De-identified data, analysis code, and experiment software for the paper. Running run_all.R regenerates the statistics, tables, and data figures.",
+  "notes": "Data are CC BY 4.0 and code is MIT. See LICENSE.",
+  "creators": [
+    {"name": "Jones, Cameron R.", "affiliation": "Stony Brook University", "orcid": "0000-0002-6609-8966"},
+    {"name": "Wong, Julia", "affiliation": "University of California San Diego"},
+    {"name": "Cohen, Aaron S.", "affiliation": "University of California San Diego"},
+    {"name": "Woolley, James", "affiliation": "University of California San Diego"},
+    {"name": "Bergen, Benjamin K.", "affiliation": "University of California San Diego"}
+  ]
+}
